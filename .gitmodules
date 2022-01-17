@@ -1,0 +1,4 @@
+	# t config --file=.gitmodules -egit config --file=.gitmodules -e
+	[submodule "node-js-getting-started"]
+	path = node-js-getting-started
+	url = https://github.com/loumignon30/sigra-backend.git

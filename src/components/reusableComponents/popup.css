@@ -1,0 +1,33 @@
+.buttonPopup{
+    height: 30px;
+    width: 35px ;
+    margin-top: -10px !important;
+    font-size: 20px !important;
+    border-style: none;
+    background-color: white;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    object-fit: cover;
+    background-color: red;
+    align-content: center;
+    padding-right: 0px;
+
+ /* style={{marginTop:"-9px", fontSize: "30px" , height:"10%"}} */
+
+}
+
+.dialogTitleMain {
+    display: flex;
+}
+
+.dialogTitleSubDiv {
+     flex-grow: 1;
+     margin-bottom: -60px;
+     height: 35px;
+     color: darkblue;
+     font-weight: 600;
+     display: flex;
+     align-content: center;
+}
+

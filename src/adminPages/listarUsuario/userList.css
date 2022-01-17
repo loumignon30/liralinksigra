@@ -1,0 +1,53 @@
+.utilisateurList {
+    flex: 4;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+    z-index: auto;
+    position:relative;
+}
+
+.UtilisateurListPlusPhoto {
+    display: flex;
+    align-items: center;
+}
+
+.UtilisateurListImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.utilisateurButtonEdit {
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.utilisateurButtonDelete {
+    color: red;
+    cursor: pointer;
+}
+
+.ButtonStatut {
+    padding: 5px 7px;
+    border: none;
+    border-radius: 30px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.ButtonStatut.Actif {
+    background-color: lightblue;
+    font-weight: 600;
+}
+.ButtonStatut.Desactivé {
+    background-color: lightcoral;
+    font-weight: 300;
+}

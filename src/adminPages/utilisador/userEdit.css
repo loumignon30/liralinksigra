@@ -1,0 +1,166 @@
+.utilisateur{
+    flex: 4;
+    padding: 20px ;
+}
+.utilisateurTitreContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.utilisateurAjouterButton {
+    width: 80px;
+    border: none;
+    padding: 5px;
+    background-color: rgb(13, 100, 100);
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+}
+
+.utilisateurContainer{
+    display: flex;
+    margin-top: 20px;
+}
+
+.utilisateurAfficher {
+    flex: 1;
+    padding: 20px;
+
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+    padding: 20px;
+    margin-right: 20px;
+}
+
+.userEdit {
+    flex: 2;
+    padding: 20px;
+    margin-top: -70px;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+}
+
+.utilisateurAfichageTop {
+    display: flex;
+    align-items: center;
+}
+
+.utilisateurAfficherTopImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.utilisateurAfficherTopTitre {
+
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.utilisateurAffichageNom {
+    font-weight: 600;
+}
+
+.utilisateurAffichageFonction {
+    font-weight: 300;
+}
+
+.utilisateurAfficherTitre {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(142, 142, 151);
+}
+
+.utilisateurAfficherBasPage {
+    margin-top: 20px;
+}
+
+.utilisateurInfo {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #444;
+}
+
+.utilisateurAfficherIcon {
+    font-size: 16px !important;
+}
+
+.userAfficherInfoTitre {
+    margin-left: 10px;
+}
+
+.utilisateurUpdateTitre {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.utilisateurUpdateFormulaire {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.utilisateurUpdateItem {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
+}
+
+.utilisateurUpdateItem >label {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.utilisateurUpdateInput {
+    border: none;
+    width: 250px;
+    height: 30px;
+    border-bottom: 1px solid grey;
+}
+
+.utilisateurUpdateCoteDroit {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.utilisateurUpdateUpload {
+    display: flex;
+    align-items: center;
+}
+
+.utilisateurUpdateImage {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-left: 20px;
+}
+
+.utilisateurUpdateIcon {
+    cursor: pointer;
+    margin-left: 120px;
+    margin-top: 0px;
+}
+
+.utilisateurUpdateButton {
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    background-color: darkblue;
+    color: white;
+    font-weight: 600;
+}
+
+.userphoto{
+    margin-left: 2px !important;
+    margin-top: 15px;
+}
+

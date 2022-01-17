@@ -1,0 +1,101 @@
+.topbar {
+    width: 100%;
+    height: 50%;
+    background-color: white;
+    position: relative;
+    z-index: 99999999;
+}
+
+.topbarwrapper {
+    height: 100%;
+    padding: 0px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 18px;
+    color: darkblue;
+    cursor: pointer;
+}
+
+.topRight {
+    display: flex;
+    align-items: center;
+}
+
+.topbarIconContainer {
+    margin-right: 10px;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    color: #555;
+    
+}
+
+.topIconBag {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 0px;
+    right: 12px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px ;   
+    z-index: inherit;
+}
+
+.topAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.imageLogo {
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.nav-ul {
+    list-style: none;
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.index-front {
+    position: absolute;
+    z-index: 1000;
+    width:220px;
+    height: 170px;
+    background-color:rgb(239, 247, 250);
+    top: 50px;
+    left: -130px;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+}
+
+.menuItemssytle .a-style {
+    font-size:13px;
+    font-weight: 600;
+    color:lightgray
+   }
+
+   .menuItemssytle .a-style-popup {
+       font-size:13px;
+       font-weight: 600;
+       color:black;
+       margin-left: 10px;
+      }
+    
+

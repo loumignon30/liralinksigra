@@ -1,0 +1,224 @@
+.universityContainer {
+    flex: 4;
+    width: 100%;
+     /* -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+    padding: 20px;
+    margin-right: 20px; */
+}
+
+.unversityItemContainer {
+  /* width: 100%; */
+  display: flex;
+  justify-content: space-between;
+  margin-left: 4px;
+  margin-top: 10px;
+}
+
+
+ .universityImagePageHeader {
+  width: 180px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: fill;
+  display: flex;
+  align-content: center;
+}
+
+.universityFormContainer {
+  width: 45%;
+  height: 280px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: -15px;
+}
+
+.categoryContainerForButton {
+  width: 47%;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+  box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.newUniversity {
+  flex: 2;
+  padding: 5px 0 0 10px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+  box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+  /* width: 320px;
+  height: 350px; */
+}
+
+.categoryContainer2 {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+  
+.labelAjouterStock{
+    float: left;
+    width: 150px;
+    margin-top: 12px;
+    text-align: right;
+    margin-top: 4px;
+    padding-right: 12px;
+    font-size: 14px;
+    clear: both;
+}
+
+.inputAjouterStock{
+    height: 25px;
+    font-size: medium;
+    padding-right: 30px;
+    margin: 2px;
+    margin-top: 5px;
+    
+} 
+
+.textareaAjouterStock {
+  margin-top: 5px;
+  margin-left: 12px;
+  height: 25px;
+  font-size: medium;
+  
+} 
+
+.selectAjouterStock {
+  margin-top: 12px;
+  height: 25px;
+  font-size: medium;
+  max-width: 50%;  
+} 
+
+input, textarea {
+  display: table;
+  text-align: left;
+}
+
+.columnStockInsert {
+    float: left;
+    width: 700px;
+    padding: 12px;
+    height: 520px;         /* Should be removed. Only for demonstration */
+    padding-right: 30px;
+  }
+
+  .utilisateurUpdateUpload {
+    display: flex;
+    align-items: center;
+}
+
+.utilisateurUpdateImage {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 20px;
+    padding-top: 10px;
+    padding-left: 80px;
+}
+
+.nouveauUtilisateurDivButton {
+  margin-left: -290px;
+}
+
+.newCategory {
+  flex: 2;
+  padding: 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+  box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+  width: 220px;
+}
+
+.categoryTextarea {
+  width: 280px;
+  margin-top: 8px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.inputTextLage {
+  max-width: 270px;
+  width: 290px;
+  height: 20px;
+  min-height: 30px;
+  margin: 10px 0 0 0;
+  border-radius: 10px;
+  object-fit: cover;
+  
+}
+.inputTextSmall {
+  max-width: 150px;
+  width: 150px;
+  height: 20px;
+  min-height: 30px;
+  margin: 10px 0 0 0;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+
+.university-datagrid-style {
+  flex: 2;
+  padding: 4px 20px 10px 20px;
+  /* -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+  box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); */
+  /* margin-top: -470px;
+  margin-left: 490px; */
+}
+
+
+.category-input-container {
+  flex: 2;
+  padding: 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+  box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+  width: 320px;
+}
+
+
+.universityButtonContainer{
+  -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+  box-shadow: -11px 11px 6px 3px rgba(0,0,0,0.13);
+  height: 60px;
+  display: flex; 
+  width: 420px;
+  margin-left:3px;
+  margin-top: 80px;
+}
+
+
+
+.UtilisateurListPlusPhoto {
+  display: flex;
+  align-items: center;
+}
+
+.UtilisateurListImage {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+
+.ImageContainer {
+  width: 100px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: fill;
+  display: flex;
+  align-content: center;
+  margin-top: -10px;
+  
+}
+

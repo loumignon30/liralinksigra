@@ -1,0 +1,94 @@
+.widgetLg{
+    flex: 3;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+
+    padding: 20px;
+}
+
+.widgetLgTitle {
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+}
+
+.widgetLgTable {
+    width: 100%;
+    border-spacing: 20px;
+}
+
+.widgetLgTh{
+    text-align: center;
+}
+
+.widgetLgThStatut {
+    text-align: center;
+}
+
+.widgetLgClient {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.widgetLgImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.widgetLgArticle {
+    font-size: 12px;
+}
+
+.widgetLgDate, .widgetLgAmontant {
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.widgetLgButton {
+    padding: 5px 7px;
+    border: none;
+    border-radius: 10px;
+    width: 80px;
+}
+
+
+.widgetLgButton.Cancel {
+    background-color: rgb(255, 232, 232);
+}
+
+.widgetLgButton.Approved {
+    background-color: rgb(206, 243, 206);
+    color: green;
+
+}
+
+.widgetLgButton.Processing {
+    background-color: rgb(200, 235, 247)
+}
+
+/* table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th{
+    color: white;
+    background:lightgray;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  
+  td, th {
+    text-align: left;
+    padding: 2px;
+  }
+  
+   tr:nth-child(even) {
+     background-color: #dddddd; 
+  }  */

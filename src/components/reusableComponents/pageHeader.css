@@ -1,0 +1,24 @@
+.pageHeader1{
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 3px rgba(0,0,0,0.13);
+    height: 100px;
+    display: flex; 
+    width: 650px;
+    background-color: rgb(174, 185, 185);
+    display: flex;
+}
+
+.pageHeader2 {
+    padding: 4px;
+    display: flex;
+    margin-bottom: 20px
+}
+
+.imageIcon {
+    padding: 12px;
+    display: inline-block;
+    margin-right: 25px;
+}
+
+
+
