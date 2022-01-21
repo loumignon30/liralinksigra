@@ -80,7 +80,7 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
 
     const columns = [
         idDisplay ?
-            { field: 'id', headerName: 'ID', width: 50, headerClassName: classes.paper } :
+            { field: 'id', headerName: 'ID', width: 60, headerClassName: classes.paper } :
             { field: 'id', headerName: 'ID', hide: { idDisplay }, width: 50, headerClassName: classes.paper },
 
         codeDisplay ?
@@ -89,23 +89,23 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
 
         {
             field: 'nome', headerName: 'Nome da Agencia', flex: 3, headerClassName: classes.paper,
-            renderCell: (params) => {
-                return (
-                    <>
-                        <div className="UtilisateurListPlusPhoto">
-                            <img className="UtilisateurListImage"
-                                src={url + "/images/" + params.row.imageName}
-                                //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
+            // renderCell: (params) => {
+            //     return (
+            //         <>
+            //             <div className="UtilisateurListPlusPhoto">
+            //                 <img className="UtilisateurListImage"
+            //                     src={url + "/images/" + params.row.imageName}
+            //                     //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
 
-                                //src={params.row.imageName}
-                                alt="" />
-                            {params.row.nome}
-                        </div>
-                    </>
-                )
+            //                     //src={params.row.imageName}
+            //                     alt="" />
+            //                 {params.row.nome}
+            //             </div>
+            //         </>
+            //     )
 
-                // C:\React app\world-university-backend\public\images
-            }
+            //     // C:\React app\world-university-backend\public\images
+            // }
         },
         emailDisplay ?
             { field: 'email', headerName: 'Email', flex: 1, headerClassName: classes.paper } :
@@ -170,8 +170,8 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
                                     cidade: params.row.cidade,
                                     pais: params.row.pais,
                                     nomeRepresentante: params.row.nomeRepresentante,
-                                    status: params.row.status,
-                                    imageChangeFromOutSideURL: url + "/images/" + params.row.imageName
+                                    status: params.row.status
+                                    // imageChangeFromOutSideURL: url + "/images/" + params.row.imageName
                                 }}
                             >
                                 <button className="utilisateurButtonEdit">Edit</button>

@@ -111,7 +111,7 @@ export default function Utilisateur(props) {
     return (
         <div className="utilisateur">
             <div className="utilisateurTitreContainer">
-                <h1 className="UtilisateurTitre">Edit User Information</h1>
+                <h1 className="UtilisateurTitre">Editar dados</h1>
             </div>
 
             <div className="utilisateurContainer">
@@ -281,19 +281,23 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div className='userphoto'>
-                                <ImageUpLoad ref={childRef} />
+                                <ImageUpLoad ref={childRef} 
+                                 fotoTitulo="Foto"
+                                 uploadDisplay={true}
+                                 />
+
                             </div>
 
                             <div>
                                 <Controls.Buttons
                                     type="button"
-                                    text="Submit"
+                                    text="Gravar"
                                     className="button"
                                     onClick={edituser}
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text="Reset"
+                                    text="Limpar"
                                     color="secondary"
                                     className="button"
                                 />

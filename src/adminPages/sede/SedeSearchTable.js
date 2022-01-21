@@ -91,8 +91,14 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
     }
 
     const columns = [
-       
-        { field: 'id', headerName: 'ID', width: 100, hide: { idDisplay }, headerClassName: classes.paper },
+        idDisplay?
+        { field: 'id', headerName: 'ID', width: 70, headerClassName: classes.paper }:
+        { field: 'id', headerName: 'ID',  hide: { idDisplay }, headerClassName: classes.paper },
+        
+        codeDisplay ?
+        { field: 'code', headerName: 'Code', flex: 1, headerClassName: classes.paper }:
+        { field: 'code', headerName: 'Code', hide: { codeDisplay }, headerClassName: classes.paper },
+
         {
             field: 'sede', headerName: 'Nome da Sede', maxWidth: 320, flex: 3, headerClassName: classes.paper,
             renderCell: (params) => {
@@ -100,7 +106,9 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
                     <>
                         <div className={classes.image}>
                             <img className={classes.imageList}
-                                src={url + "/images/" + params.row.imageName}
+                               // src={url + "/images/" + params.row.imageName}
+                                src={params.row.imageName !== "" ?"https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
+
                                 //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
 
                                 //src={params.row.imageName}
@@ -113,7 +121,6 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
                 // C:\React app\world-university-backend\public\images
             }
         },
-        { field: 'code', headerName: 'Code', hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
 
         actionsButtonSelectDisplay ?
             {
@@ -151,8 +158,9 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
                                     cidade: params.row.cidade,
                                     pais: params.row.pais,
                                     status: params.row.status,
-                                    imageChangeFromOutSideURL: url + "/images/" + params.row.imageName
-                                }}>
+                                    imageChangeFromOutSideURL: params.row.imageName !==""? "https://s3.amazonaws.com/liralink.sigra/"  + params.row.imageName:  "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png" 
+
+                               }}>
                                 <button className={classes.editButton}>Edit</button>
                             </Link>
 

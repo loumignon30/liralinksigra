@@ -6,6 +6,7 @@ import Controls from '../../components/reusableComponents/Controls';
 import { useForm, Form } from '../../components/reusableComponents/useForm';
 import Notifications from '../../components/reusableComponents/Notifications';
 import * as userRole from "../../services/admin/RoleData";
+import * as userGender from "../../services/admin/GenderData";
 import PageHeader from '../../components/reusableComponents/PageHeader';
 import ImageUpLoad from '../../components/reusableComponents/ImageUpLoad';
 import UserService from '../../services/admin/User.service';
@@ -19,7 +20,7 @@ const initialFValues = {
     address: '',
     city: '',
     dateofbirth: '',
-    gender: 'male',
+    gender: 'Masculino',
     role: '',
     password: '',
     photofilename: '',
@@ -43,18 +44,23 @@ export default function NewUSerForm() {
             setImageSRC(URL.createObjectURL(event.target.files[0]));
         }
     }
-
     // function for validating form
     const validate = (fieldValues = values) => {
         let validationErrorM = {}
-        if ('firstName' in fieldValues)
+        if ('firstname' in fieldValues)
             validationErrorM.firstname = fieldValues.firstname ? "" : " "  // This field is Required
-        if ('lastName' in fieldValues)
+        if ('lastname' in fieldValues)
             validationErrorM.lastname = fieldValues.lastname ? "" : " "   // This field is Required
         if ('email' in fieldValues)
             validationErrorM.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : ""
         if ('telephone' in fieldValues)
             validationErrorM.telephone = fieldValues.telephone.length > 8 ? "" : "Minimum 9 caracters"
+
+        if ('gender' in fieldValues)
+            validationErrorM.gender = fieldValues.gender ? "" : " "
+
+        if ('password' in fieldValues)
+            validationErrorM.password = fieldValues.password.length > 3 ? "" : "Minimum 3 caracters"
 
         setErrors({
             ...validationErrorM
@@ -75,9 +81,9 @@ export default function NewUSerForm() {
     }, []);
 
     const genderItems = [
-        { id: 'male', title: 'Male' },
-        { id: 'female', title: 'Female' },
-        { id: 'other', title: 'Other' },
+        { id: 'Masculino', title: 'Masculino' },
+        { id: 'Feminino', title: 'Feminino' },
+        { id: 'Outro', title: 'Outro' },
     ];
 
     const saveImageFromImageUpload = () => {
@@ -130,8 +136,8 @@ export default function NewUSerForm() {
             <div className="newUserMainContainer">
 
                 <PageHeader
-                    title="New User"
-                    subTitle="Save new User here"
+                    title="Novo Utilisador"
+                    subTitle="Gravar Novo Utilisadores do Sistema"
                     backGroundColor="#50394c"
                     color="white"
                     icon={<ArticleIcon />}>
@@ -144,13 +150,12 @@ export default function NewUSerForm() {
 
                         <div className="newUser">
                             <div>
-                                <label className="userLabel">Primeiro Nome</label>
+                                <label className="userLabel">Nome</label>
                                 <Controls.Input
                                     name="firstname"
-                                    placeHolder="First Name"
+                                    placeHolder="Primeiro Nome"
                                     value={values.firstname}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
                                     className='textField-TextLarge'
                                     type="text"
                                     error={errors.firstname}
@@ -161,11 +166,9 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Apelido</label>
                                 <Controls.Input
                                     name="lastname"
-                                    placeHolder="Last Name"
+                                    placeHolder="Apelido"
                                     value={values.lastname}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="text"
                                     error={errors.lastname}
                                 />
@@ -175,11 +178,9 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Email</label>
                                 <Controls.Input
                                     name="email"
-                                    placeHolder="Email Addresse"
+                                    placeHolder="Endereço email"
                                     value={values.email}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="text"
                                     error={errors.email}
                                 />
@@ -189,11 +190,9 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Telefone</label>
                                 <Controls.Input
                                     name="telephone"
-                                    placeHolder="Telephone"
+                                    placeHolder="Número de Telefone"
                                     value={values.telephone}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="text"
                                     error={errors.telephone}
                                 />
@@ -203,11 +202,9 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Endereço</label>
                                 <Controls.Input
                                     name="address"
-                                    placeHolder="Addresse"
+                                    placeHolder="Endereço"
                                     value={values.address}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="text"
                                 />
                             </div>
@@ -216,11 +213,9 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Cidade</label>
                                 <Controls.Input
                                     name="city"
-                                    placeHolder="City"
+                                    placeHolder="Cidade"
                                     value={values.city}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="text"
                                 />
                             </div>
@@ -228,11 +223,9 @@ export default function NewUSerForm() {
                                 <label className="userLabel">País</label>
                                 <Controls.Input
                                     name="country"
-                                    placeHolder="Country"
+                                    placeHolder="País"
                                     value={values.country}
                                     onChange={handleInputChange}
-                                    // className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="text"
                                 />
                             </div>
@@ -241,29 +234,27 @@ export default function NewUSerForm() {
 
                         <div className="newUser2">
                             <div>
-                                <label className="userLabel">Data Nascimento</label>
+                                <label className="userLabel">Data Nascim.</label>
                                 <Controls.Input
                                     name="dateofbirth"
-                                    placeHolder="Date of Birth"
+                                    placeHolder="Data de nascimento"
                                     value={values.dateofbirth}
-                                    /// className= {'inputTextLarge'}
                                     onChange={handleInputChange}
-                                    className={'textField-TextLarge'}
                                     type="date"
                                 />
                             </div>
 
                             <div >
-                                <label className="userLabel">Genero</label>
-                                <Controls.RadioGroup
+                                <label className="userLabel">Sexo</label>
+                                <Controls.Select
                                     name="gender"
-                                    label="Gender"
+                                    label="gender"
                                     value={values.gender}
-                                    items={genderItems}
                                     onChange={handleInputChange}
-                                    className={"radio-button"}
-                                >
-                                </Controls.RadioGroup>
+                                    options={userGender.getGender()}
+                                    className={"select-buttonLarge11"}
+                                    error={errors.gender}
+                                />
                             </div>
 
                             <div style={{ paddingTop: "5px", }}>
@@ -274,7 +265,7 @@ export default function NewUSerForm() {
                                     value={values.role}
                                     onChange={handleInputChange}
                                     options={userRole.getRole()}
-                                    className={"select-buttonLarge"}
+                                    className={"select-buttonLarge11"}
                                 />
                             </div>
 
@@ -282,12 +273,12 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Senha</label>
                                 <Controls.Input
                                     name="password"
-                                    placeHolder="Password"
+                                    placeHolder="Senha"
                                     value={values.password}
                                     onChange={handleInputChange}
                                     with="300px"
                                     type="password"
-
+                                    error={errors.password}
                                 />
                             </div>
 
@@ -295,20 +286,20 @@ export default function NewUSerForm() {
                                 <label className="userLabel">Confirmar</label>
                                 <Controls.Input
                                     name="password"
-                                    placeHolder="Confirm Password"
+                                    placeHolder="Confirmar Senha"
                                     value={values.password}
                                     onChange={handleInputChange}
-                                    //className= {'inputTextLarge'}
-                                    className={'textField-TextLarge'}
                                     type="password"
+                                    error={errors.password}
                                 />
                             </div>
                             <div>
                                 <div style={{ marginTop: "10px" }}>
                                     <ImageUpLoad
                                         ref={childRef}
-                                        fotoTitulo="Photo"
+                                        fotoTitulo="Foto"
                                         margnLeft="0px"
+                                        uploadDisplay={true}
                                     />
                                 </div>
                             </div>
@@ -321,11 +312,11 @@ export default function NewUSerForm() {
                             <div >
                                 <Controls.Buttons
                                     type="submit"
-                                    text="Submit"
+                                    text="Gravar"
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text="Reset"
+                                    text="Limpar"
                                     color="secondary"
                                     onClick={ResetForm} />
                             </div>

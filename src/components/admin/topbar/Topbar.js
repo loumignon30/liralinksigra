@@ -35,7 +35,7 @@ export default function Topbar() {
             setfirstName(item.firstname),
             setLastName(item.lastname),
             setUserPhoto(item.photofilename),
-            setImageChangeFromOutSideURL(url + "/images/" + item.photofilename)
+            setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + item.photofilename)
         ));
 
         document.addEventListener("click", handleClick);

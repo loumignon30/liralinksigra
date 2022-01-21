@@ -38,8 +38,8 @@ const Agencia = () => {
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
-    const { values, setValues, handleInputChange } = useForm(initialFValues)  // useForm = useForm.js
-    const [slideImgCategory, setSlideImgCategory] = useState();
+
+    //const [slideImgCategory, setSlideImgCategory] = useState();
     const [sede, setSede] = useState("");
     const [notificatinoShow, setNotificationShow] = useState(false);
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
@@ -51,18 +51,57 @@ const Agencia = () => {
     const [headerSubTitle, setHeaderSubTitle] = useState("");
     const [buttonTitle, setButtonTitle] = useState();
     const [textReset, setTextReset] = useState();
-
-    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
-
+    //const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
-        setSlideImgCategory("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
+        // setSlideImgCategory("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
 
         getStateValuesFromSearchTable();
         updateValuesOnOpen();  // useContext
 
     }, []);
+
+    // function for validating form
+    const validate = (fieldValues = values) => {
+        let validationErrorM = {}
+        if ('code' in fieldValues)
+            validationErrorM.code = fieldValues.code ? "" : " "  // This field is Required
+        if ('nome' in fieldValues)
+            validationErrorM.nome = fieldValues.nome ? "" : " "   // This field is Required
+
+        if ('endereco' in fieldValues)
+            validationErrorM.endereco = fieldValues.endereco ? "" : " "
+
+        if ('nomeRepresentante' in fieldValues)
+            validationErrorM.nomeRepresentante = fieldValues.nomeRepresentante ? "" : " "
+
+        if ('cidade' in fieldValues)
+            validationErrorM.cidade = fieldValues.cidade ? "" : " "
+        if ('pais' in fieldValues)
+            validationErrorM.pais = fieldValues.pais ? "" : " "
+
+            if ('telefone' in fieldValues)
+            validationErrorM.telefone = fieldValues.telefone.length > 8 ? "" : "Minimum 9 caracters"
+
+
+        if ('email' in fieldValues)
+            validationErrorM.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : " "
+
+        setErrors({
+            ...validationErrorM
+        })
+
+        return Object.values(validationErrorM).every(x => x === "")  // it will return true if x==""
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
+
 
     const getStateValuesFromSearchTable = () => {
 
@@ -77,8 +116,8 @@ const Agencia = () => {
 
             setValues(location.state);
 
-            setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
-           sendImageFromImageUpload(location.state.imageChangeFromOutSideURL);
+            //setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
+            //sendImageFromImageUpload(location.state.imageChangeFromOutSideURL);
 
 
         } else {
@@ -102,25 +141,25 @@ const Agencia = () => {
         ));
     }
 
-    const saveImageFromImageUpload = () => {
-        setImageFileName(childRef.current.fileName);
-        values.imageName = (childRef.current.fileName);
-        childRef.current.saveImage();  // saveImage() = method called
-    }
+    // const saveImageFromImageUpload = () => {
+    //     setImageFileName(childRef.current.fileName);
+    //     values.imageName = (childRef.current.fileName);
+    //     childRef.current.saveImage();  // saveImage() = method called
+    // }
 
-    const imageReset = () => {
-        childRef.current.imageReset();
-    }
+    // const imageReset = () => {
+    //     childRef.current.imageReset();
+    // }
 
-    const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            setSlideImgCategory(URL.createObjectURL(event.target.files[0]));
-        }
-    }
+    // const onImageChange = (event) => {
+    //     if (event.target.files && event.target.files[0]) {
+    //         setSlideImgCategory(URL.createObjectURL(event.target.files[0]));
+    //     }
+    // }
 
     const ResetForm = () => {
         setSede("");
-        imageReset();
+        //imageReset();
         setValues(initialFValues);
 
         updateValuesOnOpen();  // useContext
@@ -132,17 +171,17 @@ const Agencia = () => {
         setButtonTitle("Save");
         setTextReset("Limpar");
 
-        setSlideImgCategory("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
+        //setSlideImgCategory("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
         setNotificationShow(false);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        saveAgencia(); // call save university
-        ResetForm();
-        // if (validate()) {
+        if (validate()) {
+            saveAgencia(); // call save university
+            ResetForm();
+        }
 
-        // }
     }
 
     const tableAgenciaUpdateData = () => {
@@ -156,9 +195,9 @@ const Agencia = () => {
     }
 
     const saveAgencia = () => {
-        if (childRef.current.imageSelected) {  // save image only if selected
-            saveImageFromImageUpload();
-        }
+        // if (childRef.current.imageSelected) {  // save image only if selected
+        //     saveImageFromImageUpload();
+        // }
 
         if (values.id > 0) {
             AgenciaService.update(values.id, values).then(response => {
@@ -225,9 +264,10 @@ const Agencia = () => {
                                 placeHolder="Sede da Empresa"
                                 value={sede}
                                 onChange={handleInputChange}
-                                width="290px"
+                                width="280px"
                                 type="text"
                                 disabled="true"
+                                error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickUniversityPopup}
@@ -242,6 +282,8 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="290px"
+                                error={errors.code}
+
                             />
                         </div>
 
@@ -254,6 +296,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="290px"
+                                error={errors.nome}
                             />
                         </div>
                         <div>
@@ -265,6 +308,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="290px"
+                                error={errors.nomeRepresentante}
                             />
                         </div>
 
@@ -277,6 +321,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="290px"
+                                error={errors.endereco}
                             />
                         </div>
 
@@ -289,7 +334,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="290px"
-
+                                error={errors.email}
                             />
                         </div>
 
@@ -302,6 +347,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="290px"
+                                error={errors.telefone}
                             />
                         </div>
 
@@ -314,6 +360,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="145px"
+                                error={errors.cidade}
                             />
 
                             <Controls.Input
@@ -323,6 +370,7 @@ const Agencia = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="145px"
+                                error={errors.pais}
                             />
                         </div>
 
@@ -373,12 +421,13 @@ const Agencia = () => {
 
                     <div className="newFaculty">
 
-                        <div className="newUniversity">
+                        {/* <div className="newUniversity">
                             <ImageUpLoad
                                 ref={childRef}
                                 fotoTitulo="Logo"
+                                uploadDisplay={true}
                             />
-                        </div>
+                        </div> */}
 
                     </div>
 

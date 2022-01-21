@@ -268,7 +268,10 @@ const SedeEdit = (props) =>{
                             </div>
 
                             <div className='userphoto'>
-                                <ImageUpLoad ref={childRef} />
+                                <ImageUpLoad ref={childRef}
+                                margnLeft="0px"
+                                fotoTitulo="Logo"
+                                uploadDisplay={true} />
                             </div>
 
                             <div>

@@ -134,7 +134,7 @@ const Login = () => {
                         <label className="inputLabel">Email</label>
                         <Controls.Input
                             name="email"
-                            placeHolder="Email address"
+                            placeHolder="Endereço Email do usuário"
                             value={values.email}
                             onChange={handleInputChange}
                             type="text"
@@ -147,7 +147,7 @@ const Login = () => {
                         <label className="inputLabel">Password</label>
                         <Controls.Input
                             name="password"
-                            placeHolder="Password"
+                            placeHolder="Senha"
                             value={values.code}
                             onChange={handleInputChange}
                             type="password"

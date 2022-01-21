@@ -23,18 +23,18 @@ const ListagemFuncionarios = () => {
                 <FuncionarioSearchTable
                     idDisplay={false}
                     codeDisplay={true}
-                    primeiroNomeDisplay={true}
-                    ultimonomeDisplay={true}
+                    primeiroNomeDisplay={false}
+                    ultimonomeDisplay={false}
                     emailDisplay={true}
-                    actionsButtonDisplaySelect={true}
+                    actionsButtonDisplaySelect={false}
                     emailDisplay={true}
                     telefoneDislay={true}
                     statusDisplay={true}
                     actionsButtonDisplayEditDelete={true}
                     backGroundColor="darkBlue"
                     color="white"
-                    pageSize={15}
-                    rowPerPage={15} />
+                    pageSize={8}
+                    rowPerPage={8} />
             </div>
 
             <ConfirmDialog

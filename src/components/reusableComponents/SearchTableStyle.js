@@ -90,6 +90,12 @@ const useStyles = makeStyles(props => ({
         width: "100%",
         height: "85%"
     },
+    radioButton: {
+        fontSize: "10px",
+        fontFamily: "Times New Roman', Times, serif",
+        display: 'flex',
+        alignContent: "center",
+    },
 }));
 
 

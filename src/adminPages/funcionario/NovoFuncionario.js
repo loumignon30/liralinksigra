@@ -1,7 +1,7 @@
 import "./funcionario.css";
 import '../../App.css';
 import Notifications from '../../components/reusableComponents/Notifications';
-import { House, Search } from '@mui/icons-material';
+import { House, Image, Search } from '@mui/icons-material';
 import React, { useState, useEffect, useRef, useContext } from "react";
 import PageHeader from "../../components/reusableComponents/PageHeader";
 import Controls from '../../components/reusableComponents/Controls';
@@ -17,7 +17,8 @@ import DepartamentoSearchTable from "../departamento/DepartamentoSearchTable";
 import FuncaoSearchTable from "../funcao/FuncaoSearchTable";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import { useLocation } from "react-router-dom";
-
+import semfoto from "../../assets/images/semfoto.png";
+import { v4 as uuidv4 } from 'uuid';
 
 const initialFValues = {
     id: 0,
@@ -49,7 +50,6 @@ const NovoFuncionario = () => {
     const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const childRefSideBar = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
-    const { values, setValues, handleInputChange } = useForm(initialFValues)  // useForm = useForm.js
     const [slideImgCategory, setSlideImgCategory] = useState();
     const [sede, setSede] = useState("");
     const [agencia, setAgencia] = useState("");
@@ -71,6 +71,12 @@ const NovoFuncionario = () => {
     const [buttonTitle, setButtonTitle] = useState();
     const [textReset, setTextReset] = useState();
     const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
+
+    const [imageTeste, setImageTest] = useState([]);
+
+    const [fileUrl, setFileUrl] = useState();
+    const [file, setFile] = useState();
+    const [fileName, setFileName] = useState();
 
 
     const saveImageFromImageUpload = () => {
@@ -98,6 +104,43 @@ const NovoFuncionario = () => {
         getStateValuesFromSearchTable();
     }, []);
 
+    // function for validating form
+    const validate = (fieldValues = values) => {
+        let validationErrorM = {}
+        if ('code' in fieldValues)
+            validationErrorM.code = fieldValues.code ? "" : " "  // This field is Required
+        if ('primeironome' in fieldValues)
+            validationErrorM.primeironome = fieldValues.primeironome ? "" : " "   // This field is Required
+        if ('ultimonome' in fieldValues)
+            validationErrorM.ultimonome = fieldValues.ultimonome ? "" : " "   // This field is Required
+        if ('email' in fieldValues)
+            validationErrorM.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : ""
+        if ('telefone' in fieldValues)
+            validationErrorM.telefone = fieldValues.telefone.length > 8 ? "" : "Minimum 9 caracters"
+
+        if ('funcao')
+            validationErrorM.funcao = funcao ? "" : " "
+
+        if ('departamento')
+            validationErrorM.departamento = departamento ? "" : " "
+
+        if ('sede')
+            validationErrorM.sede = sede ? "" : " "
+        if ('agencia')
+            validationErrorM.agencia = agencia ? "" : " "
+
+        setErrors({
+            ...validationErrorM
+        })
+        return Object.values(validationErrorM).every(x => x === "")  // it will return true if x==""
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     const getStateValuesFromSearchTable = () => {
 
@@ -132,11 +175,6 @@ const NovoFuncionario = () => {
             setTextReset("Limpar");
         }
     }
-    const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            setSlideImgCategory(URL.createObjectURL(event.target.files[0]));
-        }
-    }
 
     const sendImageFromImageUpload = (image) => {
         childRef.current.imageChangeFromOutSide(image);  // saveImage() = method called
@@ -147,8 +185,6 @@ const NovoFuncionario = () => {
         setFuncao("")
         imageReset();
         setValues(initialFValues);
-        setSlideImgCategory("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
-        //setNotificationShow(false);
 
         setBackGroundColor("darkGreen");
         setColor("white");
@@ -163,11 +199,19 @@ const NovoFuncionario = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        saveFuncionario(); // call save university
-        ResetForm();
-        // if (validate()) {
 
-        // }
+        if (validate()) {
+
+            if (values.sedeID === 0) {
+                values.sedeID = sedeID;
+            }
+            if (values.agenciaID === 0) {
+                values.agenciaID = agenciaID;
+            }
+
+            saveFuncionario(); // call save university
+            //ResetForm();
+        }
     }
 
     const tableFuncionarioUpdateData = () => {
@@ -197,8 +241,15 @@ const NovoFuncionario = () => {
 
     const saveFuncionario = () => {
         if (childRef.current.imageSelected) {  // save image only if selected
+            childRef.current.getFuncionarioCode(values.code, "code");  // saveImage() = method called
+            saveImageFromImageUpload();
+        } else {
+            sendImageFromImageUpload(semfoto);  // enviar a imagem de sem foto
+            childRef.current.getFuncionarioCode(values.code, "code");  // saveImage() = method called
             saveImageFromImageUpload();
         }
+
+
         if (values.id > 0) {
             FuncionarioService.update(values.id, values).then(response => {
                 setNotificationShow(true);
@@ -228,6 +279,7 @@ const NovoFuncionario = () => {
         }
     }
 
+
     return (
 
         <div className="facultyContainer">
@@ -237,6 +289,7 @@ const NovoFuncionario = () => {
                 backGroundColor={backGroundColor}
                 color={color}>
             </PageHeader>
+
 
             <Form onSubmit={handleSubmit} autoComplete="off">
 
@@ -252,6 +305,7 @@ const NovoFuncionario = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 disabled="true"
+                                error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickSedePopup}
@@ -266,6 +320,7 @@ const NovoFuncionario = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 disabled="true"
+                                error={errors.agencia}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickAgenciaPopup}
@@ -279,7 +334,7 @@ const NovoFuncionario = () => {
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.code}
                             />
                         </div>
 
@@ -292,7 +347,7 @@ const NovoFuncionario = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 width="145px"
-
+                                error={errors.primeironome}
                             />
 
                             <Controls.Input
@@ -301,7 +356,8 @@ const NovoFuncionario = () => {
                                 value={values.ultimonome}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="145px"
+                                width="120px"
+                                error={errors.ultimonome}
                             />
                         </div>
                         <div>
@@ -312,7 +368,8 @@ const NovoFuncionario = () => {
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.email}
+
                             />
                         </div>
 
@@ -324,6 +381,7 @@ const NovoFuncionario = () => {
                                 value={values.telefone}
                                 onChange={handleInputChange}
                                 type="text"
+                                error={errors.telefone}
                             />
                         </div>
 
@@ -335,7 +393,7 @@ const NovoFuncionario = () => {
                                 value={departamento}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.departamento}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickDepartamentoPopup}
@@ -349,7 +407,7 @@ const NovoFuncionario = () => {
                                 value={funcao}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.funcao}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickFuncaoPopup}
@@ -359,6 +417,21 @@ const NovoFuncionario = () => {
                     </div>
                     <div className="newFaculty">
 
+                        <FuncionarioSearchTable ref={childRef2}
+                            idDisplay={false}
+                            codeDisplay={true}
+                            facultyDisplay={true}
+                            emailDisplay={false}
+                            deanDisplay={false}
+                            statusDiplay={false}
+                            actionsButtonDisplaySelect={false}
+                            actionsButtonDisplayEditDelete={false}
+                            backGroundColor={backGroundColor}
+                            color={color}
+                            pageSize={5}
+                            rowPerPage={5}
+
+                        />
                     </div>
 
                 </div>
@@ -369,7 +442,9 @@ const NovoFuncionario = () => {
 
                         <div className="newUniversity">
                             <ImageUpLoad ref={childRef}
-                                fotoTitulo="Fotografia" />
+                                fotoTitulo="Fotografia"
+                                margnLeft="0px"
+                                uploadDisplay={true} />
                         </div>
 
                     </div>
@@ -395,7 +470,7 @@ const NovoFuncionario = () => {
 
             </Form>
 
-            <div className="faculty-datagrid-style">
+            {/* <div className="faculty-datagrid-style">
                 <div style={{ height: '230px', width: '100%', marginTop: "0px" }}>
 
                     <FuncionarioSearchTable ref={childRef2}
@@ -414,7 +489,7 @@ const NovoFuncionario = () => {
 
                     />
                 </div>
-            </div>
+            </div> */}
             {notificatinoShow ?
                 <Notifications
                     notify={notify}
@@ -446,6 +521,7 @@ const NovoFuncionario = () => {
                             sedeData={(id, code, sede) => {
                                 setSede(sede);
                                 values.sedeID = id
+                                setSedeID(id);
                                 setOpenPopup(false);
                                 tableFuncionarioUpdateData(id);
                             }
@@ -462,14 +538,14 @@ const NovoFuncionario = () => {
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="540px"
-                        height="500px"
+                        width="640px"
+                        height="550px"
                     >
 
                         <AgenciaSearchTable
-                            idDisplay="true"
-                            codeDisplay="false"
-                            statusDiplay="false"
+                            idDisplay={true}
+                            codeDisplay={true}
+                            statusDiplay={false}
                             actionsButtonDisplaySelect={true}
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor={backGroundColor}
@@ -479,6 +555,7 @@ const NovoFuncionario = () => {
                             agenciaData={(id, code, agencia) => {
                                 values.agenciaID = id;
                                 setAgencia(agencia);
+                                setAgenciaID(id);
                                 setOpenPopup(false);
                             }}
                         />
@@ -493,13 +570,13 @@ const NovoFuncionario = () => {
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="540px"
-                        height="500px"
+                        width="640px"
+                        height="550px"
                     >
 
                         <DepartamentoSearchTable
-                            idDisplay="true"
-                            codeDisplay="false"
+                            idDisplay={true}
+                            codeDisplay={false}
                             actionsButtonDisplay={true}
                             actionsButtonDisplayEditDelete={false}
                             pageSize={3}
@@ -509,7 +586,6 @@ const NovoFuncionario = () => {
                                 setDepartamento(departamento);
                                 values.departamentoID = id;
                                 setOpenPopup(false);
-
                             }
                             }
                         />
@@ -524,13 +600,13 @@ const NovoFuncionario = () => {
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="540px"
-                        height="500px"
+                        width="640px"
+                        height="550px"
                     >
 
                         <FuncaoSearchTable
-                            idDisplay="true"
-                            codeDisplay="false"
+                            idDisplay={false}
+                            codeDisplay={true}
                             actionsButtonDisplay={true}
                             actionsButtonDisplayEditDelete={false}
                             pageSize={3}

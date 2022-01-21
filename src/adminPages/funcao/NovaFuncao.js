@@ -33,7 +33,6 @@ const NovaFuncao = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [popupTitle, setPpupTitle] = useState("");
     const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
-    const { values, setValues, handleInputChange } = useForm(initialFValues)  // useForm = useForm.js
     const [sede, setSede] = useState("");
     const [sedeID, setSedeID] = useState(0);
     const [agenciaID, setAgenciaID] = useState(0);
@@ -58,8 +57,35 @@ const NovaFuncao = () => {
         updateValuesOnOpen(); // // update Usecontext
 
         getStateValuesFromSearchTable();
-        
+
     }, []);
+
+    // function for validating form
+    const validate = (fieldValues = values) => {
+        let validationErrorM = {}
+        if ('code' in fieldValues)
+            validationErrorM.code = fieldValues.code ? "" : " "  // This field is Required
+        if ('funcao' in fieldValues)
+            validationErrorM.funcao = fieldValues.funcao ? "" : " "   // This field is Required
+
+        if ('sede')
+            validationErrorM.sede = sede ? "" : " "
+
+        if ('agencia')
+            validationErrorM.agencia = agencia ? "" : " "
+
+        setErrors({
+            ...validationErrorM
+        })
+        return Object.values(validationErrorM).every(x => x === "")  // it will return true if x==""
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     const updateValuesOnOpen = () => {
         userSavedValue.map(item => (
@@ -113,11 +139,10 @@ const NovaFuncao = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        saveFaculty(); // call save university
-        ResetForm();
-        // if (validate()) {
-
-        // }
+        if (validate()) {
+            saveFaculty(); // call save university
+            ResetForm();
+        }
     }
 
     const tableFuncaoUpdateData = () => {
@@ -137,50 +162,50 @@ const NovaFuncao = () => {
     }
 
     const saveFaculty = () => {
-        
-        if(values.id > 0 ){
-            FuncaoService.update(values.id,values).then(response => {
+
+        if (values.id > 0) {
+            FuncaoService.update(values.id, values).then(response => {
                 setNotificationShow(true);
                 tableFuncaoUpdateData(); // update Faculty Data on FacultySearchTable.js
                 values.code = "";
                 values.funcao = "";
                 values.observacao = "";
-    
+
                 setNotify({
                     isOpen: true,
                     message: 'Função Modificado com Sucesso!',
                     type: 'success'
                 })
-    
+
             })
                 .catch(e => {
                     console.log(e)
                 });
-    
-        }else{
 
-            if(values.agenciaID === 0 && agenciaID > 0) {
-                values.agenciaID =agenciaID;
+        } else {
+
+            if (values.agenciaID === 0 && agenciaID > 0) {
+                values.agenciaID = agenciaID;
             }
 
             FuncaoService.create(values).then(response => {
 
                 setNotificationShow(true);
                 tableFuncaoUpdateData(); // update Faculty Data on FacultySearchTable.js
-    
+
                 setNotify({
                     isOpen: true,
                     message: 'Nova Função guarda com Sucesso!',
                     type: 'success'
                 })
-    
+
             })
                 .catch(e => {
                     console.log(e)
                 });
         }
 
-           }
+    }
 
     return (
 
@@ -206,8 +231,7 @@ const NovaFuncao = () => {
                                 value={sede}
                                 onChange={handleInputChange}
                                 type="text"
-                                disabled="true"
-                            //error={errors.telephone}
+                                error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclicSedePopup}
@@ -221,7 +245,7 @@ const NovaFuncao = () => {
                                 value={agencia}
                                 onChange={handleInputChange}
                                 type="text"
-                                disabled="true"
+                                error={errors.agencia}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickAgenciaPopup}
@@ -236,6 +260,7 @@ const NovaFuncao = () => {
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
+                                error={errors.code}
                             />
                         </div>
                         <div>
@@ -246,22 +271,22 @@ const NovaFuncao = () => {
                                 value={values.funcao}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.funcao}
                             />
                         </div>
 
                         <div>
                             <label className="inputLabel">Observação</label>
-                            <Controls.TextArea
+                            <Controls.Input
                                 name="observacao"
                                 placeHolder="Observação"
                                 value={values.observacao}
                                 onChange={handleInputChange}
                                 type="text"
-                                minRow={8}
-                                width="285px"
+                                multiline
+                                rows={5}
                                 height="140px"
-                            // className={'textField-TextLarge'}
+                                width="290px"
                             />
                         </div>
 
@@ -332,8 +357,8 @@ const NovaFuncao = () => {
                     >
 
                         <SedeSearchTable
-                            idDisplay="true"
-                            codeDisplay="false"
+                            idDisplay={true}
+                            codeDisplay={false}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
                             pageSize={5}
@@ -358,14 +383,14 @@ const NovaFuncao = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="470px"
-                        height="480px"
+                        width="670px"
+                        height="580px"
                     >
 
                         <AgenciaSearchTable
-                            idDisplay="false"
-                            codeDisplay="false"
-                            statusDiplay="false"
+                            idDisplay={false}
+                            codeDisplay={false}
+                            statusDiplay={false}
                             actionsButtonDisplaySelect={true}
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor={backGroundColor}

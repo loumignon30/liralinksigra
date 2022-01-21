@@ -4,6 +4,9 @@ import http from '../../http-common';
 import urlImage from '../../http-common-images';
 import { Publish } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
+import semmagem from "../../assets/images/sem-imagem.jpg"
+import { v4 as uuidv4 } from 'uuid';
+
 
 const ImageUpLoad = forwardRef((props, ref) => {
 
@@ -29,15 +32,27 @@ const ImageUpLoad = forwardRef((props, ref) => {
     const [fileName, setFileName] = useState("");
     const [fileDisplay, setFileDisplay] = useState(null);
     const [imageSelected, setImageSelected] = useState(false);
+    const [fileNameRandom, setfileNameRandom] = useState("");
+
     const { imageChangeFromOutSideURL } = props;
     const classes = useStyles();
+
+    let codigo = "";
+    let campoImageNaBaseDeDados = "";
+
 
     const saveImage = () => {
 
         if (imageSelected)  // save the image only if an image is selected
         {
+           
             const formData = new FormData();
             formData.append('photo', file);
+
+            if(campoImageNaBaseDeDados === "code"){
+                formData.append('code', codigo);
+            }
+
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data',
@@ -58,55 +73,51 @@ const ImageUpLoad = forwardRef((props, ref) => {
         fileName: fileName,
         imageReset: imageReset,
         imageChangeFromOutSide: imageChangeFromOutSide,
-        imageSelected: imageSelected
+        imageSelected: imageSelected,
+        getFuncionarioCode: getFuncionarioCode
 
     }));
 
     useEffect(() => {
 
-        setFileDisplay("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
+        setFileDisplay(semmagem);
 
     }, []);
 
     const imageReset = () => {
-        setFileDisplay("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
+        setFileDisplay(semmagem);
     }
 
     const imageChangeFromOutSide = (imageChangeFromOutSideURL) => {
-
         setFileDisplay(imageChangeFromOutSideURL);
     }
 
+    const getFuncionarioCode = (code, campoImageNaBaseDeDados1) => {
+        codigo = code;
+        campoImageNaBaseDeDados = campoImageNaBaseDeDados1;
+
+    }
+
     const onImageInputChange = (e) => {
+
+        let uuidvRandom = "";
+
         setFile(e.target.files[0]);
         setFileDisplay(URL.createObjectURL(e.target.files[0]));
         setImageSelected(true);
         setFileName(e.target.files[0].name);
-    }
 
-    const onFormSubmit = (e) => {
-        e.preventDefault();
+       // uuidvRandom = uuidv4();
+        //setfileNameRandom(uuidvRandom)
+        //setFileName(uuidvRandom);
+       
 
-        const formData = new FormData();
-        formData.append('photo', file);
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data',
-            },
-        };
+       // console.log(fileName);
 
-        //const url = 'http://localhost:5001/api';
-
-        axios.post(url, formData).then((response) => {
-            // alert('Image Uploaded Successfully!!');
-        }).catch((err) => {
-            console.log(err);
-        })
     }
 
     return (
         <div className="App">
-
             {
                 uploadDisplay ?
                     <label htmlFor="file" >
@@ -119,7 +130,7 @@ const ImageUpLoad = forwardRef((props, ref) => {
                 className={classes.file}
             />
 
-            <div style={{marginTop:"5px"}}>
+            <div style={{ marginTop: "5px" }}>
                 <label className={classes.labelStyle}>{fotoTitulo}</label>
                 <img className="ImageContainer"
                     src={fileDisplay}

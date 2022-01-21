@@ -100,7 +100,7 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
         { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
         
         codeDisplay?
-        { field: 'code', headerName: 'Code', flex: 1, headerClassName: classes.paper }:
+        { field: 'code', headerName: 'Code', width: 80, headerClassName: classes.paper }:
         { field: 'code', headerName: 'Code', hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
         
         { field: 'funcao', headerName: 'Função',  flex: 3, headerClassName: classes.paper },

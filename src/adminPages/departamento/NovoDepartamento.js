@@ -34,7 +34,6 @@ const NovoDepartamento = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [popupTitle, setPpupTitle] = useState("");
     const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
-    const { values, setValues, handleInputChange } = useForm(initialFValues)  // useForm = useForm.js
     const [sede, setSede] = useState("");
     const [notificatinoShow, setNotificationShow] = useState(false);
     const [agencia, setAgencia] = useState();
@@ -43,9 +42,7 @@ const NovoDepartamento = () => {
 
     const [sedeID, setSedeID] = useState(0);
     const [agenciaID, setAgenciaID] = useState();
-
     const location = useLocation();
-
     const [backGroundColor, setBackGroundColor] = useState("");
     const [color, setColor] = useState("");
     const [headerTitle, setHeaderTitle] = useState("");
@@ -53,13 +50,41 @@ const NovoDepartamento = () => {
     const [buttonTitle, setButtonTitle] = useState();
     const [textReset, setTextReset] = useState();
 
-
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
         updateValuesOnOpen(); // update Usecontext
         getStateValuesFromSearchTable();
 
     }, []);
+
+    // function for validating form
+    const validate = (fieldValues = values) => {
+        let validationErrorM = {}
+        if ('code' in fieldValues)
+            validationErrorM.code = fieldValues.code ? "" : " "  // This field is Required
+        if ('departamento' in fieldValues)
+            validationErrorM.departamento = fieldValues.departamento ? "" : " "   // This field is Required
+
+        if ('sede')
+            validationErrorM.sede = sede ? "" : " "
+
+        if ('agencia')
+            validationErrorM.agencia = agencia ? "" : " "
+
+        setErrors({
+            ...validationErrorM
+        })
+
+        return Object.values(validationErrorM).every(x => x === "")  // it will return true if x==""
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
+
 
     const getStateValuesFromSearchTable = () => {
 
@@ -113,11 +138,11 @@ const NovoDepartamento = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        saveFaculty(); // call save university
-        ResetForm();
-        // if (validate()) {
+        if (validate()) {
+            saveFaculty(); // call save university
+            ResetForm();
+        }
 
-        // }
     }
 
     const tableDepartamentoUpdateData = () => {
@@ -138,7 +163,7 @@ const NovoDepartamento = () => {
 
     const saveFaculty = () => {
 
-        if(values.id > 0 ){
+        if (values.id > 0) {
             DepartamentoServices.update(values.id, values).then(response => {
                 setNotificationShow(true);
                 tableDepartamentoUpdateData(); // update Faculty Data on FacultySearchTable.js
@@ -151,12 +176,12 @@ const NovoDepartamento = () => {
                 .catch(e => {
                     console.log(e)
                 });
-        }else {
+        } else {
 
-            if(values.agenciaID === 0 && agenciaID > 0) {
-                values.agenciaID =agenciaID;
+            if (values.agenciaID === 0 && agenciaID > 0) {
+                values.agenciaID = agenciaID;
             }
-            
+
             DepartamentoServices.create(values).then(response => {
                 setNotificationShow(true);
                 tableDepartamentoUpdateData(); // update Faculty Data on FacultySearchTable.js
@@ -170,7 +195,7 @@ const NovoDepartamento = () => {
                     console.log(e)
                 });
         }
-        
+
     }
 
     return (
@@ -198,7 +223,7 @@ const NovoDepartamento = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 disabled="true"
-                            //error={errors.telephone}
+                                error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclicSedePopup}
@@ -213,6 +238,7 @@ const NovoDepartamento = () => {
                                 onChange={handleInputChange}
                                 type="text"
                                 disabled="true"
+                                error={errors.agencia}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                 onClick={onclickAgenciaPopup}
@@ -227,6 +253,7 @@ const NovoDepartamento = () => {
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
+                                error={errors.code}
                             />
                         </div>
                         <div>
@@ -237,22 +264,21 @@ const NovoDepartamento = () => {
                                 value={values.departamento}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.departamento}
                             />
                         </div>
 
                         <div>
                             <label className="inputLabel">Observação</label>
-                            <Controls.TextArea
+                            <Controls.Input
                                 name="observacao"
                                 placeHolder="Observação"
                                 value={values.observacao}
                                 onChange={handleInputChange}
                                 type="text"
-                                minRow={8}
-                                width="285px"
+                                multiline
+                                rows={5}
                                 height="140px"
-                            // className={'textField-TextLarge'}
                             />
                         </div>
 
@@ -323,8 +349,8 @@ const NovoDepartamento = () => {
                     >
 
                         <SedeSearchTable
-                            idDisplay="true"
-                            codeDisplay="false"
+                            idDisplay={false}
+                            codeDisplay={true}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
                             pageSize={5}
@@ -349,17 +375,15 @@ const NovoDepartamento = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="470px"
-                        height="480px"
+                        width="770px"
+                        height="580px"
                     >
 
                         <AgenciaSearchTable
-                            idDisplay="false"
-                            codeDisplay="false"
-                            facultyDisplay="true"
-                            emailDisplay="false"
-                            deanDisplay="false"
-                            statusDiplay="false"
+                            idDisplay={false}
+                            codeDisplay={true}
+                            emailDisplay={false}
+                            statusDiplay={false}
                             actionsButtonDisplaySelect={true}
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor={backGroundColor}

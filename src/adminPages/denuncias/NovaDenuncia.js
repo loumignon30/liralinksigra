@@ -62,6 +62,7 @@ const NovaDenuncia = () => {
     const [endereco, setEndereco] = useState("");
     const [cidade, setCidade] = useState("");
     const [pais, setPais] = useState("");
+    let fotoFuncionario = "";
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -106,7 +107,7 @@ const NovaDenuncia = () => {
         handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     useEffect(() => {
-        setImageSRC("https://media-exp1.licdn.com/dms/image/C4E03AQFsD7qKHQJzYA/profile-displayphoto-shrink_800_800/0/1624105018084?e=1642032000&v=beta&t=HTny2PpWRl0YOFcXgDMAx2rXIE7XU2lbDjzFm4T2g5o");
+       // setImageSRC("https://media-exp1.licdn.com/dms/image/C4E03AQFsD7qKHQJzYA/profile-displayphoto-shrink_800_800/0/1624105018084?e=1642032000&v=beta&t=HTny2PpWRl0YOFcXgDMAx2rXIE7XU2lbDjzFm4T2g5o");
 
         updateValuesOnOpen();
         setUrl(urlImage());
@@ -203,8 +204,9 @@ const NovaDenuncia = () => {
     const pesquisaCodigoFuncionario = () => {
 
         FuncionarioService.getID(values.codigo).then(response => {
+
             if (response.data.length === 0) {
-                alert("O número " + values.code + " não existe na base de dados");
+                alert("O número inserido não existe na base de dados");
 
                 setSede("");
                 setAgencia("");
@@ -221,8 +223,15 @@ const NovaDenuncia = () => {
             }
 
             response.data.map(info => {
-                setImageChangeFromOutSideURL(url + "/images/" + info.imageName);
-                sendImageFromImageUpload(url + "/images/" + info.imageName);
+                setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
+                sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
+
+                fotoFuncionario = info.imageName;
+
+                if(fotoFuncionario ===""){
+                    setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png");
+                    sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png");
+                }
 
                 setSede(info.sedeFuncionario.sede)
                 setAgencia(info.agenciaFuncionario.nome)
@@ -237,6 +246,7 @@ const NovaDenuncia = () => {
                 values.funcionarioID = info.id;
                 values.sedeID = info.sedeFuncionario.id;
                 values.agenciaID = info.agenciaFuncionario.id;
+
             })
 
         })
@@ -274,7 +284,7 @@ const NovaDenuncia = () => {
                                     placeHolder="Digite o Numero do Funcionário"
                                     value={values.codigo}
                                     onChange={handleInputChange}
-                                    width="290px" type="text"
+                                    width="275px" type="text"
                                     onKeyPress={(event) => {
                                         if (event.key === "Enter") {
                                             handleKeyPress()

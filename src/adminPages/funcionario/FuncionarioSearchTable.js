@@ -5,6 +5,7 @@ import FuncionarioService from "../../services/admin/Funcionario.services";
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import semfoto from "../../assets/images/semfoto.png"
 
 const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
@@ -30,7 +31,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
 
     const [openPopup, setOpenPopup] = useState(false);
     const { idDisplay, codeDisplay, primeiroNomeDisplay, ultimonomeDisplay,
-        emailDisplay,telefoneDislay, statusDisplay,
+        emailDisplay, telefoneDislay, statusDisplay,
         actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete,
         pageSize, rowPerPage } = props;
@@ -67,17 +68,16 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                 console.log(e);
             });
     }
-
     const columns = [
         idDisplay ?
 
-        { field: 'id', headerName: 'ID', flex:1, headerClassName: classes.paper }:
-        { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
-        
-        codeDisplay?
-        { field: 'code', headerName: 'Code', flex: 1, headerClassName: classes.paper }:
-        { field: 'code', headerName: 'Code', hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
-        
+            { field: 'id', headerName: 'ID', flex: 1, headerClassName: classes.paper } :
+            { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
+
+        codeDisplay ?
+            { field: 'code', headerName: 'Code', flex: 1, headerClassName: classes.paper } :
+            { field: 'code', headerName: 'Code', hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
+
         {
             field: 'nomeCompleto', headerName: 'Nome Completo', flex: 3, headerClassName: classes.paper,
             renderCell: (params) => {
@@ -85,7 +85,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                     <>
                         <div className="UtilisateurListPlusPhoto">
                             <img className="UtilisateurListImage"
-                                src={url + "/images/" + params.row.imageName}
+                                src={params.row.imageName !== "" ?"https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
+                               // src={params.row.imageName !== "" ? url + "/images/" + params.row.imageName : url + "/images/" + "semfoto.png"}
                                 //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
 
                                 //src={params.row.imageName}
@@ -99,20 +100,20 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
             }
         },
         primeiroNomeDisplay ?
-        { field: 'primeironome', headerName: 'Primeiro Nome',  flex: 1, headerClassName: classes.paper }:
-        { field: 'primeironome', headerName: 'Primeiro Nome', hide: { primeiroNomeDisplay }, headerClassName: classes.paper },
+            { field: 'primeironome', headerName: 'Primeiro Nome', flex: 1, headerClassName: classes.paper } :
+            { field: 'primeironome', headerName: 'Primeiro Nome', hide: { primeiroNomeDisplay }, headerClassName: classes.paper },
 
         ultimonomeDisplay ?
-        { field: 'ultimonome', headerName: 'Ultimo Nome',  flex: 1, headerClassName: classes.paper }:
-        { field: 'ultimonome', headerName: 'Ultimo Nome', hide: { ultimonomeDisplay }, headerClassName: classes.paper },
+            { field: 'ultimonome', headerName: 'Ultimo Nome', flex: 1, headerClassName: classes.paper } :
+            { field: 'ultimonome', headerName: 'Ultimo Nome', hide: { ultimonomeDisplay }, headerClassName: classes.paper },
 
         emailDisplay ?
-        { field: 'email', headerName: 'Email',  flex: 1, headerClassName: classes.paper }:
-        { field: 'email', headerName: 'Email', hide: { emailDisplay }, headerClassName: classes.paper },
+            { field: 'email', headerName: 'Email', flex: 1, headerClassName: classes.paper } :
+            { field: 'email', headerName: 'Email', hide: { emailDisplay }, headerClassName: classes.paper },
 
         telefoneDislay ?
-        { field: 'telefone', headerName: 'Telefone',  flex: 1, headerClassName: classes.paper }:
-        { field: 'telefone', headerName: 'Telefone', hide: { telefoneDislay }, headerClassName: classes.paper },
+            { field: 'telefone', headerName: 'Telefone', flex: 1, headerClassName: classes.paper } :
+            { field: 'telefone', headerName: 'Telefone', hide: { telefoneDislay }, headerClassName: classes.paper },
 
         statusDisplay ?
             {
@@ -145,7 +146,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action1', headerName: 'Ação', flex:1, headerClassName: classes.paper,
+                field: 'action1', headerName: 'Ação', flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -159,7 +160,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                                     email: params.row.email,
                                     telefone: params.row.telefone,
                                     status: params.row.status,
-                                    imageChangeFromOutSideURL: url + "/images/" + params.row.imageName,
+                                    imageChangeFromOutSideURL: params.row.imageName ? "https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png",
                                     sedeID: params.row.sedeFuncionario.id,
                                     sede: params.row.sedeFuncionario.sede,
                                     agenciaId: params.row.agenciaFuncionario.id,

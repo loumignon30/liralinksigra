@@ -45,7 +45,8 @@ const Sede = (props) => {
     const [id, setID] = useState(0);
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
-    let imageDisplay ;
+    let imageDisplay;
+    let logoCheck = "";
     // function to call the click from ImageUpLoad.js
     const updateValuesOnOpen = () => {
 
@@ -59,8 +60,9 @@ const Sede = (props) => {
             values.endereco = item.sedeEndereco,
             values.cidade = item.sedeCidade,
             values.pais = item.sedePais,
-            imageDisplay =  url + "/images/" + item.sedeImageFile,
-            values.imageName = item.sedeImageFile
+            imageDisplay = "https://s3.amazonaws.com/liralink.sigra/" + item.sedeImageFile,
+            values.imageName = item.sedeImageFile,
+            logoCheck = item.sedeImageFile
         ));
 
     }
@@ -69,17 +71,58 @@ const Sede = (props) => {
         window.scrollTo(0, 0); // open the page on top
         updateValuesOnOpen();
 
-        if(values.id > 0) {
+        if (values.id > 0) {
             imaSedeDisplay(imageDisplay);
         }
 
     }, [id]);
+
+    // function for validating form
+    const validate = (fieldValues = values) => {
+        let validationErrorM = {}
+        if ('code' in fieldValues)
+            validationErrorM.code = fieldValues.code ? "" : " "  // This field is Required
+        if ('sede' in fieldValues)
+            validationErrorM.sede = fieldValues.sede ? "" : " "   // This field is Required
+
+        if ('endereco' in fieldValues)
+            validationErrorM.endereco = fieldValues.endereco ? "" : " "
+
+        if ('nomeRepresentante' in fieldValues)
+            validationErrorM.nomeRepresentante = fieldValues.nomeRepresentante ? "" : " "
+
+        if ('cidade' in fieldValues)
+            validationErrorM.cidade = fieldValues.cidade ? "" : " "
+        if ('pais' in fieldValues)
+            validationErrorM.pais = fieldValues.pais ? "" : " "
+
+        if ('contacto' in fieldValues)
+            validationErrorM.contacto = fieldValues.contacto.length > 8 ? "" : "Minimum 9 caracters"
+
+
+        if ('email' in fieldValues)
+            validationErrorM.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : " "
+
+        setErrors({
+            ...validationErrorM
+        })
+
+        return Object.values(validationErrorM).every(x => x === "")  // it will return true if x==""
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     const saveImageFromImageUpload = () => {
 
         setImageFileName(childRef.current.fileName);
         values.imageName = (childRef.current.fileName);
         childRef.current.saveImage();  // saveImage() = method called
+        logoCheck = (childRef.current.fileName);
     }
 
     const tableSedeData = () => {
@@ -92,8 +135,6 @@ const Sede = (props) => {
     const imageReset = () => {
         childRef.current.imageReset()
     }
-
-    const { values, setValues, handleInputChange } = useForm(initialFValues)  // useForm = useForm.js
 
     const handleDelete = (id) => {
         //setSlideImgCategory(universityDaya.filter((item) => item.id !== id));
@@ -112,18 +153,31 @@ const Sede = (props) => {
         setNotificationShow(false);
 
         setUserSavedValue({});
-        navigate('/login');
-        setOpenPopup(false);
+        navigate('/');
+        // setOpenPopup(false);
     }
 
     const gavarSede = () => {
-        
-        if(childRef.current.imageSelected) {  // save image only if selected
-            saveImageFromImageUpload();
-        }
-       
+
         if (values.id > 0) {
             SedeService.update(values.id, values).then(response => {
+                alert("A Sede foi Alterada com Sucesso!!. O programa vai fechar para atualização da Sede");
+                tableSedeData(); // update DataGrid Table used form universitySearchTable.js
+                setNotificationShow(true);
+                setNotify({
+                    isOpen: true,
+                    message: 'Nova Sede Gravada com Sucesso!',
+                    type: 'success'
+                });
+
+            })
+                .catch(e => {
+                    console.log(e)
+                });
+
+        } else {
+            SedeService.create(values).then(response => {
+                alert("A Sede foi gravada com Sucesso!!. O programa vai fechar para atualização da Sede");
                 tableSedeData(); // update DataGrid Table used form universitySearchTable.js
                 setNotificationShow(true);
                 setNotify({
@@ -132,33 +186,29 @@ const Sede = (props) => {
                     type: 'success'
                 })
 
-            })
-                .catch(e => {
-                    console.log(e)
-                });
-                
-        } else {
-            SedeService.create(values).then(response => {
-                tableSedeData(); // update DataGrid Table used form universitySearchTable.js
-                setNotificationShow(true);
-                setNotify({
-                    isOpen: true,
-                    message: 'Nova Sede Gravada com Sucesso!',
-                    type: 'success'
-                })
             })
                 .catch(e => {
                     console.log(e)
                 });
         }
-
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        gavarSede(); // call save university
-        ResetForm();
-        close();
+        if (validate()) {
+
+            if (childRef.current.imageSelected) {  // if (childRef.current.imageSelected) {
+                saveImageFromImageUpload();
+            }
+            if (logoCheck === "") {
+                alert("Falta do Logo da Sede", "Atenção");
+                return;
+            }
+
+            gavarSede(); // call save university
+            ResetForm();
+            // close();
+        }
     }
 
     const close = () => {
@@ -166,8 +216,6 @@ const Sede = (props) => {
         setOpenPopup(false);
         props.yearGetData();
     }
-
-    
 
     return (
         <div className="universityContainer">
@@ -196,7 +244,7 @@ const Sede = (props) => {
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.code}
                             />
                         </div>
 
@@ -208,7 +256,8 @@ const Sede = (props) => {
                                 value={values.sede}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.sede}
+
                             />
                         </div>
 
@@ -220,7 +269,7 @@ const Sede = (props) => {
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.email}
                             />
                         </div>
 
@@ -232,7 +281,7 @@ const Sede = (props) => {
                                 value={values.contacto}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.contacto}
                             />
                         </div>
 
@@ -244,7 +293,7 @@ const Sede = (props) => {
                                 value={values.endereco}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.endereco}
                             />
                         </div>
 
@@ -256,7 +305,7 @@ const Sede = (props) => {
                                 value={values.cidade}
                                 onChange={handleInputChange}
                                 type="text"
-                            // className={'textField-TextLarge'}
+                                error={errors.cidade}
                             />
                         </div>
 
@@ -268,7 +317,7 @@ const Sede = (props) => {
                                 value={values.pais}
                                 onChange={handleInputChange}
                                 type="text"
-                            //className={'textField-TextLarge'}
+                                error={errors.pais}
                             />
                         </div>
 
@@ -297,7 +346,9 @@ const Sede = (props) => {
                     <div className="newUniversity">
                         <ImageUpLoad
                             ref={childRef}
+                            margnLeft="0px"
                             fotoTitulo="Logo"
+                            uploadDisplay={true}
                         />
                     </div>
 
@@ -329,7 +380,7 @@ const Sede = (props) => {
                 /> : null
             }
 
-             <ConfirmDialog
+            <ConfirmDialog
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
             />
