@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import DepartamentoServices from "../../services/admin/Departamento.services";
 
+import { useTranslation } from "react-i18next";
+
+
 const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
     const useStyles = makeStyles({
@@ -54,6 +57,8 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
     });
 
     const classes = useStyles();
+    const { t } = useTranslation();
+
 
     const [openPopup, setOpenPopup] = useState(false);
     const { idDisplay, codeDisplay, actionsButtonDisplay,
@@ -92,15 +97,15 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
         { field: 'id', headerName: 'ID', hide: { idDisplay }, width: 100, headerClassName: classes.paper },
 
         codeDisplay?
-        { field: 'code', headerName: 'Code', flex:1, headerClassName: classes.paper }:
-        { field: 'code', headerName: 'Code', hide: { codeDisplay }, headerClassName: classes.paper },
+        { field: 'code', headerName: t('code'), flex:1, headerClassName: classes.paper }:
+        { field: 'code', headerName: t('code'), hide: { codeDisplay }, headerClassName: classes.paper },
 
 
-        { field: 'departamento', headerName: 'Departamento', flex: 3, headerClassName: classes.paper },
+        { field: 'departamento', headerName: t('departamento'), flex: 3, headerClassName: classes.paper },
 
         statusDisplay ?
             {
-                field: 'status', headerName: 'Status', flex: 1, headerClassName: classes.paper,
+                field: 'status', headerName: t('status'), flex: 1, headerClassName: classes.paper,
                 renderCell: (type) => {
                     return (
                         <>
@@ -108,12 +113,12 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
                         </>
                     )
                 }
-            } : { field: 'status', headerName: 'Status', flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
+            } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
 
 
         actionsButtonDisplay ?
             {
-                field: 'action', headerName: 'Action', flex: 1, headerClassName: classes.paper,
+                field: 'action', headerName: t('action'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -126,11 +131,11 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
                         </>
                     )
                 }
-            } : { field: 'action', headerName: 'Action', hide: { actionsButtonDisplay }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action', headerName: t('action'), hide: { actionsButtonDisplay }, flex: 1, headerClassName: classes.paper },
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action2', headerName: 'Ação', flex:1, headerClassName: classes.paper,
+                field: 'action2', headerName: t('action'), flex:1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -155,7 +160,7 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
                         </>
                     )
                 }
-            } : { field: 'action2', headerName: 'Action', hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action2', headerName: t('action'), hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
 
     ];
     return (

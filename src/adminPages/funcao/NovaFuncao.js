@@ -16,6 +16,9 @@ import FuncaoSearchTable from "./FuncaoSearchTable";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import { useLocation } from "react-router-dom";
 
+import { useTranslation } from "react-i18next";
+
+
 const initialFValues = {
     id: 0,
     code: '',
@@ -52,13 +55,16 @@ const NovaFuncao = () => {
     const [buttonTitle, setButtonTitle] = useState();
     const [textReset, setTextReset] = useState();
 
+    const { t } = useTranslation();
+
+
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
         updateValuesOnOpen(); // // update Usecontext
 
         getStateValuesFromSearchTable();
 
-    }, []);
+    }, [t('header_title_funcao_modificar')]);
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -100,10 +106,10 @@ const NovaFuncao = () => {
 
             setBackGroundColor("darkBlue");
             setColor("white");
-            setHeaderTitle("Modificar Função");
-            setHeaderSubTitle("Modificar os dados da Função");
-            setButtonTitle("Modificar");
-            setTextReset("Novos dados");
+            setHeaderTitle(t('header_title_funcao_modificar'));
+            setHeaderSubTitle(t('header_subTitle_funcao_modificar'));
+            setButtonTitle(t('button_modificar'));
+            setTextReset(t('button_modificar'));
 
             setValues(location.state);
             setSede(location.state.sede);
@@ -115,10 +121,11 @@ const NovaFuncao = () => {
         } else {
             setBackGroundColor("darkGreen");
             setColor("white");
-            setHeaderTitle("Cadastrar Nova Função");
-            setHeaderSubTitle("Guardar os dados do nova Função");
-            setButtonTitle("Guardar");
-            setTextReset("Limpar");
+            setHeaderTitle(t('header_title_funcao_novo'));
+            setHeaderSubTitle(t('header_subTitle_funcao_novo'));
+            setButtonTitle(t('button_gravar'));
+            setTextReset(t('button_limpar'));
+
         }
     }
 
@@ -131,10 +138,11 @@ const NovaFuncao = () => {
 
         setBackGroundColor("darkGreen");
         setColor("white");
-        setHeaderTitle("Cadastrar Nova Função");
-        setHeaderSubTitle("Guardar os dados do nova Função");
-        setButtonTitle("Guardar");
-        setTextReset("Limpar");
+        setHeaderTitle(t('header_title_funcao_novo'));
+        setHeaderSubTitle(t('header_subTitle_funcao_novo'));
+        setButtonTitle(t('button_gravar'));
+        setTextReset(t('button_limpar'));
+
     }
 
     const handleSubmit = (e) => {
@@ -152,12 +160,12 @@ const NovaFuncao = () => {
 
     const onclicSedePopup = () => {
         setCount(1);
-        setPpupTitle("Listagem de Sedes Cadastradas");
+        setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
     const onclickAgenciaPopup = () => {
         setCount(2);
-        setPpupTitle("Listagem de Agências");
+        setPpupTitle(t('lista_agencia'));
         setOpenPopup(true);
     }
 
@@ -173,7 +181,7 @@ const NovaFuncao = () => {
 
                 setNotify({
                     isOpen: true,
-                    message: 'Função Modificado com Sucesso!',
+                    message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 })
 
@@ -195,7 +203,7 @@ const NovaFuncao = () => {
 
                 setNotify({
                     isOpen: true,
-                    message: 'Nova Função guarda com Sucesso!',
+                    message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
                 })
 
@@ -204,9 +212,7 @@ const NovaFuncao = () => {
                     console.log(e)
                 });
         }
-
     }
-
     return (
 
         <div className="facultyContainer">
@@ -226,11 +232,12 @@ const NovaFuncao = () => {
                         <div>
                             <label className="inputLabel">Sede</label>
                             <Controls.Input
-                                name="sede"
-                                placeHolder="Sede da Empresa"
+                                name= {t('sede')}
+                                placeHolder={t('sede')}
                                 value={sede}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -238,13 +245,14 @@ const NovaFuncao = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Agência</label>
+                            <label className="inputLabel">{t('agencia')}</label>
                             <Controls.Input
                                 name="agencia"
-                                placeHolder="Agencia da Empresa"
+                                placeHolder={t('agencia')}
                                 value={agencia}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.agencia}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -253,40 +261,43 @@ const NovaFuncao = () => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Código</label>
+                            <label className="inputLabel">{t('code')}</label>
                             <Controls.Input
                                 name="code"
-                                placeHolder="Código da Função"
+                                placeHolder={t('code')}
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.code}
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Função</label>
+                            <label className="inputLabel">{t('funcao')}</label>
                             <Controls.Input
                                 name="funcao"
-                                placeHolder="Designação da Função"
+                                placeHolder={t('funcao')}
                                 value={values.funcao}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.funcao}
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Observação</label>
+                            <label className="inputLabel">{t('observacao')}</label>
                             <Controls.Input
                                 name="observacao"
-                                placeHolder="Observação"
+                                placeHolder={t('observacao')}
                                 value={values.observacao}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 multiline
                                 rows={5}
                                 height="140px"
-                                width="290px"
+                               // width="290px"
                             />
                         </div>
 

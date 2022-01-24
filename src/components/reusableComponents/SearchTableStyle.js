@@ -51,6 +51,7 @@ const useStyles = makeStyles(props => ({
       },
       inputStyle: {
         background: props.backGroundColor || "white",
+        minWidth: "15%",
         width: ({ width }) => width || "65%",
         color: ({ color }) => color,
         height: ({ height }) => height || "30px",

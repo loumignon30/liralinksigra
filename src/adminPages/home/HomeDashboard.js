@@ -1,8 +1,11 @@
 import "./homeDashboard.css"
 import { ArrowUpward } from '@mui/icons-material';
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CaracteristiquesInfo() {
+    const { t } = useTranslation();
+
     useEffect(() => {
         //window.scrollTo(0, 0); // open the page on top
     }, []);
@@ -11,7 +14,7 @@ export default function CaracteristiquesInfo() {
 
             <div className="caracteristiquesItem" style={{backgroundColor:"#efebe9"}}>
 
-                <span className="caracteristiquesTitre">Denúncias do Mês</span>
+                <span className="caracteristiquesTitre">{t('mensagem_denuncia_do_mes')}</span>
 
                 <div className="caracteristiquesMoneyContainer">
 
@@ -23,13 +26,13 @@ export default function CaracteristiquesInfo() {
                     
                 </div>
 
-                <span className="caracteritiquesSub">Comparado com o mês passado</span>
+                <span className="caracteritiquesSub">{t('mensagem_denuncia_comparado_com_o_mes_passado')}</span>
 
             </div>
             
             <div className="caracteristiquesItem" style={{backgroundColor:"#ffe0b2"}}>
         
-                <span className="caracteristiquesTitre">Denúncias resolvidas</span>
+                <span className="caracteristiquesTitre">{t('mensagem_denuncia_resolvidas')}</span>
 
                 <div className="caracteristiquesMoneyContainer">
 
@@ -39,13 +42,13 @@ export default function CaracteristiquesInfo() {
                     </span>
                 </div>
 
-                <span className="caracteritiquesSub">Comparado com  mês passado</span>
+                <span className="caracteritiquesSub">{t('mensagem_denuncia_comparado_com_o_mes_passado')}</span>
 
             </div>
 
             <div className="caracteristiquesItem"style={{backgroundColor:"#eceff1"}}>
 
-                <span className="caracteristiquesTitre">Denúncias por Tratar</span>
+                <span className="caracteristiquesTitre">{t('mensagem_denuncia_por_tratar')}</span>
 
                 <div className="caracteristiquesMoneyContainer">
 
@@ -55,7 +58,7 @@ export default function CaracteristiquesInfo() {
                     </span>
                 </div>
 
-                <span className="caracteritiquesSub">Comparado com o ano passado</span>
+                <span className="caracteritiquesSub">{t('mensagem_denuncia_comparado_com_o_ano_passado')}</span>
 
             </div>
 

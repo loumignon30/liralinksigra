@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import urlImage from '../../http-common-images';
 import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog";
+import SideMenuData2 from "../../menuData/admin/SideMenuData2"
+
+import { useTranslation } from "react-i18next";
 
 const Sede = (props) => {
 
@@ -47,7 +50,13 @@ const Sede = (props) => {
 
     let imageDisplay;
     let logoCheck = "";
+
+    const childRefMenu = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+
     // function to call the click from ImageUpLoad.js
+
+    const { t } = useTranslation();
+
     const updateValuesOnOpen = () => {
 
         userSavedValue.map(item => (
@@ -142,12 +151,6 @@ const Sede = (props) => {
 
     const ResetForm = () => {
 
-        // setConfirmDialog({
-        //     isOpen: true,
-        //     title: 'O Sistema vai reiniciar para atualizar os dados da Sede!',
-        //     subTitle: "Informação"
-        // });
-
         imageReset();
         setValues(initialFValues);
         setNotificationShow(false);
@@ -161,12 +164,12 @@ const Sede = (props) => {
 
         if (values.id > 0) {
             SedeService.update(values.id, values).then(response => {
-                alert("A Sede foi Alterada com Sucesso!!. O programa vai fechar para atualização da Sede");
+                alert(t('mensagem_alteracao_sede'));
                 tableSedeData(); // update DataGrid Table used form universitySearchTable.js
                 setNotificationShow(true);
                 setNotify({
                     isOpen: true,
-                    message: 'Nova Sede Gravada com Sucesso!',
+                    message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 });
 
@@ -177,12 +180,12 @@ const Sede = (props) => {
 
         } else {
             SedeService.create(values).then(response => {
-                alert("A Sede foi gravada com Sucesso!!. O programa vai fechar para atualização da Sede");
+                alert(t('mensagem_alteracao_sede'));
                 tableSedeData(); // update DataGrid Table used form universitySearchTable.js
                 setNotificationShow(true);
                 setNotify({
                     isOpen: true,
-                    message: 'Nova Sede Gravada com Sucesso!',
+                    message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
                 })
 
@@ -201,7 +204,7 @@ const Sede = (props) => {
                 saveImageFromImageUpload();
             }
             if (logoCheck === "") {
-                alert("Falta do Logo da Sede", "Atenção");
+                alert(t('mensagem_falta_de_logitipo_da_sede'));
                 return;
             }
 
@@ -217,17 +220,18 @@ const Sede = (props) => {
         props.yearGetData();
     }
 
+
     return (
         <div className="universityContainer">
             <PageHeader
-                title="Nova Sede"
-                subTitle="Cadastrar uma nova Sede"
+                title={t('header_title_sede')}
+                subTitle={t('header_subTitle_sede')}
                 backGroundColor="darkBlue"
                 color="white"
                 icon={<House />}>
             </PageHeader>
 
-            {/* <button onClick={testImage}>Test call image select</button>  */}
+            {/* <button onClick={MenuDataDisplay}>Test Menu Data</button> */}
 
             {/* <button onClick={buttonclick}> Button</button> */}
 
@@ -237,10 +241,10 @@ const Sede = (props) => {
 
                     <div className="newUniversity">
                         <div>
-                            <label className="inputLabel">Code</label>
+                            <label className="inputLabel">{t('code')}</label>
                             <Controls.Input
                                 name="code"
-                                placeHolder="Code"
+                                placeHolder={t('code')}
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
@@ -249,10 +253,10 @@ const Sede = (props) => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Sede</label>
+                            <label className="inputLabel">{t('sede')}</label>
                             <Controls.Input
                                 name="sede"
-                                placeHolder="Nome da Sede"
+                                placeHolder={t('language')}
                                 value={values.sede}
                                 onChange={handleInputChange}
                                 type="text"
@@ -262,10 +266,10 @@ const Sede = (props) => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Email</label>
+                            <label className="inputLabel">{t('email')}</label>
                             <Controls.Input
                                 name="email"
-                                placeHolder="Email da Sede"
+                                placeHolder={t('language')}
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
@@ -274,10 +278,10 @@ const Sede = (props) => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Contacto</label>
+                            <label className="inputLabel">{t('contacto')}</label>
                             <Controls.Input
                                 name="contacto"
-                                placeHolder="Contact of da Sede"
+                                placeHolder={t('contacto')}
                                 value={values.contacto}
                                 onChange={handleInputChange}
                                 type="text"
@@ -286,10 +290,10 @@ const Sede = (props) => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Endereço</label>
+                            <label className="inputLabel">{t('endereco')}</label>
                             <Controls.Input
                                 name="endereco"
-                                placeHolder="Endereço da Sede"
+                                placeHolder={t('endereco')}
                                 value={values.endereco}
                                 onChange={handleInputChange}
                                 type="text"
@@ -298,10 +302,10 @@ const Sede = (props) => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Cidade</label>
+                            <label className="inputLabel">{t('cidade')}</label>
                             <Controls.Input
                                 name="cidade"
-                                placeHolder="Cidade da Sede"
+                                placeHolder={t('cidade')}
                                 value={values.cidade}
                                 onChange={handleInputChange}
                                 type="text"
@@ -310,10 +314,10 @@ const Sede = (props) => {
                         </div>
 
                         <div style={{ marginBottom: "10px" }}>
-                            <label className="inputLabel">País</label>
+                            <label className="inputLabel">{t('pais')}</label>
                             <Controls.Input
                                 name="pais"
-                                placeHolder="País"
+                                placeHolder={t('pais')}
                                 value={values.pais}
                                 onChange={handleInputChange}
                                 type="text"
@@ -356,12 +360,12 @@ const Sede = (props) => {
                         <div >
                             <Controls.Buttons
                                 type="submit"
-                                text="Gravar"
+                                text={t('button_gravar')}
                                 className="button"
                             />
                             <Controls.Buttons
                                 type="button"
-                                text="Sair"
+                                text={t('sair')}
                                 color="secondary"
                                 className="button"
                                 onClick={close}
@@ -383,6 +387,10 @@ const Sede = (props) => {
             <ConfirmDialog
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
+            />
+
+            <SideMenuData2
+                ref={childRefMenu}
             />
 
         </div>

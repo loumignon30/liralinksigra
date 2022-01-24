@@ -5,6 +5,7 @@ import SedeService from "../../services/admin/Sede.services";
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import { useTranslation } from "react-i18next";
 
 const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
@@ -61,6 +62,7 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
+    const { t } = useTranslation();
 
     useEffect(() => {
         getGetAllData();
@@ -96,11 +98,11 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
         { field: 'id', headerName: 'ID',  hide: { idDisplay }, headerClassName: classes.paper },
         
         codeDisplay ?
-        { field: 'code', headerName: 'Code', flex: 1, headerClassName: classes.paper }:
+        { field: 'code', headerName: t('code'), flex: 1, headerClassName: classes.paper }:
         { field: 'code', headerName: 'Code', hide: { codeDisplay }, headerClassName: classes.paper },
 
         {
-            field: 'sede', headerName: 'Nome da Sede', maxWidth: 320, flex: 3, headerClassName: classes.paper,
+            field: 'sede', headerName: t('sede'), maxWidth: 320, flex: 3, headerClassName: classes.paper,
             renderCell: (params) => {
                 return (
                     <>
@@ -124,7 +126,7 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
 
         actionsButtonSelectDisplay ?
             {
-                field: 'action1', headerName: 'Selecione', flex: 1, headerClassName: classes.paper,
+                field: 'action1', headerName:  t('selecione'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -139,11 +141,11 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
                     )
                 }
             } :
-            { field: 'action1', headerName: 'Selecione', flex: 1, hide: { actionsButtonSelectDisplay }, headerClassName: classes.paper }
+            { field: 'action1', headerName:  t('selecione'), flex: 1, hide: { actionsButtonSelectDisplay }, headerClassName: classes.paper }
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action', headerName: 'Ação', flex: 1, headerClassName: classes.paper,
+                field: 'action', headerName:  t('action'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -169,7 +171,7 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
                         </>
                     )
                 }
-            } : { field: 'action', headerName: 'Selecione', flex: 1, hide: { actionsButtonDisplayEditDelete }, headerClassName: classes.paper }
+            } : { field: 'action', headerName:  t('action'), flex: 1, hide: { actionsButtonDisplayEditDelete }, headerClassName: classes.paper }
     ];
     return (
         <>

@@ -15,6 +15,8 @@ import FuncionarioService from "../../services/admin/Funcionario.services";
 import urlImage from '../../http-common-images';
 import DenunciaService from '../../services/admin/Denuncias.services';
 
+import { useTranslation } from "react-i18next";
+
 const initialFValues = {
     id: 0,
     codigo: '',
@@ -64,6 +66,9 @@ const NovaDenuncia = () => {
     const [pais, setPais] = useState("");
     let fotoFuncionario = "";
 
+    const { t } = useTranslation();
+
+
     // function for validating form
     const validate = (fieldValues = values) => {
         let validationErrorM = {}
@@ -112,7 +117,7 @@ const NovaDenuncia = () => {
         updateValuesOnOpen();
         setUrl(urlImage());
 
-    }, []);
+    }, [t('header_title_denuncia_novo')]);
 
     const updateValuesOnOpen = () => {
         userSavedValue.map(item => (
@@ -146,12 +151,12 @@ const NovaDenuncia = () => {
 
     const onclicSedePopup = () => {
         setCount(1);
-        setPpupTitle("Listagem de Sedes Cadastradas");
+        setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
     const onclickAgenciaPopup = () => {
         setCount(2);
-        setPpupTitle("Listagem de Agências");
+        setPpupTitle(t('lista_agencia'));
         setOpenPopup(true);
     }
 
@@ -186,7 +191,7 @@ const NovaDenuncia = () => {
         DenunciaService.create(values).then(response => {
             setNotify({
                 isOpen: true,
-                message: 'A denuncia foi guardada com Sucesso!!!',
+                message: t('mensagem_Gravar_Nova_Agencia'),
                 type: 'success'
             });
 
@@ -197,7 +202,7 @@ const NovaDenuncia = () => {
     }
     const onclickSedePopup = () => {
         setCount(1);
-        setPpupTitle("Listagem de Sedes");
+        setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
 
@@ -206,7 +211,7 @@ const NovaDenuncia = () => {
         FuncionarioService.getID(values.codigo).then(response => {
 
             if (response.data.length === 0) {
-                alert("O número inserido não existe na base de dados");
+                alert(t('mensagem_erro_numero_funcionario_pesquisa'));
 
                 setSede("");
                 setAgencia("");
@@ -262,10 +267,9 @@ const NovaDenuncia = () => {
     return (
         <>
             <div className="newUserMainContainer">
-
                 <PageHeader
-                    title="CADASTRAR DENÚNCIA"
-                    subTitle="Cadastrar nova Denúncia"
+                    title={t('header_title_denuncia_novo')}
+                    subTitle={t('header_subTitle_denuncia_novo')}
                     backGroundColor="#50394c"
                     color="white"
                     icon={<ArticleIcon />}>
@@ -278,13 +282,13 @@ const NovaDenuncia = () => {
                         <div className="newUser">
 
                             <div>
-                                <label className="userLabel"># Funcionario</label>
+                                <label className="userLabel"># {t('funcionarios_menu')}</label>
                                 <Controls.Input
                                     name="codigo"
-                                    placeHolder="Digite o Numero do Funcionário"
+                                    placeHolder={t('denunciaNumeroPlaceOrder')}
                                     value={values.codigo}
                                     onChange={handleInputChange}
-                                    width="275px" type="text"
+                                    width="65%" type="text"
                                     onKeyPress={(event) => {
                                         if (event.key === "Enter") {
                                             handleKeyPress()
@@ -298,97 +302,97 @@ const NovaDenuncia = () => {
                                 />
                             </div>
                             <div>
-                                <label className="userLabel">Nome</label>
+                                <label className="userLabel">{t('nome')}</label>
                                 <Controls.Input
                                     name="primeiroNome"
-                                    placeHolder="Primeiro Nome"
+                                    placeHolder={t('funcionarios_menu')}
                                     value={primeiroNome}
                                     type="text"
-                                    width="144px"
+                                    width="32%"
                                     error={errors.primeiroNome}
 
                                 />
 
                                 <Controls.Input
                                     name="apelido"
-                                    placeHolder="Apelido"
+                                    placeHolder={t('apelido')}
                                     value={apelido}
                                     type="text"
-                                    width="144px"
+                                    width="33%"
                                     error={errors.apelido}
                                 />
                             </div>
                             <div>
-                                <label className="inputLabel">Sede</label>
+                                <label className="inputLabel">{t('sede')}</label>
                                 <Controls.Input
                                     name="sede"
-                                    placeHolder="Sede da Empresa"
+                                    placeHolder={t('sede')}
                                     value={sede}
                                     onChange={handleInputChange}
                                     type="text"
-                                    width="144px"
+                                    width="32%"
                                     disabled="true"
                                 />
                                 <Controls.Input
                                     name="agencia"
-                                    placeHolder="Agencia da Empresa"
+                                    placeHolder={t('agencia')}
                                     value={agencia}
                                     onChange={handleInputChange}
                                     type="text"
-                                    width="144px"
+                                    width="33%"
                                     disabled="true"
                                 />
 
                             </div>
 
                             <div>
-                                <label className="userLabel">Email</label>
+                                <label className="userLabel">{t('email')}</label>
                                 <Controls.Input
                                     name="email"
-                                    placeHolder="Email"
+                                    placeHolder={t('email')}
                                     value={email}
-                                    width="290px" type="text"
+                                    width="65%" type="text"
                                     error={errors.telephone}
                                 />
                             </div>
                             <div>
-                                <label className="userLabel">Telefone</label>
+                                <label className="userLabel">{t('contacto')}</label>
                                 <Controls.Input
                                     name="telefone"
-                                    placeHolder="Nº de Telefone da Agência"
+                                    placeHolder={t('contacto')}
                                     value={telefone}
-                                    width="290px" type="text"
+                                    width="65%" type="text"
                                     error={errors.telephone}
                                 />
                             </div>
 
                             <div>
-                                <label className="userLabel">Endereço</label>
+                                <label className="userLabel">{t('endereco')}</label>
                                 <Controls.Input
                                     name="endereco"
-                                    placeHolder="Endereço da Agência"
+                                    placeHolder={t('endereco')}
                                     value={endereco}
                                     onChange={handleInputChange}
-                                    width="290px" type="text"
+                                    width="65%" type="text"
                                 />
                             </div>
 
                             <div>
-                                <label className="userLabel">Cidade</label>
+                                <label className="userLabel">{t('cidade')}</label>
                                 <Controls.Input
                                     name="cidade"
-                                    placeHolder="Cidade"
+                                    placeHolder={t('cidade')}
                                     value={cidade}
                                     onChange={handleInputChange}
-                                    width="144px" type="text"
+                                    width="32%" type="text"
                                 />
 
                                 <Controls.Input
                                     name="pais"
-                                    placeHolder="País"
+                                    placeHolder={t('pais')}
                                     value={pais}
                                     onChange={handleInputChange}
-                                    width="144px"
+                                    width="33%"
                                     type="text"
                                 />
                             </div>
@@ -396,7 +400,7 @@ const NovaDenuncia = () => {
                             <div style={{ marginTop: "10px" }}>
                                 <ImageUpLoad
                                     ref={childRef}
-                                    fotoTitulo="Photo"
+                                    fotoTitulo={t('foto')}
                                     margnLeft="0px"
                                     uploadDisplay={false}
                                 />
@@ -405,25 +409,25 @@ const NovaDenuncia = () => {
 
                         <div className="newUser2">
                             <div>
-                                <label className="userLabel">Denúciante</label>
+                                <label className="userLabel">{t('denunciante')}</label>
                                 <Controls.Input
                                     name="nome"
-                                    placeHolder="Nome do denunciante"
+                                    placeHolder={t('denunciante')}
                                     value={values.nome}
                                     onChange={handleInputChange}
-                                    width="290px" type="text"
+                                    width="65%" type="text"
                                     error={errors.nome}
                                 />
                             </div>
 
                             <div>
-                                <label className="userLabel">Tipo Denúncia</label>
+                                <label className="userLabel">{t('tipo_denuncia')}</label>
                                 <Controls.Input
                                     name="tipodenuncia"
-                                    placeHolder="Tipo de Denuncia"
+                                    placeHolder={t('tipo_denuncia')}
                                     value={values.tipodenuncia}
                                     onChange={handleInputChange}
-                                    width="290px" type="text"
+                                    width="65%" type="text"
                                     error={errors.tipodenuncia}
                                 />
                                 <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -432,35 +436,37 @@ const NovaDenuncia = () => {
                             </div>
 
                             <div>
-                                <label className="userLabel">Telefone</label>
+                                <label className="userLabel">{t('contacto')}</label>
                                 <Controls.Input
                                     name="telepfoneDenunciante"
-                                    placeHolder="Telefone"
+                                    placeHolder={t('contacto')}
                                     value={values.telepfoneDenunciante}
                                     onChange={handleInputChange}
-                                    width="290px" type="text"
+                                    width="65%" 
+                                    type="text"
                                 />
                             </div>
                             <div>
-                                <label className="userLabel">Email</label>
+                                <label className="userLabel">{t('email')}</label>
                                 <Controls.Input
                                     name="emailDenunciante"
-                                    placeHolder="Email"
+                                    placeHolder={t('email')}
                                     value={values.emailDenunciante}
                                     onChange={handleInputChange}
-                                    width="290px" type="text"
+                                    width="65%" type="text"
                                     error={errors.emailDenunciante}
                                 />
                             </div>
 
                             <div>
-                                <label className="userLabel">Queixa</label>
+                                <label className="userLabel">{t('queixa')}</label>
                                 <Controls.Input
                                     name="queixa"
-                                    placeHolder="Escrever a Denuncia .."
+                                    placeHolder={t('queixaPlaceOrder')}
                                     value={values.queixa}
                                     onChange={handleInputChange}
                                     type="text"
+                                    width="65%"
                                     multiline
                                     rows={7}
                                     height="140px"
@@ -477,12 +483,12 @@ const NovaDenuncia = () => {
                             <div >
                                 <Controls.Buttons
                                     type="button"
-                                    text="Gravar"
+                                    text={t('button_gravar')}
                                     onClick={handleSubmit}
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text="Limpar"
+                                    text={t('button_limpar')}
                                     color="secondary"
                                     onClick={ResetForm} />
                             </div>

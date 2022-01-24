@@ -1,10 +1,17 @@
 import {Link} from "react-router-dom"
 import React, { useState } from 'react'
-import "../../App.css"
+import "../../App.css";
+
+import { useTranslation } from "react-i18next";
+import 'flag-icon-css/css/flag-icons.min.css';
+import i18next from 'i18next';
+import cookies from 'js-cookie'
 
 const MenuItems = (props) => {
     const { name, subMenus, icon, to, expanded, className } = props;
-    const [expand, setExpande] = useState(expanded)
+    const [expand, setExpande] = useState(expanded);
+    const { t } = useTranslation();
+
     return (
         <>
         <li className="menuItemssytle">
@@ -17,7 +24,9 @@ const MenuItems = (props) => {
                 <ul className="sub-menus">
                     {expand ?
                         subMenus.map((menu, index) => 
-                            <li className="sidebarListItem" key={index}>
+                            <li 
+                            key={index} 
+                            className="sidebarListItem" >
                                 <i>{menu.icon} </i>
                                 <Link to={menu.to} className="link">{menu.name}</Link>
                             </li>

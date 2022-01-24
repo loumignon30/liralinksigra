@@ -11,7 +11,7 @@ export default function WidgetPt() {
 
             <ul className="widgetSmList">
                 <li className="widgetSmListItem">
-                    <img alt="" src="https://media-exp1.licdn.com/dms/image/C4E03AQHdQMulUzZQOA/profile-displayphoto-shrink_800_800/0/1624673067861?e=1642032000&v=beta&t=HTuBo631MqnY0YnunlTFy-zGsAa2P83Q31yIo6EysoU" 
+                    <img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png" 
                     className="widgetSmImage"/>
                     <div className="widgetSmUser">
                         <span className="widgetSmUserName">João Walter</span>

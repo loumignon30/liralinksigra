@@ -10,6 +10,7 @@ import * as userGender from "../../services/admin/GenderData";
 import PageHeader from '../../components/reusableComponents/PageHeader';
 import ImageUpLoad from '../../components/reusableComponents/ImageUpLoad';
 import UserService from '../../services/admin/User.service';
+import { useTranslation } from "react-i18next";
 
 const initialFValues = {
     id: 0,
@@ -20,7 +21,7 @@ const initialFValues = {
     address: '',
     city: '',
     dateofbirth: '',
-    gender: 'Masculino',
+    gender: '',
     role: '',
     password: '',
     photofilename: '',
@@ -38,6 +39,8 @@ export default function NewUSerForm() {
     const [imageSRC, setImageSRC] = useState();
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
+
+    const { t } = useTranslation();
 
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -81,10 +84,16 @@ export default function NewUSerForm() {
     }, []);
 
     const genderItems = [
-        { id: 'Masculino', title: 'Masculino' },
-        { id: 'Feminino', title: 'Feminino' },
-        { id: 'Outro', title: 'Outro' },
+        { id: t('sexo_masculino'), title: t('sexo_masculino') },
+        { id: t('sexo_feminino'), title: t('sexo_feminino') },
+        { id: t('sexo_outros'), title: t('sexo_outros') },
     ];
+
+      const getRole = [
+        {id: t('role_administrador'), title: t('role_administrador')},
+        {id: t('role_Funcionario'), title: t('role_Funcionario')},
+        {id: t('role_utilizador'), title: t('role_utilizador')}
+    ]
 
     const saveImageFromImageUpload = () => {
         setImageFileName(childRef.current.fileName);
@@ -121,7 +130,7 @@ export default function NewUSerForm() {
         UserService.create(values).then(response => {
             setNotify({
                 isOpen: true,
-                message: 'New User was Submitted succefully',
+                message: t('mensagem_Gravar_Nova_Agencia'),
                 type: 'success'
             });
 
@@ -136,8 +145,8 @@ export default function NewUSerForm() {
             <div className="newUserMainContainer">
 
                 <PageHeader
-                    title="Novo Utilisador"
-                    subTitle="Gravar Novo Utilisadores do Sistema"
+                    title={t('header_title_utilisador_novo')}
+                    subTitle={t('header_subTitle_utilisador_novo')}
                     backGroundColor="#50394c"
                     color="white"
                     icon={<ArticleIcon />}>
@@ -150,10 +159,10 @@ export default function NewUSerForm() {
 
                         <div className="newUser">
                             <div>
-                                <label className="userLabel">Nome</label>
+                                <label className="userLabel">{t('nome')}</label>
                                 <Controls.Input
                                     name="firstname"
-                                    placeHolder="Primeiro Nome"
+                                    placeHolder={t('nome')}
                                     value={values.firstname}
                                     onChange={handleInputChange}
                                     className='textField-TextLarge'
@@ -163,10 +172,10 @@ export default function NewUSerForm() {
                                 {/* <span style={{marginTop:'5px', marginLeft:'2px', color:'red'}}>{errors.firstName}</span> */}
                             </div>
                             <div>
-                                <label className="userLabel">Apelido</label>
+                                <label className="userLabel">{t('apelido')}</label>
                                 <Controls.Input
                                     name="lastname"
-                                    placeHolder="Apelido"
+                                    placeHolder={t('apelido')}
                                     value={values.lastname}
                                     onChange={handleInputChange}
                                     type="text"
@@ -175,10 +184,10 @@ export default function NewUSerForm() {
                             </div>
 
                             <div>
-                                <label className="userLabel">Email</label>
+                                <label className="userLabel">{t('email')}</label>
                                 <Controls.Input
                                     name="email"
-                                    placeHolder="Endereço email"
+                                    placeHolder={t('email')}
                                     value={values.email}
                                     onChange={handleInputChange}
                                     type="text"
@@ -187,10 +196,10 @@ export default function NewUSerForm() {
                             </div>
 
                             <div>
-                                <label className="userLabel">Telefone</label>
+                                <label className="userLabel">{t('contacto')}</label>
                                 <Controls.Input
                                     name="telephone"
-                                    placeHolder="Número de Telefone"
+                                    placeHolder={t('contacto')}
                                     value={values.telephone}
                                     onChange={handleInputChange}
                                     type="text"
@@ -199,10 +208,10 @@ export default function NewUSerForm() {
                             </div>
 
                             <div>
-                                <label className="userLabel">Endereço</label>
+                                <label className="userLabel">{t('endereco')}</label>
                                 <Controls.Input
                                     name="address"
-                                    placeHolder="Endereço"
+                                    placeHolder={t('endereco')}
                                     value={values.address}
                                     onChange={handleInputChange}
                                     type="text"
@@ -210,20 +219,20 @@ export default function NewUSerForm() {
                             </div>
 
                             <div>
-                                <label className="userLabel">Cidade</label>
+                                <label className="userLabel">{t('cidade')}</label>
                                 <Controls.Input
                                     name="city"
-                                    placeHolder="Cidade"
+                                    placeHolder={t('cidade')}
                                     value={values.city}
                                     onChange={handleInputChange}
                                     type="text"
                                 />
                             </div>
                             <div>
-                                <label className="userLabel">País</label>
+                                <label className="userLabel">{t('pais')}</label>
                                 <Controls.Input
                                     name="country"
-                                    placeHolder="País"
+                                    placeHolder={t('pais')}
                                     value={values.country}
                                     onChange={handleInputChange}
                                     type="text"
@@ -234,10 +243,10 @@ export default function NewUSerForm() {
 
                         <div className="newUser2">
                             <div>
-                                <label className="userLabel">Data Nascim.</label>
+                                <label className="userLabel">{t('data_nascimento')}</label>
                                 <Controls.Input
                                     name="dateofbirth"
-                                    placeHolder="Data de nascimento"
+                                    placeHolder={t('data_nascimento')}
                                     value={values.dateofbirth}
                                     onChange={handleInputChange}
                                     type="date"
@@ -245,35 +254,35 @@ export default function NewUSerForm() {
                             </div>
 
                             <div >
-                                <label className="userLabel">Sexo</label>
+                                <label className="userLabel">{t('sexo')}</label>
                                 <Controls.Select
                                     name="gender"
                                     label="gender"
                                     value={values.gender}
                                     onChange={handleInputChange}
-                                    options={userGender.getGender()}
+                                    options={genderItems}
                                     className={"select-buttonLarge11"}
                                     error={errors.gender}
                                 />
                             </div>
 
                             <div style={{ paddingTop: "5px", }}>
-                                <label className="userLabel" htmlFor="role">Nível Acesso</label>
+                                <label className="userLabel" htmlFor="role">{t('nivel_accesso')}</label>
                                 <Controls.Select
                                     name="role"
                                     label="Role"
                                     value={values.role}
                                     onChange={handleInputChange}
-                                    options={userRole.getRole()}
+                                    options={getRole}
                                     className={"select-buttonLarge11"}
                                 />
                             </div>
 
                             <div>
-                                <label className="userLabel">Senha</label>
+                                <label className="userLabel">{t('senha')}</label>
                                 <Controls.Input
                                     name="password"
-                                    placeHolder="Senha"
+                                    placeHolder={t('senha')}
                                     value={values.password}
                                     onChange={handleInputChange}
                                     with="300px"
@@ -283,10 +292,10 @@ export default function NewUSerForm() {
                             </div>
 
                             <div>
-                                <label className="userLabel">Confirmar</label>
+                                <label className="userLabel">{t('confirmar_senha')}</label>
                                 <Controls.Input
                                     name="password"
-                                    placeHolder="Confirmar Senha"
+                                    placeHolder={t('confirmar_senha')}
                                     value={values.password}
                                     onChange={handleInputChange}
                                     type="password"
@@ -297,7 +306,7 @@ export default function NewUSerForm() {
                                 <div style={{ marginTop: "10px" }}>
                                     <ImageUpLoad
                                         ref={childRef}
-                                        fotoTitulo="Foto"
+                                        fotoTitulo={t('foto')}
                                         margnLeft="0px"
                                         uploadDisplay={true}
                                     />
@@ -312,11 +321,11 @@ export default function NewUSerForm() {
                             <div >
                                 <Controls.Buttons
                                     type="submit"
-                                    text="Gravar"
+                                    text={t('button_gravar')}
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text="Limpar"
+                                    text={t('button_limpar')}
                                     color="secondary"
                                     onClick={ResetForm} />
                             </div>

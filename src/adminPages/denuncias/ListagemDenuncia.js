@@ -5,11 +5,16 @@ import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog"
 import Notifications from '../../components/reusableComponents/Notifications';
 import DenunciaSearchTable from './DenunciaSearchTable';
 
+import { useTranslation } from "react-i18next";
+
 const ListagemDenuncia = () => {
 
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [openPopup, setOpenPopup] = useState(false);
+
+    const { t } = useTranslation();
+
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
@@ -17,7 +22,7 @@ const ListagemDenuncia = () => {
     
     return (
         <div className="utilisateurList">
-            <h3 style={{ marginLeft: '15px' }}>LISTA DE DENÚNCIAS</h3>
+            <h3 style={{ marginLeft: '15px' }}>{t('lista_denuncia')}</h3>
 
             <div style={{ height: 400, width: '100%' }}>
                 <DenunciaSearchTable

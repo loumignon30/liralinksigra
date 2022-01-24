@@ -78,7 +78,7 @@ const AgenciaEdit = (props) =>{
             // imageReset();
             setNotify({
                 isOpen: true,
-                message: 'A Sede foi actualizada com Sucesso!',
+                message: t('mensagem_modificar_Nova_Agencia'),
                 type: 'success'
             })
         })

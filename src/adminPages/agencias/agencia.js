@@ -13,6 +13,7 @@ import AgenciaService from "../../services/admin/Agencia.service";
 import ImageUpLoad from "../../components/reusableComponents/ImageUpLoad";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const initialFValues = {
     id: 0,
@@ -51,7 +52,8 @@ const Agencia = () => {
     const [headerSubTitle, setHeaderSubTitle] = useState("");
     const [buttonTitle, setButtonTitle] = useState();
     const [textReset, setTextReset] = useState();
-    //const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
@@ -60,7 +62,7 @@ const Agencia = () => {
         getStateValuesFromSearchTable();
         updateValuesOnOpen();  // useContext
 
-    }, []);
+    }, [t('sede')]);
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -81,7 +83,7 @@ const Agencia = () => {
         if ('pais' in fieldValues)
             validationErrorM.pais = fieldValues.pais ? "" : " "
 
-            if ('telefone' in fieldValues)
+        if ('telefone' in fieldValues)
             validationErrorM.telefone = fieldValues.telefone.length > 8 ? "" : "Minimum 9 caracters"
 
 
@@ -109,10 +111,10 @@ const Agencia = () => {
 
             setBackGroundColor("darkBlue");
             setColor("white");
-            setHeaderTitle("Modificar Agencia");
-            setHeaderSubTitle("Modificar os dados da Agência");
-            setButtonTitle("Modificar");
-            setTextReset("Nova Agência");
+            setHeaderTitle(t('header_title_agence_modificar'));
+            setHeaderSubTitle(t('header_subTitle_agence_modificar'));
+            setButtonTitle(t('button_modificar'));
+            setTextReset(t('button_novo'));
 
             setValues(location.state);
 
@@ -123,10 +125,11 @@ const Agencia = () => {
         } else {
             setBackGroundColor("darkGreen");
             setColor("white");
-            setHeaderTitle("Cadastrar Nova Agência");
-            setHeaderSubTitle("Guardar os dados da nova Agência");
-            setButtonTitle("Guardar");
+            setHeaderTitle(t('header_title_agence_novo'));
+            setHeaderSubTitle(t('header_subTitle_agence_novo'));
+            setButtonTitle(t('button_gravar'));
             setTextReset("Limpar");
+            setTextReset(t('button_limpar'));
         }
     }
 
@@ -166,10 +169,11 @@ const Agencia = () => {
 
         setBackGroundColor("darkGreen");
         setColor("white");
-        setHeaderTitle("Cadastrar Nova Agência");
-        setHeaderSubTitle("Guardar os dados da nova Agência");
-        setButtonTitle("Save");
+        setHeaderTitle(t('header_title_agence_novo'));
+        setHeaderSubTitle(t('header_subTitle_agence_novo'));
+        setButtonTitle(t('button_gravar'));
         setTextReset("Limpar");
+        setTextReset(t('button_limpar'));
 
         //setSlideImgCategory("https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg");
         setNotificationShow(false);
@@ -190,7 +194,7 @@ const Agencia = () => {
     }
 
     const onclickUniversityPopup = () => {
-        setPpupTitle("Listagem de Sedes");
+        setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
 
@@ -205,7 +209,7 @@ const Agencia = () => {
                 tableAgenciaUpdateData(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
-                    message: 'Dados da Agencia Modificadas com Sucesso!',
+                    message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 })
             })
@@ -218,7 +222,7 @@ const Agencia = () => {
                 tableAgenciaUpdateData(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
-                    message: 'Nova Agencia guarda com Sucesso!',
+                    message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
                 })
             })
@@ -234,7 +238,6 @@ const Agencia = () => {
     }
 
     const reserClick = () => {
-        alert("null values")
         values.code = -""
     }
     const imageAgenciaDisplay = (image) => {
@@ -258,13 +261,13 @@ const Agencia = () => {
 
                     <div className="newFaculty">
                         <div>
-                            <label className="inputLabel">Sede</label>
+                            <label className="inputLabel">{t('sede')}</label>
                             <Controls.Input
                                 name="sede"
-                                placeHolder="Sede da Empresa"
+                                placeHolder={t('sede')}
                                 value={sede}
                                 onChange={handleInputChange}
-                                width="280px"
+                                width="65%"
                                 type="text"
                                 disabled="true"
                                 error={errors.sede}
@@ -274,102 +277,104 @@ const Agencia = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Code</label>
+                            <label className="inputLabel">{t('code')}</label>
                             <Controls.Input
                                 name="code"
-                                placeHolder="Code"
+                                placeHolder={t('code')}
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="290px"
+                                width="65%"
                                 error={errors.code}
 
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Nome Agencia</label>
+                            <label className="inputLabel">{t('nome_Agencia')}</label>
                             <Controls.Input
                                 name="nome"
-                                placeHolder="Nome da Agencia"
+                                placeHolder={t('nome_Agencia')}
                                 value={values.nome}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="290px"
+                                width="65%"
                                 error={errors.nome}
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Representante</label>
+                            <label className="inputLabel">{t('nome_representante')}</label>
                             <Controls.Input
                                 name="nomeRepresentante"
-                                placeHolder="Nome do(a) Representante"
+                                placeHolder={t('nome_representante')}
                                 value={values.nomeRepresentante}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="290px"
+                                width="65%"
                                 error={errors.nomeRepresentante}
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Endereço</label>
+                            <label className="inputLabel">{t('endereco')}</label>
                             <Controls.Input
                                 name="endereco"
-                                placeHolder="Endereço da Agencia"
+                                placeHolder={t('endereco')}
                                 value={values.endereco}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="290px"
+                                width="65%"
                                 error={errors.endereco}
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Email</label>
+                            <label className="inputLabel">{t('email')}</label>
                             <Controls.Input
                                 name="email"
-                                placeHolder="Email da Egencia"
+                                placeHolder={t('email')}
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="290px"
+                                width="65%"
                                 error={errors.email}
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Nº Telefone</label>
+                            <label className="inputLabel">{t('contacto')}</label>
                             <Controls.Input
                                 name="telefone"
-                                placeHolder="Número de Telefone da Agencia"
+                                placeHolder={t('contacto')}
                                 value={values.telefone}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="290px"
+                                width="65%"
                                 error={errors.telefone}
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Cidade</label>
+                            <label className="inputLabel">{t('cidade')}</label>
                             <Controls.Input
                                 name="cidade"
-                                placeHolder="Cidade"
+                                placeHolder={t('cidade')}
                                 value={values.cidade}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="145px"
+                                width="65%"
                                 error={errors.cidade}
                             />
-
+                        </div>
+                        <div>
+                            <label className="inputLabel">{t('pais')}</label>
                             <Controls.Input
                                 name="pais"
-                                placeHolder="País"
+                                placeHolder={t('pais')}
                                 value={values.pais}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="145px"
+                                width="65%"
                                 error={errors.pais}
                             />
                         </div>
@@ -421,13 +426,7 @@ const Agencia = () => {
 
                     <div className="newFaculty">
 
-                        {/* <div className="newUniversity">
-                            <ImageUpLoad
-                                ref={childRef}
-                                fotoTitulo="Logo"
-                                uploadDisplay={true}
-                            />
-                        </div> */}
+
 
                     </div>
 

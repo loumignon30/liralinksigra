@@ -12,7 +12,7 @@ import * as userRole from "../../services/admin/RoleData";
 import * as statusData from "../../services/admin/StatusData";
 import UserService from '../../services/admin/User.service';
 import Notifications from '../../components/reusableComponents/Notifications';
-
+import { useTranslation } from "react-i18next";
 
 const initialFValues = {
     id: 0,
@@ -56,6 +56,8 @@ export default function Utilisateur(props) {
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
 
+    const { t } = useTranslation();
+
     //     city, dateofbirth, gender, role, password, status, country
     const saveImageFromImageUpload = () => {
         childRef.current.imageChangeFromOutSide(location.state.imageChangeFromOutSideURL);  // saveImage() = method called
@@ -89,7 +91,7 @@ export default function Utilisateur(props) {
             // imageReset();
             setNotify({
                 isOpen: true,
-                message: 'USer was Edited succefully',
+                message: t('mensagem_modificar_Nova_Agencia'),
                 type: 'success'
             })
         })
@@ -111,7 +113,7 @@ export default function Utilisateur(props) {
     return (
         <div className="utilisateur">
             <div className="utilisateurTitreContainer">
-                <h1 className="UtilisateurTitre">Editar dados</h1>
+                <h3 className="UtilisateurTitre">{t('userEdit_editarDados_text')}</h3>
             </div>
 
             <div className="utilisateurContainer">
@@ -132,7 +134,7 @@ export default function Utilisateur(props) {
 
                     <div className="utilisateurAfficherBasPage1">
 
-                        <span className="utilisateurAfficherTitre">User Information</span>
+                        <span className="utilisateurAfficherTitre">{t('user_informstion')}</span>
 
                         <div className="utilisateurInfo">
                             <PermIdentity className="utilisateurAfficherIcon" />  {/* icon de material*/}
@@ -142,7 +144,7 @@ export default function Utilisateur(props) {
                             <PermIdentity className="utilisateurAfficherIcon" />  {/* icon de material*/}
                             <span className="userAfficherInfoTitre">{lastname}</span>
                         </div>
-                        <span className="utilisateurAfficherTitre">User Contacts</span>
+                        <span className="utilisateurAfficherTitre">{t('user_contact')}</span>
 
                         <div className="utilisateurInfo">
                             <Phone className="utilisateurAfficherIcon" />  {/* icon de material*/}
@@ -174,10 +176,10 @@ export default function Utilisateur(props) {
 
 
                             <div style={{ marginTop: "-20px" }}>
-                                <label className="inputLabel">First Name</label>
+                                <label className="inputLabel">{t('nome')}</label>
                                 <Controls.Input
                                     name="firstname"
-                                    placeHolder="First Name"
+                                    placeHolder={t('nome')}
                                     value={values.firstname}
                                     onChange={handleInputChange}
                                     type="text"
@@ -186,10 +188,10 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div>
-                                <label className="inputLabel">Last Name</label>
+                                <label className="inputLabel">{t('apelido')}</label>
                                 <Controls.Input
                                     name="lastname"
-                                    placeHolder="Last Name"
+                                    placeHolder={t('apelido')}
                                     value={values.lastname}
                                     onChange={handleInputChange}
                                     type="text"
@@ -198,10 +200,10 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div>
-                                <label className="inputLabel">Email</label>
+                                <label className="inputLabel">{t('email')}</label>
                                 <Controls.Input
                                     name="email"
-                                    placeHolder="Email"
+                                    placeHolder={t('email')}
                                     value={values.email}
                                     onChange={handleInputChange}
                                     type="text"
@@ -210,10 +212,10 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div>
-                                <label className="inputLabel">Telephone</label>
+                                <label className="inputLabel">{t('contacto')}</label>
                                 <Controls.Input
                                     name="telephone"
-                                    placeHolder="Telephone"
+                                    placeHolder={t('contacto')}
                                     value={values.telephone}
                                     onChange={handleInputChange}
                                     type="text"
@@ -222,10 +224,10 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div>
-                                <label className="inputLabel">Address</label>
+                                <label className="inputLabel">{t('endereco')}</label>
                                 <Controls.Input
                                     name="address"
-                                    placeHolder="Address"
+                                    placeHolder={t('endereco')}
                                     value={values.address}
                                     onChange={handleInputChange}
                                     type="text"
@@ -234,10 +236,10 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div>
-                                <label className="inputLabel">City</label>
+                                <label className="inputLabel">{t('cidade')}</label>
                                 <Controls.Input
                                     name="city"
-                                    placeHolder="City"
+                                    placeHolder={t('cidade')}
                                     value={values.city}
                                     onChange={handleInputChange}
                                     type="text"
@@ -246,10 +248,10 @@ export default function Utilisateur(props) {
                             </div>
 
                             <div>
-                                <label className="inputLabel">Country</label>
+                                <label className="inputLabel">{t('pais')}</label>
                                 <Controls.Input
                                     name="country"
-                                    placeHolder="Country"
+                                    placeHolder={t('pais')}
                                     value={values.country}
                                     onChange={handleInputChange}
                                     type="text"
@@ -257,7 +259,7 @@ export default function Utilisateur(props) {
                                 />
                             </div>
                             <div style={{ paddingTop: "5px", }}>
-                                <label className="userLabel" htmlFor="role">Role</label>
+                                <label className="userLabel" htmlFor="role">{t('nivel_accesso')}</label>
                                 <Controls.Select
                                     name="role"
                                     label="Role"
@@ -268,7 +270,7 @@ export default function Utilisateur(props) {
                                 />
                             </div>
                             <div style={{ marginTop: "5px" }}>
-                                <label className="userLabel" htmlFor="status">Status</label>
+                                <label className="userLabel" htmlFor="status">{t('status')}</label>
                                 <Controls.Select
                                     name="status"
                                     label="status"
@@ -282,7 +284,7 @@ export default function Utilisateur(props) {
 
                             <div className='userphoto'>
                                 <ImageUpLoad ref={childRef} 
-                                 fotoTitulo="Foto"
+                                 fotoTitulo={t('foto')}
                                  uploadDisplay={true}
                                  />
 
@@ -291,13 +293,13 @@ export default function Utilisateur(props) {
                             <div>
                                 <Controls.Buttons
                                     type="button"
-                                    text="Gravar"
+                                    text={t('button_gravar')}
                                     className="button"
                                     onClick={edituser}
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text="Limpar"
+                                    text={t('button_limpar')}
                                     color="secondary"
                                     className="button"
                                 />

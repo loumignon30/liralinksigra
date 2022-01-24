@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import semfoto from "../../assets/images/semfoto.png"
 
+import { useTranslation } from "react-i18next";
+
 const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
     const useStyles = makeStyles({
@@ -40,6 +42,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
     const [url, setUrl] = useState("");  // backend image  URL
     const classes = useStyles();
 
+    const { t } = useTranslation();
 
     useEffect(() => {
         getGetAllData();
@@ -75,11 +78,11 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
             { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
 
         codeDisplay ?
-            { field: 'code', headerName: 'Code', flex: 1, headerClassName: classes.paper } :
-            { field: 'code', headerName: 'Code', hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
+            { field: 'code', headerName: t('code'), flex: 1, headerClassName: classes.paper } :
+            { field: 'code', headerName: t('code'), hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
 
         {
-            field: 'nomeCompleto', headerName: 'Nome Completo', flex: 3, headerClassName: classes.paper,
+            field: 'nomeCompleto', headerName: t('nome_completo'), flex: 3, headerClassName: classes.paper,
             renderCell: (params) => {
                 return (
                     <>
@@ -100,24 +103,24 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
             }
         },
         primeiroNomeDisplay ?
-            { field: 'primeironome', headerName: 'Primeiro Nome', flex: 1, headerClassName: classes.paper } :
-            { field: 'primeironome', headerName: 'Primeiro Nome', hide: { primeiroNomeDisplay }, headerClassName: classes.paper },
+            { field: 'primeironome', headerName: t('nome'), flex: 1, headerClassName: classes.paper } :
+            { field: 'primeironome', headerName: t('apelido'), hide: { primeiroNomeDisplay }, headerClassName: classes.paper },
 
         ultimonomeDisplay ?
-            { field: 'ultimonome', headerName: 'Ultimo Nome', flex: 1, headerClassName: classes.paper } :
-            { field: 'ultimonome', headerName: 'Ultimo Nome', hide: { ultimonomeDisplay }, headerClassName: classes.paper },
+            { field: 'ultimonome', headerName: t('nome'), flex: 1, headerClassName: classes.paper } :
+            { field: 'ultimonome', headerName: t('apelido'), hide: { ultimonomeDisplay }, headerClassName: classes.paper },
 
         emailDisplay ?
-            { field: 'email', headerName: 'Email', flex: 1, headerClassName: classes.paper } :
-            { field: 'email', headerName: 'Email', hide: { emailDisplay }, headerClassName: classes.paper },
+            { field: 'email', headerName: t('email'), flex: 1, headerClassName: classes.paper } :
+            { field: 'email', headerName: t('email'), hide: { emailDisplay }, headerClassName: classes.paper },
 
         telefoneDislay ?
-            { field: 'telefone', headerName: 'Telefone', flex: 1, headerClassName: classes.paper } :
-            { field: 'telefone', headerName: 'Telefone', hide: { telefoneDislay }, headerClassName: classes.paper },
+            { field: 'telefone', headerName: t('contacto'), flex: 1, headerClassName: classes.paper } :
+            { field: 'telefone', headerName: t('contacto'), hide: { telefoneDislay }, headerClassName: classes.paper },
 
         statusDisplay ?
             {
-                field: 'status', headerName: 'Status', flex: 1, headerClassName: classes.paper,
+                field: 'status', headerName: t('status'), flex: 1, headerClassName: classes.paper,
                 renderCell: (type) => {
                     return (
                         <>
@@ -125,11 +128,11 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                         </>
                     )
                 }
-            } : { field: 'status', headerName: 'Status', flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
+            } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
 
         actionsButtonDisplaySelect ?
             {
-                field: 'action', headerName: 'Action', flex: 1, headerClassName: classes.paper,
+                field: 'action', headerName: t('action'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -142,11 +145,11 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                         </>
                     )
                 }
-            } : { field: 'action', headerName: 'Action', hide: { actionsButtonDisplaySelect }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action', headerName: t('action'), hide: { actionsButtonDisplaySelect }, flex: 1, headerClassName: classes.paper },
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action1', headerName: 'Ação', flex: 1, headerClassName: classes.paper,
+                field: 'action1', headerName: t('action'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -178,7 +181,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                         </>
                     )
                 }
-            } : { field: 'action1', headerName: 'Action', hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action1', headerName: t('action'), hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
 
     ];
     return (

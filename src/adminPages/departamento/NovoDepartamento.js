@@ -16,6 +16,8 @@ import DepartamentoSearchTable from "./DepartamentoSearchTable";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import { useLocation } from "react-router-dom";
 
+import { useTranslation } from "react-i18next";
+
 
 const initialFValues = {
     id: 0,
@@ -50,12 +52,15 @@ const NovoDepartamento = () => {
     const [buttonTitle, setButtonTitle] = useState();
     const [textReset, setTextReset] = useState();
 
+    const { t } = useTranslation();
+
+
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
         updateValuesOnOpen(); // update Usecontext
         getStateValuesFromSearchTable();
 
-    }, []);
+    }, [(t('header_title_departamento_modificar'))]);
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -92,10 +97,10 @@ const NovoDepartamento = () => {
 
             setBackGroundColor("darkBlue");
             setColor("white");
-            setHeaderTitle("Modificar Departamento");
-            setHeaderSubTitle("Modificar os dados do Departamento");
-            setButtonTitle("Modificar");
-            setTextReset("Novos dados");
+            setHeaderTitle(t('header_title_departamento_modificar'));
+            setHeaderSubTitle(t('header_subTitle_departamento_modificar'));
+            setButtonTitle(t('button_modificar'));
+            setTextReset(t('button_novo'));
 
             setValues(location.state);
             setSede(location.state.sede);
@@ -107,10 +112,11 @@ const NovoDepartamento = () => {
         } else {
             setBackGroundColor("darkGreen");
             setColor("white");
-            setHeaderTitle("Cadastrar Novo Departamento");
-            setHeaderSubTitle("Guardar os dados do novo Departamento");
-            setButtonTitle("Guardar");
-            setTextReset("Limpar");
+            setHeaderTitle(t('header_title_departamento_novo'));
+            setHeaderSubTitle(t('header_subTitle_departamento_novo'));
+            setButtonTitle(t('button_modificar'));
+            setTextReset(t('button_gravar'));
+            setTextReset(t('button_limpar'));
         }
     }
 
@@ -129,11 +135,12 @@ const NovoDepartamento = () => {
         values.agenciaID = agenciaID;
 
         setBackGroundColor("darkGreen");
-        setColor("white");
-        setHeaderTitle("Cadastrar Novo Departamento");
-        setHeaderSubTitle("Guardar os dados do novo Departamento");
-        setButtonTitle("Guardar");
-        setTextReset("Limpar");
+            setColor("white");
+            setHeaderTitle(t('header_title_departamento_novo'));
+            setHeaderSubTitle(t('header_subTitle_departamento_novo'));
+            setButtonTitle(t('button_modificar'));
+            setTextReset(t('button_gravar'));
+            setTextReset(t('button_limpar'));
     }
 
     const handleSubmit = (e) => {
@@ -152,12 +159,12 @@ const NovoDepartamento = () => {
 
     const onclicSedePopup = () => {
         setCount(1);
-        setPpupTitle("Listagem de Sedes Cadastradas");
+        setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
     const onclickAgenciaPopup = () => {
         setCount(2);
-        setPpupTitle("Listagem de Agências");
+        setPpupTitle(t('lista_agencia'));
         setOpenPopup(true);
     }
 
@@ -169,7 +176,7 @@ const NovoDepartamento = () => {
                 tableDepartamentoUpdateData(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
-                    message: 'Departamento Modificado com Sucesso!',
+                    message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 })
             })
@@ -187,7 +194,7 @@ const NovoDepartamento = () => {
                 tableDepartamentoUpdateData(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
-                    message: 'Novo Departamento guarda com Sucesso!',
+                    message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
                 })
             })
@@ -195,7 +202,6 @@ const NovoDepartamento = () => {
                     console.log(e)
                 });
         }
-
     }
 
     return (
@@ -215,10 +221,10 @@ const NovoDepartamento = () => {
 
                     <div className="newFaculty">
                         <div>
-                            <label className="inputLabel">Sede</label>
+                            <label className="inputLabel">{t('sede')}</label>
                             <Controls.Input
                                 name="sede"
-                                placeHolder="Sede da Empresa"
+                                placeHolder={t('sede')}
                                 value={sede}
                                 onChange={handleInputChange}
                                 type="text"
@@ -230,10 +236,10 @@ const NovoDepartamento = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Agência</label>
+                            <label className="inputLabel">{t('nome_Agencia')}</label>
                             <Controls.Input
                                 name="agencia"
-                                placeHolder="Agencia da Empresa"
+                                placeHolder={t('nome_Agencia')}
                                 value={agencia}
                                 onChange={handleInputChange}
                                 type="text"
@@ -246,10 +252,10 @@ const NovoDepartamento = () => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Código</label>
+                            <label className="inputLabel">{t('code')}</label>
                             <Controls.Input
                                 name="code"
-                                placeHolder="Código do Departamento"
+                                placeHolder={t('code')}
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
@@ -257,10 +263,10 @@ const NovoDepartamento = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Departamento</label>
+                            <label className="inputLabel">{t('departamento')}</label>
                             <Controls.Input
                                 name="departamento"
-                                placeHolder="Designação do Departamento"
+                                placeHolder={t('departamento')}
                                 value={values.departamento}
                                 onChange={handleInputChange}
                                 type="text"
@@ -269,10 +275,10 @@ const NovoDepartamento = () => {
                         </div>
 
                         <div>
-                            <label className="inputLabel">Observação</label>
+                            <label className="inputLabel">{t('observacao')}</label>
                             <Controls.Input
                                 name="observacao"
-                                placeHolder="Observação"
+                                placeHolder={t('observacao')}
                                 value={values.observacao}
                                 onChange={handleInputChange}
                                 type="text"

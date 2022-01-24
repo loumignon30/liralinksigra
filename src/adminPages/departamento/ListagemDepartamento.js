@@ -6,11 +6,16 @@ import Notifications from '../../components/reusableComponents/Notifications';
 import UserSearchTable from '../utilisador/UserSearchTable';
 import DepartamentoSearchTable from './DepartamentoSearchTable';
 
+import { useTranslation } from "react-i18next";
+
 const ListagemDepartamento = () => {
 
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [openPopup, setOpenPopup] = useState(false);
+
+    const { t } = useTranslation();
+
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
@@ -18,7 +23,7 @@ const ListagemDepartamento = () => {
     
     return (
         <div className="utilisateurList">
-            <h3 style={{ marginLeft: '15px' }}>LISTA DE DEPARTAMENTOS</h3>
+            <h3 style={{ marginLeft: '15px' }}>{t('listagem_departemento_menu')}</h3>
 
             <div style={{ height: 400, width: '100%' }}>
                 <DepartamentoSearchTable

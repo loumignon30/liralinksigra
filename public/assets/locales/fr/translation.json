@@ -1,0 +1,169 @@
+{
+    "app_title": "SIGRA",
+    "language": "Langue",
+    "welcome_message": "Bienvenue2",
+    "days_since_release": "ça fait {{number_of_days}} jours depuis la sortie",
+    "Welcome_to_React": "Bienvenue à React et react-i18next 2",
+    "code": "Code",
+    "sede": "Siège",
+    "email": "Email",
+    "contacto": "Telephone",
+    "endereco": "Adresse",
+    "cidade": "Ville",
+    "pais": "Pays",
+    "status": "Status",
+    "button_gravar": "Enregistrer",
+     "button_modificar": "Modifier",
+     "button_novo": "Nouveau",
+     "button_limpar": "Effacer",
+     "lista_agencia": "Liste de Agences",
+     "lista_usuarios": "LISTE DES UTILISATEURS DU LOGICIEL",
+     "userEdit_editarDados_text": "MODIFIER LES DONNÉES",
+     "lista_funcionario": "LISTE DE TRAVAILLEURS ",
+     "user_informstion": "Information de l'utilisateur",
+     "user_contact": "Contacts de l'utilisateur",
+
+     "data": "Date",
+     "hora": "Heure",
+
+    "sair": "Fermer",
+    "nome_completo": "Nom Complet",
+    "nome": "Prénom",
+     "apelido": "Nom",
+     "data_nascimento": "Date Naissance",
+     "sexo": "Sexe",
+     "nivel_accesso": "Niveau d'accès",
+     "senha": "Mot de passe",
+     "confirmar_senha": "Confirmez",
+     "foto": "Photo",
+
+     "sexo_none": "Sélectionnez",
+     "sexo_masculino": "Masculin",
+     "sexo_feminino": "Féminin",
+     "sexo_outros": "Autres",
+
+     "role_administrador": "Administrateur",
+     "role_Funcionario": "Travailleur",
+     "role_utilizador": "Utilisateur",
+
+     "denunciante": "Nom du Plaignant",
+     "tipo_denuncia": "Type de Plainte",
+     "queixa": "Plainte",
+     "queixaPlaceOrder": "Ecrivez la plainte contre le Travailleur",
+
+     "mensagem_Gravar_Nova_Agencia": "Les données ont été enregistrée avec succès!",
+     "mensagem_modificar_Nova_Agencia": "Les donnée ont été Modifiée avec succès!",
+     "mensagem_alteracao_sede": "Le Siège Principal a été modifié avec succeès!!. Le logiciel va fermer pour actualiser les données",
+     "mensagem_falta_de_logitipo_da_sede": "Vous devez inserer une Image ou Logo du Siège de L'entreprise, Attention", 
+
+     "mensagem_denuncia_do_mes": "Plaintes du mois",
+    "mensagem_denuncia_resolvidas": "Plaintes résolues",
+    "mensagem_denuncia_por_tratar": "Plaintes à traiter",
+    "mensagem_denuncia_comparado_com_o_mes_passado": "Par rapport au mois dernier",
+    "mensagem_denuncia_comparado_com_o_ano_passado": "Par rapport à l’année dernière",
+    
+    "mensagem_analise_denuncia_home_page": "Analyse des Plaintes",
+
+     "mensagem_erro_numero_funcionario_pesquisa": "Le code du Travailleur n'existe pas dans la base de données!",
+
+
+    "selecione": "Sélectionner",
+    "action": "Ação",
+    "header_title_sede": "Siège de l'entreprise",
+     "header_subTitle_sede": "Enregistrez un nouveau siège de l'entreprise",
+
+     "header_title_agence_novo": "Enregistrer une nouvelle agence",
+     "header_subTitle_agence_novo": "Formulaire d’inscription pour la nouvelle agence",
+     "header_title_agence_modificar": "Modifier les données de l’Agence",
+     "header_subTitle_agence_modificar": "Formulaire de modification des données de l’agence",
+     
+     "header_title_utilisador_novo": "Nouveau Utilisateur du Logiciel",
+     "header_subTitle_utilisador_novo": "Enregistrez un nouveau utiisateur du Logiciel",
+     "header_title_utilisador_modificar": "Modifiez les données de l'utilisateur du Logiciel",
+     "header_subTitle_utilisador_modificar": "Formulaire de modification des données de l'utilisateur du Logiciel",
+     
+         
+     "header_title_departamento_novo": "Enregistrer Nouveau Departement",
+     "header_subTitle_departamento_novo": "Formulaire d'enregistrement des nouveau Departement",
+     "header_title_departamento_modificar": "Modifier le departement",
+     "header_subTitle_departamento_modificar": "Modifier les données du Departement",
+
+     "header_title_funcao_novo": "Enregistrer nouvelle Fonction",
+     "header_subTitle_funcao_novo": "Enregistrer les données de la nouvelle Fonction",
+     "header_title_funcao_modificar": "Modifier la  Fonction",
+     "header_subTitle_funcao_modificar": "Modifier les données de la fonction",
+
+     "header_title_funcionario_novo": "Enregistrer Nouveau Travailleurs",
+     "header_subTitle_funcionario_novo": "Enregistrer les données du nouveau Travailleur",
+     "header_title_funcionario_modificar": "Modifier les données du Travailleur",
+     "header_subTitle_funcionario_modificar": "Modifier les Informations du Travailleur",
+
+     "header_title_denuncia_novo": "Enregistrer une Plainte",
+     "header_subTitle_denuncia_novo": "Enregister une Plainte contre un travailleur",
+     "denunciaNumeroPlaceOrder": "Entrez le Code d’employé",
+
+
+     "nome_Agencia": "Agence",
+     "nome_representante": "Gérant",
+     "agencia": "Agence",
+     "funcao": "Fonction",
+
+     "departamento": "Departement",
+     "observacao": "Observation",
+
+    "dashboard_menu": "Dashboard",
+     "definicoes_menu": "Configurations",
+     "sedeMenu_menu": "Siège de l'Entreprise",
+     "agencia_menu": "Agences",
+     "listagem_agencia_menu": "Liste Agênces",
+     "provincias_menu": "Provinces",
+     "novo_usuario_menu": "Nouvau Utilisateur",
+     
+     "lista_sede": "Liste de Siège",
+     "listagem_usuario_menu": "Liste Utilisateurs",
+     "listagem_departemento_menu": "LISTE DES DEPARTEMENTS",
+     "lista_denuncia": "LISTE DES PLAINTES ",
+
+     "departamentos_menu": "Departements",
+     "Novo_departamento_menu": "Nouveau Departement",
+     "listagem_departamento_menu": "Liste des Departements",
+
+     "funcoes_menu": "Fonctions",
+     "nova_funcao_menu": "Nouvelle Fonction",
+     "listagem_funcao_menu": "Liste des Fonctions",
+
+     "funcionarios_menu": "Travailleurs",
+     "novo_funcionario_menu": "Nouveau Travailleurs",
+     "listagem_funcionario_menu": "Liste des Travailleurs",
+
+     "cadastrar_denuncias_menu": "Plaintes contre Travailleur",
+     "tipo_denuncias_menu": "Types des Plaintes",
+     "nova_denuncia_menu": "Nouvelle Plaintes",
+     "listagem_denuncia_menu": "Liste des Plaintes",
+
+     "tratamento_denuncia_menu": "Gérer les Plaintes",
+     "tratamento_menu": "Traiter une Plaintes",
+     "denuncia_tratadas_menu": "Plaintes Traitées",
+
+     "analise_denuncia_menu": "Analyse des Plaintes",
+     "relatorio_analise_menu": "Rapports des Plaintes",
+     "elogoios_menu": "Évaluer un Travailleur",
+     "respostas_funcionario_menu": "Reponse aux Plaintes",
+     "denucia_por_agencia_menu": "Evaluer Plaintes",
+
+     "total_denuncias": "Total Plaintes",
+
+
+     "janeiro": "janvier",
+    "fevereiro": "février",
+    "marco": "mars",
+    "abril": "avril",
+    "maio": "mai",
+    "junho": "juin",
+    "julho": "juillet",
+    "agosto": "août",
+    "setembro": "septembre",
+    "outubro": "octobre",
+    "novembro": "novembre",
+    "dezembro": "décembre"
+}

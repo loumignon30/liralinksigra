@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import FuncaoService from "../../services/admin/Funcao.services";
 
+import { useTranslation } from "react-i18next";
+
 const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
     const useStyles = makeStyles({
@@ -63,6 +65,7 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
 
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -100,14 +103,14 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
         { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
         
         codeDisplay?
-        { field: 'code', headerName: 'Code', width: 80, headerClassName: classes.paper }:
-        { field: 'code', headerName: 'Code', hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
+        { field: 'code', headerName: t('code'),flex:1, headerClassName: classes.paper }:
+        { field: 'code', headerName: t('code'), hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
         
-        { field: 'funcao', headerName: 'Função',  flex: 3, headerClassName: classes.paper },
+        { field: 'funcao', headerName: t('funcao'),  flex: 3, headerClassName: classes.paper },
 
         actionsButtonDisplay ?
             {
-                field: 'action', headerName: 'Action', flex: 1, headerClassName: classes.paper,
+                field: 'action', headerName: t('funcao'), flex: 0.5, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -120,11 +123,11 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
                         </>
                     )
                 }
-            } : { field: 'action', headerName: 'Action', hide: { actionsButtonDisplay }, flex: 1, headerClassName: classes.paper }
+            } : { field: 'action', headerName: t('funcao'), hide: { actionsButtonDisplay }, flex: 1, headerClassName: classes.paper }
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action2', headerName: 'Ação', flex: 1, headerClassName: classes.paper,
+                field: 'action2', headerName: t('funcao'), flex: 0.5, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -148,7 +151,7 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
                         </>
                     )
                 }
-            } : { field: 'action2', headerName: 'Action', hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action2', headerName: t('funcao'), hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
 
     ];
     return (

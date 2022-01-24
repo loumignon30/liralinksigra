@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { Delete } from '@mui/icons-material';
 import urlImage from '../../http-common-images';
 import useStylesSearchTable from '../../components/reusableComponents/SearchTableStyle';
+import { useTranslation } from "react-i18next";
+
 
 const UserSearchTable = forwardRef((props, ref) => {
 
@@ -14,6 +16,9 @@ const UserSearchTable = forwardRef((props, ref) => {
     const [userDataParam, setUserDataParam] = useState([]);
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [url, setUrl] = useState(urlImage());  // backend image URL
+
+    const { t } = useTranslation();
+
 
     const propsTableGrid = {  // grid style: SearchTableStyle.js
         backGroundColor: props.backGroundColor,
@@ -83,7 +88,7 @@ const UserSearchTable = forwardRef((props, ref) => {
 
         userNameDisplay ?
             {
-                field: 'firstname', headerName: 'Name', flex:3, headerClassName: classes.gridHeader,
+                field: 'firstname', headerName: t('nome'), flex:3, headerClassName: classes.gridHeader,
                 renderCell: (params) => {
                     return (
                         <>
@@ -100,15 +105,15 @@ const UserSearchTable = forwardRef((props, ref) => {
                 }
             } : "",
         emailDisplay ?
-            { field: 'email', headerName: 'Email', flex: 2, headerClassName: classes.gridHeader } :
-            { field: 'email', headerName: 'Email', flex: 2, hide: { emailDisplay }, headerClassName: classes.gridHeader },
+            { field: 'email', headerName: t('email'), flex: 2, headerClassName: classes.gridHeader } :
+            { field: 'email', headerName: t('email'), flex: 2, hide: { emailDisplay }, headerClassName: classes.gridHeader },
         roleDisplay ?
-            { field: 'role', headerName: 'Role', flex: 1, headerClassName: classes.gridHeader } :
-            { field: 'role', headerName: 'Role', flex: 1, hide: { roleDisplay }, headerClassName: classes.gridHeader },
+            { field: 'role', headerName: t('nivel_accesso'), flex: 1, headerClassName: classes.gridHeader } :
+            { field: 'role', headerName: t('nivel_accesso'), flex: 1, hide: { roleDisplay }, headerClassName: classes.gridHeader },
 
         statusDisplay ?
             {
-                field: 'status', headerName: 'Status', flex: 1, headerClassName: classes.gridHeader,
+                field: 'status', headerName: t('status'), flex: 1, headerClassName: classes.gridHeader,
                 renderCell: (type) => {
                     return (
                         <>
@@ -116,11 +121,11 @@ const UserSearchTable = forwardRef((props, ref) => {
                         </>
                     )
                 }
-            } : { field: 'status', headerName: 'Status', flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
+            } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
 
         actionsButtonDisplaySelect ?
             {
-                field: 'action', headerName: 'Action', flex: 1, headerClassName: classes.gridHeader,
+                field: 'action', headerName: t('action'), flex: 1, headerClassName: classes.gridHeader,
                 renderCell: (params) => {
                     return (
                         <>
@@ -133,11 +138,11 @@ const UserSearchTable = forwardRef((props, ref) => {
                         </>
                     )
                 }
-            } : { field: 'action', headerName: 'Action', flex: 1, hide:{actionsButtonDisplaySelect}, headerClassName: classes.gridHeader },
+            } : { field: 'action', headerName: t('action'), flex: 1, hide:{actionsButtonDisplaySelect}, headerClassName: classes.gridHeader },
         
             actionsButtonDisplayEditDelete ?
             {
-                field: 'action2', headerName: 'Action', flex: 1, headerClassName: classes.gridHeader,
+                field: 'action2', headerName: t('action'), flex: 1, headerClassName: classes.gridHeader,
                 renderCell: (params) => {
                     return (
                         <>
@@ -167,7 +172,7 @@ const UserSearchTable = forwardRef((props, ref) => {
                         </>
                     )
                 }
-            } : {field: 'action2', headerName: 'Action', flex: 1, hide:{actionsButtonDisplayEditDelete}, headerClassName: classes.gridHeader},
+            } : {field: 'action2', headerName: t('action'), flex: 1, hide:{actionsButtonDisplayEditDelete}, headerClassName: classes.gridHeader},
 
     ];
     return (

@@ -6,6 +6,9 @@ import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 
+import { useTranslation } from "react-i18next";
+
+
 const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
     const useStyles = makeStyles({
@@ -39,6 +42,7 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
     const [url, setUrl] = useState("");  // backend image  URL
     const classes = useStyles();
 
+    const { t } = useTranslation();
 
     useEffect(() => {
         getGetAllData();
@@ -75,37 +79,37 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
         { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
         
         dataDisplay?
-        { field: 'data', headerName: 'DATA', width:100, headerClassName: classes.paper }:
-        { field: 'data', headerName: 'DATA', hide: { dataDisplay }, headerClassName: classes.paper },
+        { field: 'data', headerName: t('data'), width:100, headerClassName: classes.paper }:
+        { field: 'data', headerName: t('data'), hide: { dataDisplay }, headerClassName: classes.paper },
         
         horaDisplay?
-        { field: 'hora', headerName: 'HORA', width:80, headerClassName: classes.paper }:
-        { field: 'hora', headerName: 'HORA', hide: { horaDisplay }, headerClassName: classes.paper },
+        { field: 'hora', headerName: t('hora'), width:80, headerClassName: classes.paper }:
+        { field: 'hora', headerName: t('hora'), hide: { horaDisplay }, headerClassName: classes.paper },
         
         nomeDisplay?
-        { field: 'nome', headerName: 'Nome do Denunciante', flex: 2, headerClassName: classes.paper }:
-        { field: 'nome', headerName: 'Nome', hide: { nomeDisplay }, headerClassName: classes.paper },
+        { field: 'nome', headerName: t('denunciante'), flex: 2, headerClassName: classes.paper }:
+        { field: 'nome', headerName: t('denunciante'), hide: { nomeDisplay }, headerClassName: classes.paper },
         
         
         tipoDenunciaDisplay ?
-        { field: 'tipodenuncia', headerName: 'Tipo Denúncia',  flex: 1, headerClassName: classes.paper }:
-        { field: 'tipodenuncia', headerName: 'Tipo Denúncia', hide: { tipoDenunciaDisplay }, headerClassName: classes.paper },
+        { field: 'tipodenuncia', headerName: t('tipo_denuncia'),  flex: 1, headerClassName: classes.paper }:
+        { field: 'tipodenuncia', headerName: t('tipo_denuncia'), hide: { tipoDenunciaDisplay }, headerClassName: classes.paper },
 
         emailDisplay ?
-        { field: 'email', headerName: 'Email',  flex: 1, headerClassName: classes.paper }:
-        { field: 'email', headerName: 'Email', hide: { emailDisplay }, headerClassName: classes.paper },
+        { field: 'email', headerName: t('email'),  flex: 1, headerClassName: classes.paper }:
+        { field: 'email', headerName: t('email'), hide: { emailDisplay }, headerClassName: classes.paper },
 
         telefoneDislay ?
-        { field: 'telefone', headerName: 'Telefone',  flex: 1, headerClassName: classes.paper }:
-        { field: 'telefone', headerName: 'Telefone', hide: { telefoneDislay }, headerClassName: classes.paper },
+        { field: 'telefone', headerName: t('contacto'),  flex: 1, headerClassName: classes.paper }:
+        { field: 'telefone', headerName: t('contacto'), hide: { telefoneDislay }, headerClassName: classes.paper },
 
         queixaDisplay ?
-        { field: 'queixa', headerName: 'Queixa',  flex: 2, headerClassName: classes.paper }:
-        { field: 'queixa', headerName: 'Queixa', hide: { queixaDisplay }, headerClassName: classes.paper },
+        { field: 'queixa', headerName: t('queixa'),  flex: 2, headerClassName: classes.paper }:
+        { field: 'queixa', headerName: t('queixa'), hide: { queixaDisplay }, headerClassName: classes.paper },
 
         statusDisplay ?
             {
-                field: 'status', headerName: 'Status', width:80, headerClassName: classes.paper,
+                field: 'status', headerName: t('status'), width:80, headerClassName: classes.paper,
                 renderCell: (type) => {
                     return (
                         <>
@@ -113,11 +117,11 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
                         </>
                     )
                 }
-            } : { field: 'status', headerName: 'Status', flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
+            } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
 
         actionsButtonDisplaySelect ?
             {
-                field: 'action', headerName: 'Action', width:80, headerClassName: classes.paper,
+                field: 'action', headerName: t('action'), width:80, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -130,11 +134,11 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
                         </>
                     )
                 }
-            } : { field: 'action', headerName: 'Action', hide: { actionsButtonDisplaySelect }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action', headerName: t('action'), hide: { actionsButtonDisplaySelect }, flex: 1, headerClassName: classes.paper },
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action1', headerName: 'Ação', width:110, headerClassName: classes.paper,
+                field: 'action1', headerName: t('action'), width:110, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -167,7 +171,7 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
                         </>
                     )
                 }
-            } : { field: 'action1', headerName: 'Action', hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action1', headerName: t('action'), hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
 
     ];
     return (

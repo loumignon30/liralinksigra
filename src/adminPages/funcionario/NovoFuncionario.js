@@ -20,6 +20,9 @@ import { useLocation } from "react-router-dom";
 import semfoto from "../../assets/images/semfoto.png";
 import { v4 as uuidv4 } from 'uuid';
 
+import { useTranslation } from "react-i18next";
+
+
 const initialFValues = {
     id: 0,
     code: '',
@@ -78,6 +81,7 @@ const NovoFuncionario = () => {
     const [file, setFile] = useState();
     const [fileName, setFileName] = useState();
 
+    const { t } = useTranslation();
 
     const saveImageFromImageUpload = () => {
         setImageFileName(childRef.current.fileName);
@@ -102,7 +106,7 @@ const NovoFuncionario = () => {
 
         updateValuesOnOpen();
         getStateValuesFromSearchTable();
-    }, []);
+    }, [t('header_title_funcionario_modificar')]);
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -148,10 +152,10 @@ const NovoFuncionario = () => {
 
             setBackGroundColor("darkBlue");
             setColor("white");
-            setHeaderTitle("Modificar Funcionário");
-            setHeaderSubTitle("Modificar os dados do Funcionário");
-            setButtonTitle("Modificar");
-            setTextReset("Novos dados");
+            setHeaderTitle(t('header_title_funcionario_modificar'));
+            setHeaderSubTitle(t('header_subTitle_funcionario_modificar'));
+            setButtonTitle(t('button_modificar'));
+            setTextReset(t('button_novo'));
 
             setValues(location.state);
             setSede(location.state.sede);
@@ -169,10 +173,10 @@ const NovoFuncionario = () => {
         } else {
             setBackGroundColor("darkGreen");
             setColor("white");
-            setHeaderTitle("Cadastrar Novo Funcionário");
-            setHeaderSubTitle("Guardar os dados do Funcionário");
-            setButtonTitle("Guardar");
-            setTextReset("Limpar");
+            setHeaderTitle(t('header_title_funcionario_novo'));
+            setHeaderSubTitle(t('header_subTitle_funcionario_novo'));
+            setButtonTitle(t('button_gravar'));
+            setTextReset(t('button_novo'));
         }
     }
 
@@ -188,10 +192,11 @@ const NovoFuncionario = () => {
 
         setBackGroundColor("darkGreen");
         setColor("white");
-        setHeaderTitle("Cadastrar Novo Funcionário");
-        setHeaderSubTitle("Guardar os dados do Funcionário");
-        setButtonTitle("Guardar");
-        setTextReset("Limpar");
+
+        setHeaderTitle(t('header_title_funcionario_novo'));
+        setHeaderSubTitle(t('header_subTitle_funcionario_novo'));
+        setButtonTitle(t('button_gravar'));
+        setTextReset(t('button_novo'));
 
         values.sedeID = sedeID;
         values.agenciaID = agenciaID;
@@ -220,22 +225,22 @@ const NovoFuncionario = () => {
 
     const onclickSedePopup = () => {
         setCount(1);
-        setPpupTitle("Listagem de Sedes");
+        setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
     const onclickAgenciaPopup = () => {
         setCount(2);
-        setPpupTitle("Listagem de Agências");
+        setPpupTitle(t('lista_agencia'));
         setOpenPopup(true);
     }
     const onclickDepartamentoPopup = () => {
         setCount(3);
-        setPpupTitle("Listagem de Departamentos");
+        setPpupTitle(t('listagem_departamento_menu'));
         setOpenPopup(true);
     }
     const onclickFuncaoPopup = () => {
         setCount(4);
-        setPpupTitle("Listagem de Funções da Empresa");
+        setPpupTitle(t('listagem_funcao_menu'));
         setOpenPopup(true);
     }
 
@@ -256,7 +261,7 @@ const NovoFuncionario = () => {
                 tableFuncionarioUpdateData();
                 setNotify({
                     isOpen: true,
-                    message: 'Dados do Funcionario Modificados com Sucesso!',
+                    message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 })
             })
@@ -269,7 +274,7 @@ const NovoFuncionario = () => {
                 tableFuncionarioUpdateData();
                 setNotify({
                     isOpen: true,
-                    message: 'Novo Funcionario guarda com Sucesso!',
+                    message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
                 })
             })
@@ -278,7 +283,6 @@ const NovoFuncionario = () => {
                 });
         }
     }
-
 
     return (
 
@@ -297,14 +301,14 @@ const NovoFuncionario = () => {
 
                     <div className="newFaculty">
                         <div>
-                            <label className="inputLabel">Sede</label>
+                            <label className="inputLabel">{t('sede')}</label>
                             <Controls.Input
                                 name="sede"
-                                placeHolder="Sede da Empresa"
+                                placeHolder={t('sede')}
                                 value={sede}
                                 onChange={handleInputChange}
                                 type="text"
-                                disabled="true"
+                                width="65%"
                                 error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -312,14 +316,14 @@ const NovoFuncionario = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Agencia</label>
+                            <label className="inputLabel">{t('agencia')}</label>
                             <Controls.Input
                                 name="agencia"
-                                placeHolder="Agencia da Empresa"
+                                placeHolder={t('agencia')}
                                 value={agencia}
                                 onChange={handleInputChange}
                                 type="text"
-                                disabled="true"
+                                width="65%"
                                 error={errors.agencia}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -327,72 +331,76 @@ const NovoFuncionario = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Code</label>
+                            <label className="inputLabel">{t('code')}</label>
                             <Controls.Input
                                 name="code"
-                                placeHolder="Code"
+                                placeHolder={t('code')}
                                 value={values.code}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.code}
                             />
                         </div>
 
                         <div >
-                            <label className="inputLabel">Nome</label>
+                            <label className="inputLabel">{t('nome')}</label>
                             <Controls.Input
                                 name="primeironome"
-                                placeHolder="Primeiro nome"
+                                placeHolder={t('nome')}
                                 value={values.primeironome}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="145px"
+                                width="33%"
                                 error={errors.primeironome}
                             />
 
                             <Controls.Input
                                 name="ultimonome"
-                                placeHolder="Apelido "
+                                placeHolder={t('apelido')}
                                 value={values.ultimonome}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="120px"
+                                width="32%"
                                 error={errors.ultimonome}
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Email</label>
+                            <label className="inputLabel">{t('email')}</label>
                             <Controls.Input
                                 name="email"
-                                placeHolder="Email da Egencia"
+                                placeHolder={t('email')}
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.email}
 
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Telefone</label>
+                            <label className="inputLabel">{t('contacto')}</label>
                             <Controls.Input
                                 name="telefone"
-                                placeHolder="Número de Telefone"
+                                placeHolder={t('contacto')}
                                 value={values.telefone}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.telefone}
                             />
                         </div>
 
                         <div>
-                            <label className="inputLabel">Departamento</label>
+                            <label className="inputLabel">{t('departamento')}</label>
                             <Controls.Input
                                 name="departamento"
-                                placeHolder="Departamento do Funcionario"
+                                placeHolder={t('departamento')}
                                 value={departamento}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.departamento}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -400,13 +408,14 @@ const NovoFuncionario = () => {
                             />
                         </div>
                         <div>
-                            <label className="inputLabel">Função</label>
+                            <label className="inputLabel">{t('funcao')}</label>
                             <Controls.Input
                                 name="funcao"
-                                placeHolder="Função do Funcionario"
+                                placeHolder={t('funcao')}
                                 value={funcao}
                                 onChange={handleInputChange}
                                 type="text"
+                                width="65%"
                                 error={errors.funcao}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -442,7 +451,7 @@ const NovoFuncionario = () => {
 
                         <div className="newUniversity">
                             <ImageUpLoad ref={childRef}
-                                fotoTitulo="Fotografia"
+                                fotoTitulo={t('foto')}
                                 margnLeft="0px"
                                 uploadDisplay={true} />
                         </div>
@@ -454,12 +463,12 @@ const NovoFuncionario = () => {
                     <div className="newFaculty">
                         <Controls.Buttons
                             type="submit"
-                            text="Gravar"
+                            text={t('button_gravar')}
                             className="button"
                         />
                         <Controls.Buttons
                             type="button"
-                            text="Limpar"
+                            text={t('button_limpar')}
                             color="secondary"
                             className="button"
                             onClick={ResetForm}
