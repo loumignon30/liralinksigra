@@ -16,12 +16,18 @@
      "button_modificar": "Modifier",
      "button_novo": "Nouveau",
      "button_limpar": "Effacer",
+     "button_pagina_anterior": "Rétrocéder",
      "lista_agencia": "Liste de Agences",
      "lista_usuarios": "LISTE DES UTILISATEURS DU LOGICIEL",
      "userEdit_editarDados_text": "MODIFIER LES DONNÉES",
      "lista_funcionario": "LISTE DE TRAVAILLEURS ",
      "user_informstion": "Information de l'utilisateur",
      "user_contact": "Contacts de l'utilisateur",
+
+     "sedeEdit_editarDados_text": "MODIFIER LE SIÈGE",
+     "sedeEdit_informacaoSede_text": "Information du Siège",
+     "sedeEdit_contactSede_text": "Contacts du Siège",
+
 
      "data": "Date",
      "hora": "Heure",
@@ -102,6 +108,9 @@
      "header_subTitle_denuncia_novo": "Enregister une Plainte contre un travailleur",
      "denunciaNumeroPlaceOrder": "Entrez le Code d’employé",
 
+     "header_title_tipo_denuncia_gravar": "Enregistrer Type de Plainte",
+    "header_subTitle_tipo_denuncia_gravar": "Formulaire d'enregistrement de Type de Plaintes",
+
 
      "nome_Agencia": "Agence",
      "nome_representante": "Gérant",
@@ -123,6 +132,8 @@
      "listagem_usuario_menu": "Liste Utilisateurs",
      "listagem_departemento_menu": "LISTE DES DEPARTEMENTS",
      "lista_denuncia": "LISTE DES PLAINTES ",
+     "lista_tipoDenuncia": "LISTE DES TYPES DE PLAINTES",
+     "tipo_denuncia_menu": "Liste- Types Plaintes",
 
      "departamentos_menu": "Departements",
      "Novo_departamento_menu": "Nouveau Departement",

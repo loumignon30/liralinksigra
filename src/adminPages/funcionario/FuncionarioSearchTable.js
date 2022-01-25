@@ -36,7 +36,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
         emailDisplay, telefoneDislay, statusDisplay,
         actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete,
-        pageSize, rowPerPage } = props;
+        pageSize, rowPerPage,
+        sedeID, agenciaID } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
@@ -45,7 +46,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
     const { t } = useTranslation();
 
     useEffect(() => {
-        getGetAllData();
+        getGetAllData(sedeID,  agenciaID);
         setUrl(urlImage());
 
     }, []);
@@ -62,8 +63,10 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
         setOpenPopup(false);
     }
 
-    const getGetAllData = () => {
-        FuncionarioService.getAll()
+    const getGetAllData = (sedeID, agenciaID) => {
+        
+
+        FuncionarioService.getAll(sedeID, agenciaID)
             .then(response => {
                 setData(response.data)
             })

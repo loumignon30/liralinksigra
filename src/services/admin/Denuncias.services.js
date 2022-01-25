@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class DenunciasService {
 
-    getAll(){
-        return http.get("/denuncias");
+    getAll(abreviationLangue){
+        return http.get(`/denuncias?abreviationLangue=${abreviationLangue}`);
     }
 
     create(data){

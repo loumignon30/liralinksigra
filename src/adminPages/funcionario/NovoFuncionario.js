@@ -56,13 +56,13 @@ const NovoFuncionario = () => {
     const [slideImgCategory, setSlideImgCategory] = useState();
     const [sede, setSede] = useState("");
     const [agencia, setAgencia] = useState("");
-    const [count, setCount] = useState();
+    const [count, setCount] = useState(0);
     const [notificatinoShow, setNotificationShow] = useState(false);
     const [departamento, setDepartamento] = useState("");
     const [funcao, setFuncao] = useState("");
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
 
-    const [agenciaID, setAgenciaID] = useState();
+    const [agenciaID, setAgenciaID] = useState(0);
     const [sedeID, setSedeID] = useState(0);
 
     const location = useLocation();
@@ -71,15 +71,9 @@ const NovoFuncionario = () => {
     const [color, setColor] = useState("");
     const [headerTitle, setHeaderTitle] = useState("");
     const [headerSubTitle, setHeaderSubTitle] = useState("");
-    const [buttonTitle, setButtonTitle] = useState();
-    const [textReset, setTextReset] = useState();
+    const [buttonTitle, setButtonTitle] = useState("");
+    const [textReset, setTextReset] = useState("");
     const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
-
-    const [imageTeste, setImageTest] = useState([]);
-
-    const [fileUrl, setFileUrl] = useState();
-    const [file, setFile] = useState();
-    const [fileName, setFileName] = useState();
 
     const { t } = useTranslation();
 
@@ -90,10 +84,10 @@ const NovoFuncionario = () => {
     }
 
     const updateValuesOnOpen = () => {
-        userSavedValue.map(item => (
-            values.sedeID = item.sedeID,
-            setSede(item.nomeSede)
-        ));
+        // userSavedValue.map(item => (
+        //     values.sedeID = item.sedeID,
+        //     setSede(item.nomeSede)
+        // ));
     }
 
     const imageReset = () => {
@@ -254,34 +248,40 @@ const NovoFuncionario = () => {
             saveImageFromImageUpload();
         }
 
-
         if (values.id > 0) {
             FuncionarioService.update(values.id, values).then(response => {
-                setNotificationShow(true);
-                tableFuncionarioUpdateData();
+                tableDepartamentoUpdateData1(sedeID, agenciaID)
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
-                })
+                });
+                setNotificationShow(true);
             })
                 .catch(e => {
                     console.log(e)
                 });
         } else {
             FuncionarioService.create(values).then(response => {
-                setNotificationShow(true);
-                tableFuncionarioUpdateData();
+                tableDepartamentoUpdateData1(sedeID, agenciaID)
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
-                })
+                });
+                setNotificationShow(true);
             })
                 .catch(e => {
                     console.log(e)
                 });
         }
+    }
+
+    const tableDepartamentoUpdateData1 = (sedeID1, agenciaID1) => {
+        if(sedeID1 > 0  && agenciaID1 > 0){
+            childRef2.current.getGetAllData(sedeID1, agenciaID1);  // saveImage() = method called
+        }
+
     }
 
     return (
@@ -436,6 +436,8 @@ const NovoFuncionario = () => {
                             actionsButtonDisplaySelect={false}
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor={backGroundColor}
+                            sedeID={sedeID}
+                            agenciaID={agenciaID}
                             color={color}
                             pageSize={5}
                             rowPerPage={5}
@@ -532,6 +534,9 @@ const NovoFuncionario = () => {
                                 values.sedeID = id
                                 setSedeID(id);
                                 setOpenPopup(false);
+                                setAgencia("");
+                                setDepartamento("");
+                                setFuncao("");
                                 tableFuncionarioUpdateData(id);
                             }
                             }
@@ -550,7 +555,6 @@ const NovoFuncionario = () => {
                         width="640px"
                         height="550px"
                     >
-
                         <AgenciaSearchTable
                             idDisplay={true}
                             codeDisplay={true}
@@ -561,11 +565,15 @@ const NovoFuncionario = () => {
                             color={color}
                             pageSize={5}
                             rowPerPage={5}
+                            idSede = {sedeID}
                             agenciaData={(id, code, agencia) => {
                                 values.agenciaID = id;
                                 setAgencia(agencia);
                                 setAgenciaID(id);
                                 setOpenPopup(false);
+                                setDepartamento("");
+                                setFuncao("");
+                                tableDepartamentoUpdateData1(sedeID, id)
                             }}
                         />
                     </Popup> : ""
@@ -590,6 +598,8 @@ const NovoFuncionario = () => {
                             actionsButtonDisplayEditDelete={false}
                             pageSize={3}
                             rowPerPage={3}
+                            sedeID = {sedeID} 
+                            agenciaID = {agenciaID}
                             backGroundColor={backGroundColor}
                             departamentoData={(id, code, departamento) => {
                                 setDepartamento(departamento);
@@ -621,6 +631,8 @@ const NovoFuncionario = () => {
                             pageSize={3}
                             rowPerPage={3}
                             backGroundColor="darkGreen"
+                            sedeID = {sedeID} 
+                            agenciaID = {agenciaID}
                             funcaoData={(id, code, funcao) => {
                                 setFuncao(funcao);
                                 values.funcaoID = id;

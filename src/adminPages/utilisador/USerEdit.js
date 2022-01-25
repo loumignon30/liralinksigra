@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import "./userEdit.css"
 import {
     PermIdentity, CalendarViewDayTwoTone, Phone,
-    Email, House, Publish
+    Email, House, Publish, Search
 } from '@mui/icons-material';
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useForm } from '../../components/reusableComponents/useForm';
 import ImageUpLoad from '../../components/reusableComponents/ImageUpLoad';
 import Controls from '../../components/reusableComponents/Controls';
@@ -13,6 +13,9 @@ import * as statusData from "../../services/admin/StatusData";
 import UserService from '../../services/admin/User.service';
 import Notifications from '../../components/reusableComponents/Notifications';
 import { useTranslation } from "react-i18next";
+import Popup from '../../components/reusableComponents/Popup';
+import SedeSearchTable from '../sede/SedeSearchTable';
+
 
 const initialFValues = {
     id: 0,
@@ -23,12 +26,13 @@ const initialFValues = {
     address: '',
     city: '',
     dateofbirth: '',
-    gender: 'male',
+    gender: '',
     role: '',
     password: '',
     photofilename: '',
     status: 'Active',
     country: '',
+    sedeID: 0
 }
 
 export default function Utilisateur(props) {
@@ -39,7 +43,6 @@ export default function Utilisateur(props) {
     //     imageChangeFromOutSideURL } = location.state; // getting data from Edit link from UserSearchTable.js
 
     const [fname, setFname] = useState();
-    const { values, setValues, handleInputChange } = useForm(initialFValues)  // useForm = useForm.js
 
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
@@ -56,16 +59,22 @@ export default function Utilisateur(props) {
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
 
-    const { t } = useTranslation();
+    const [sede, setSede] = useState("");
+    const [sedeID, setSedeID] = useState(0);
 
-    //     city, dateofbirth, gender, role, password, status, country
-    const saveImageFromImageUpload = () => {
-        childRef.current.imageChangeFromOutSide(location.state.imageChangeFromOutSideURL);  // saveImage() = method called
-    }
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+
+    const [count, setCount] = useState();
+    const [popupTitle, setPpupTitle] = useState("");
+    const [openPopup, setOpenPopup] = useState(false);
+    const [notificatinoShow, setNotificationShow] = useState(false);
+
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
-        getStateValuesFromUSerSearchTable();
+        setSede(location.state.sede);
+        setSedeID(location.state.sedeID);
 
         setFirstname(location.state.firstname);
         setLastname(location.state.lastname);
@@ -77,7 +86,60 @@ export default function Utilisateur(props) {
         setCountry(location.state.country);
         setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
 
+        getStateValuesFromUSerSearchTable();
+
     }, []);
+
+    // function for validating form
+    const validate = (fieldValues = values) => {
+        let validationErrorM = {}
+
+        if ('sede')
+            validationErrorM.sede = sede ? "" : " "  // This field is Required
+
+        if ('firstname' in fieldValues)
+            validationErrorM.firstname = fieldValues.firstname ? "" : " "  // This field is Required
+
+        if ('lastname' in fieldValues)
+            validationErrorM.lastname = fieldValues.lastname ? "" : " "   // This field is Required
+
+        if ('email' in fieldValues)
+            validationErrorM.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : ""
+
+        if ('telephone' in fieldValues)
+            validationErrorM.telephone = fieldValues.telephone.length > 8 ? "" : "Minimum 9 caracters"
+
+        if ('role' in fieldValues)
+            validationErrorM.role = fieldValues.role ? "" : " "  // This field is Required
+
+        if ('gender' in fieldValues)
+            validationErrorM.gender = fieldValues.gender ? "" : " "
+
+        if ('status' in fieldValues)
+            validationErrorM.status = fieldValues.status ? "" : " "
+
+        if ('password' in fieldValues)
+            validationErrorM.password = fieldValues.password.length > 3 ? "" : "Minimum 3 caracters"
+
+        setErrors({
+            ...validationErrorM
+        })
+
+        return Object.values(validationErrorM).every(x => x === "")  // it will return true if x==""
+    }
+
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
+
+
+    //     city, dateofbirth, gender, role, password, status, country
+    const saveImageFromImageUpload = () => {
+        childRef.current.imageChangeFromOutSide(location.state.imageChangeFromOutSideURL);  // saveImage() = method called
+    }
 
     const getStateValuesFromUSerSearchTable = () => {
         setValues(location.state);
@@ -85,19 +147,22 @@ export default function Utilisateur(props) {
     }
 
     const edituser = () => {
+        if (validate()) {
+            saveImageFromImageUploadEdit();
+            UserService.update(values.id, values).then(response => {
+                // imageReset();
+                setNotify({
+                    isOpen: true,
+                    message: t('mensagem_modificar_Nova_Agencia'),
+                    type: 'success'
+                });
+                setNotificationShow(true);
 
-        saveImageFromImageUploadEdit();
-        UserService.update(values.id, values).then(response => {
-            // imageReset();
-            setNotify({
-                isOpen: true,
-                message: t('mensagem_modificar_Nova_Agencia'),
-                type: 'success'
             })
-        })
-            .catch(e => {
-                console.log(e)
-            });
+                .catch(e => {
+                    console.log(e)
+                });
+        }
     }
 
     const saveImageFromImageUploadEdit = () => {
@@ -107,6 +172,12 @@ export default function Utilisateur(props) {
             values.photofilename = (childRef.current.fileName);
             childRef.current.saveImage();  // saveImage() = method called
         }
+    }
+
+    const onclicSedePopup = () => {
+        setCount(1);
+        setPpupTitle(t('lista_sede'));
+        setOpenPopup(true);
     }
 
 
@@ -174,8 +245,23 @@ export default function Utilisateur(props) {
 
                         <div className="utilisateurUpdateCoteGauche">  {/* div reprenant les données à modifier  */}
 
+                            <div>
+                                <label className="inputLabel">{t('sede')}</label>
+                                <Controls.Input
+                                    name={t('sede')}
+                                    placeHolder={t('sede')}
+                                    value={sede}
+                                    onChange={handleInputChange}
+                                    type="text"
+                                    width="65%"
+                                    error={errors.sede}
+                                />
+                                <Search style={{ marginTop: "10px", cursor: "pointer" }}
+                                    onClick={onclicSedePopup}
+                                />
+                            </div>
 
-                            <div style={{ marginTop: "-20px" }}>
+                            <div >
                                 <label className="inputLabel">{t('nome')}</label>
                                 <Controls.Input
                                     name="firstname"
@@ -183,22 +269,20 @@ export default function Utilisateur(props) {
                                     value={values.firstname}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
+                                    width="32%"
+                                    error={errors.firstname}
                                 />
-                            </div>
 
-                            <div>
-                                <label className="inputLabel">{t('apelido')}</label>
                                 <Controls.Input
                                     name="lastname"
                                     placeHolder={t('apelido')}
                                     value={values.lastname}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
+                                    width="33%"
+                                    error={errors.lastname}
                                 />
                             </div>
-
                             <div>
                                 <label className="inputLabel">{t('email')}</label>
                                 <Controls.Input
@@ -207,19 +291,18 @@ export default function Utilisateur(props) {
                                     value={values.email}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
-                                />
-                            </div>
+                                    width="40%"
+                                    error={errors.email}
 
-                            <div>
-                                <label className="inputLabel">{t('contacto')}</label>
+                                />
+
                                 <Controls.Input
                                     name="telephone"
                                     placeHolder={t('contacto')}
                                     value={values.telephone}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
+                                    width="25%"
                                 />
                             </div>
 
@@ -231,7 +314,6 @@ export default function Utilisateur(props) {
                                     value={values.address}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
@@ -243,7 +325,6 @@ export default function Utilisateur(props) {
                                     value={values.city}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
@@ -255,7 +336,6 @@ export default function Utilisateur(props) {
                                     value={values.country}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge-2'}
                                 />
                             </div>
                             <div style={{ paddingTop: "5px", }}>
@@ -266,7 +346,9 @@ export default function Utilisateur(props) {
                                     value={values.role}
                                     onChange={handleInputChange}
                                     options={userRole.getRole()}
-                                    className={"select-buttonLarge2"}
+                                    className={"select-buttonLarge11"}
+                                    error={errors.role}
+
                                 />
                             </div>
                             <div style={{ marginTop: "5px" }}>
@@ -277,16 +359,17 @@ export default function Utilisateur(props) {
                                     value={values.status}
                                     onChange={handleInputChange}
                                     options={statusData.getStatus()}
-                                    className={"select-buttonLarge2"}
                                     typeOfSelect={2}
+                                    className={"select-buttonLarge11"}
+                                    // error={errors.status}
                                 />
                             </div>
 
                             <div className='userphoto'>
-                                <ImageUpLoad ref={childRef} 
-                                 fotoTitulo={t('foto')}
-                                 uploadDisplay={true}
-                                 />
+                                <ImageUpLoad ref={childRef}
+                                    fotoTitulo={t('foto')}
+                                    uploadDisplay={true}
+                                />
 
                             </div>
 
@@ -299,9 +382,12 @@ export default function Utilisateur(props) {
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text={t('button_limpar')}
+                                    text={t('button_pagina_anterior')}
                                     color="secondary"
                                     className="button"
+                                    onClick={(e) => {
+                                        navigate(-1)
+                                    }}
                                 />
                             </div>
                         </div>
@@ -311,10 +397,47 @@ export default function Utilisateur(props) {
 
             </div>
 
-            <Notifications
-                notify={notify}
-                setNotify={setNotify}
-            />
+            {notificatinoShow ?
+                <Notifications
+                    notify={notify}
+                    setNotify={setNotify}
+                /> : null
+            }
+
+
+            {
+                count === 1 ?
+                    <Popup
+                        openPopup={openPopup}
+                        setOpenPopup={setOpenPopup}
+                        buttonColor="secondary"
+                        title={popupTitle}
+                        width="600px"
+                        height="480px"
+                    >
+
+                        <SedeSearchTable
+                            idDisplay={true}
+                            codeDisplay={false}
+                            actionsButtonSelectDisplay={true}
+                            actionsButtonDisplayEditDelete={false}
+                            pageSize={5}
+                            rowPerPage={5}
+                            backGroundColor="#50394c"
+                            color="white"
+                            sedeData={(id, code, sede) => {
+                                setSede(sede);
+                                setSedeID(id)
+                                values.sedeID = id
+                                setOpenPopup(false);
+                            }
+                            }
+                        />
+                    </Popup> : null
+            }
+
+            {
+            }
 
         </div>
     )

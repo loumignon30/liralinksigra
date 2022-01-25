@@ -138,10 +138,10 @@ const Agencia = () => {
     }
 
     const updateValuesOnOpen = () => {
-        userSavedValue.map(item => (
-            values.sedeID = item.sedeID,
-            setSede(item.nomeSede)
-        ));
+        // userSavedValue.map(item => (
+        //     values.sedeID = item.sedeID,
+        //     setSede(item.nomeSede)
+        // ));
     }
 
     // const saveImageFromImageUpload = () => {
@@ -205,26 +205,26 @@ const Agencia = () => {
 
         if (values.id > 0) {
             AgenciaService.update(values.id, values).then(response => {
-                setNotificationShow(true);
                 tableAgenciaUpdateData(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 })
+                setNotificationShow(true);
             })
                 .catch(e => {
                     console.log(e)
                 });
         } else {
             AgenciaService.create(values).then(response => {
-                setNotificationShow(true);
                 tableAgenciaUpdateData(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
                 })
+                setNotificationShow(true);
             })
                 .catch(e => {
                     console.log(e)
@@ -336,20 +336,18 @@ const Agencia = () => {
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="65%"
+                                width="40%"
                                 error={errors.email}
                             />
-                        </div>
-
-                        <div>
-                            <label className="inputLabel">{t('contacto')}</label>
+                        
+                            {/* <label className="inputLabel">{t('contacto')}</label> */}
                             <Controls.Input
                                 name="telefone"
                                 placeHolder={t('contacto')}
                                 value={values.telefone}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="65%"
+                                width="25%"
                                 error={errors.telefone}
                             />
                         </div>
@@ -362,19 +360,18 @@ const Agencia = () => {
                                 value={values.cidade}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="65%"
+                                width="33%"
                                 error={errors.cidade}
                             />
-                        </div>
-                        <div>
-                            <label className="inputLabel">{t('pais')}</label>
+                        
+                            {/* <label className="inputLabel">{t('pais')}</label> */}
                             <Controls.Input
                                 name="pais"
                                 placeHolder={t('pais')}
                                 value={values.pais}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="65%"
+                                width="32%"
                                 error={errors.pais}
                             />
                         </div>

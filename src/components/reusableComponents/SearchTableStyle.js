@@ -1,5 +1,5 @@
 import { makeStyles, styled } from '@mui/styles';
-import { display, height } from '@mui/system';
+import { display, height, padding } from '@mui/system';
 
 const useStyles = makeStyles(props => ({
     gridHeader: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles(props => ({
         color: "green",
         cursor: "pointer",
         marginRight: "20px"
-      },
+    },
     editSearchButton: {
         border: "none",
         borderRadius: "10px",
@@ -48,8 +48,8 @@ const useStyles = makeStyles(props => ({
         display: "flex",
         alignContent: "center",
         marginTop: "-10px"
-      },
-      inputStyle: {
+    },
+    inputStyle: {
         background: props.backGroundColor || "white",
         minWidth: "15%",
         width: ({ width }) => width || "65%",
@@ -60,7 +60,7 @@ const useStyles = makeStyles(props => ({
         objectFit: "cover",
         fontWeight: "bold",
         marginTop: "4px",
-        marginLeft: ({ marginLeft }) => marginLeft  || "0px",
+        marginLeft: ({ marginLeft }) => marginLeft || "0px",
     },
     textAreaStyle: {
         // background: props.backGroundColor || "white",
@@ -71,8 +71,8 @@ const useStyles = makeStyles(props => ({
         objectFit: "cover",
         fontWeight: "bold",
         marginTop: "4px",
-        marginLeft: ({ marginLeft }) => marginLeft  || "0px",
-        marginTop: ({ marginTop }) => marginTop  || "0px",
+        marginLeft: ({ marginLeft }) => marginLeft || "0px",
+        marginTop: ({ marginTop }) => marginTop || "0px",
     },
     pageHeader: {
         color: ({ color }) => color || "white",
@@ -83,7 +83,7 @@ const useStyles = makeStyles(props => ({
         width: "100%"
     },
     balanceStyle: {
-        color:  "black",
+        color: "black",
         background: "yellow",
         fontSize: "13px",
         fontFamily: "Times New Roman', Times, serif",
@@ -97,6 +97,15 @@ const useStyles = makeStyles(props => ({
         display: 'flex',
         alignContent: "center",
     },
+
+    selectStyle: {
+        minWidth: "15%",
+        width: ({ width }) => width || "65%",
+        height: ({ height }) => height || "40px",
+        borderRadius: "10px",
+        objectFit: "cover",
+        fontWeight: "bold"
+        },
 }));
 
 

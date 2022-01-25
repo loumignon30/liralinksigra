@@ -71,8 +71,9 @@ const UserSearchTable = forwardRef((props, ref) => {
             type: 'success'
         })
     }
-    const userGetAll = (e) => {
-        UserService.getAll()
+    const userGetAll = (sedeID) => {
+
+        UserService.getAll(sedeID)
             .then(response => {
                 setUserDataParam(response.data);
 
@@ -161,7 +162,9 @@ const UserSearchTable = forwardRef((props, ref) => {
                                     password: params.row.password,
                                     status: params.row.status,
                                     country: params.row.country,
-                                    imageChangeFromOutSideURL: params.row.photofilename !==""? "https://s3.amazonaws.com/liralink.sigra/"  + params.row.photofilename:  "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png" 
+                                    imageChangeFromOutSideURL: params.row.photofilename !==""? "https://s3.amazonaws.com/liralink.sigra/"  + params.row.photofilename:  "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png" ,
+                                    sedeID: params.row.userSede.id,
+                                    sede: params.row.userSede.sede
                                 }}
                             >
                                 <button className="utilisateurButtonEdit">Edit</button>

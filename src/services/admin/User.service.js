@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class UserService {
 
-    getAll(){
-        return http.get("/users");
+    getAll(sedeID){
+        return http.get(`/users?sedeID=${sedeID}`);
     }
     
     create(data){

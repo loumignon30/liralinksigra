@@ -59,20 +59,20 @@ const Sede = (props) => {
 
     const updateValuesOnOpen = () => {
 
-        userSavedValue.map(item => (
-            setID(item.sedeID),
-            values.id = item.sedeID,
-            values.code = item.codeSede,
-            values.sede = item.nomeSede,
-            values.email = item.emailSede,
-            values.contacto = item.sedeContacto,
-            values.endereco = item.sedeEndereco,
-            values.cidade = item.sedeCidade,
-            values.pais = item.sedePais,
-            imageDisplay = "https://s3.amazonaws.com/liralink.sigra/" + item.sedeImageFile,
-            values.imageName = item.sedeImageFile,
-            logoCheck = item.sedeImageFile
-        ));
+        // userSavedValue.map(item => (
+        //     setID(item.sedeID),
+        //     values.id = item.sedeID,
+        //     values.code = item.codeSede,
+        //     values.sede = item.nomeSede,
+        //     values.email = item.emailSede,
+        //     values.contacto = item.sedeContacto,
+        //     values.endereco = item.sedeEndereco,
+        //     values.cidade = item.sedeCidade,
+        //     values.pais = item.sedePais,
+        //     imageDisplay = "https://s3.amazonaws.com/liralink.sigra/" + item.sedeImageFile,
+        //     values.imageName = item.sedeImageFile,
+        //     logoCheck = item.sedeImageFile
+        // ));
 
     }
 
@@ -155,8 +155,9 @@ const Sede = (props) => {
         setValues(initialFValues);
         setNotificationShow(false);
 
-        setUserSavedValue({});
-        navigate('/');
+        //setUserSavedValue({});
+
+        //navigate('/');
         // setOpenPopup(false);
     }
 
@@ -164,14 +165,14 @@ const Sede = (props) => {
 
         if (values.id > 0) {
             SedeService.update(values.id, values).then(response => {
-                alert(t('mensagem_alteracao_sede'));
+                //alert(t('mensagem_alteracao_sede'));
                 tableSedeData(); // update DataGrid Table used form universitySearchTable.js
-                setNotificationShow(true);
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 });
+                setNotificationShow(true);
 
             })
                 .catch(e => {
@@ -180,14 +181,14 @@ const Sede = (props) => {
 
         } else {
             SedeService.create(values).then(response => {
-                alert(t('mensagem_alteracao_sede'));
+               // alert(t('mensagem_alteracao_sede'));
                 tableSedeData(); // update DataGrid Table used form universitySearchTable.js
-                setNotificationShow(true);
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
-                })
+                });
+                setNotificationShow(true);
 
             })
                 .catch(e => {
@@ -256,7 +257,7 @@ const Sede = (props) => {
                             <label className="inputLabel">{t('sede')}</label>
                             <Controls.Input
                                 name="sede"
-                                placeHolder={t('language')}
+                                placeHolder={t('sede')}
                                 value={values.sede}
                                 onChange={handleInputChange}
                                 type="text"
@@ -269,7 +270,7 @@ const Sede = (props) => {
                             <label className="inputLabel">{t('email')}</label>
                             <Controls.Input
                                 name="email"
-                                placeHolder={t('language')}
+                                placeHolder={t('email')}
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
@@ -365,10 +366,11 @@ const Sede = (props) => {
                             />
                             <Controls.Buttons
                                 type="button"
-                                text={t('sair')}
+                                text={t('button_limpar')}
                                 color="secondary"
                                 className="button"
-                                onClick={close}
+                                onClick={ResetForm}
+                                // onClick={close}
                             />
                         </div>
                     </div>

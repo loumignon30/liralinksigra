@@ -1,31 +1,42 @@
 import { useState, useEffect, useRef } from 'react';
-import "./userList.css";
+import "./denuncia.css";
 import '../../App.css'
 import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog"
 import Notifications from '../../components/reusableComponents/Notifications';
-import UserSearchTable from '../utilisador/UserSearchTable';
+
 import { useTranslation } from "react-i18next";
+import cookies from 'js-cookie'
+
+import TipoDenunciaSearchTable from './TipoDenunciaSearchTable';
 import Controls from '../../components/reusableComponents/Controls';
 import { Search } from '@mui/icons-material';
 import SedeSearchTable from '../sede/SedeSearchTable';
 import Popup from '../../components/reusableComponents/Popup';
 
-const UserList = () => {
+
+const ListagemDenuncia = () => {
 
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
-    const [sede, setSede] = useState("");
-    const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
-
     const [openPopup, setOpenPopup] = useState(false);
+    const [sede, setSede] = useState("");
     const [popupTitle, setPpupTitle] = useState("");
 
     const { t } = useTranslation();
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
 
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
-    }, []);
+       
+       // tableTipoDenunciaUpdateData();
+        
+    }, [currentLanguageCode]);
+
+    const tableTipoDenunciaUpdateData = () => {
+       // childRef.current.getGetAllData(currentLanguageCode, currentLanguageCode);  // saveImage() = method called
+    }
 
     const onclickAgenciaPopup = () => {
         setPpupTitle(t('lista_sede'));
@@ -33,12 +44,13 @@ const UserList = () => {
     }
 
     const tableAgenciaUpdateData = (sedeID) => {
-        childRef.current.userGetAll(sedeID);  // saveImage() = method called
+        childRef.current.getGetAllData(currentLanguageCode, sedeID);  // saveImage() = method called
     }
+    
 
     return (
         <div className="utilisateurList">
-            <h3 style={{ marginLeft: '15px' }}>{t('lista_usuarios')}</h3>
+            <h3 style={{ marginLeft: '15px' }}>{t('lista_tipoDenuncia')}</h3>
 
             <div style={{ marginBottom: "5px", padding: "6px" }}>
                 <label className="inputLabel">{t('sede')}</label>
@@ -50,35 +62,33 @@ const UserList = () => {
                     type="text"
                     disabled="true"
                 />
+                <Controls.Input
+                    name="sede"
+                    placeHolder={currentLanguageCode}
+                    value={currentLanguageCode}
+                    width="15%"
+                    type="text"
+                    disabled="true"
+               
+                />
                 <Search style={{ marginTop: "10px", cursor: "pointer" }}
                     onClick={onclickAgenciaPopup}
                 />
             </div>
-
+            
             <div style={{ height: 400, width: '100%' }}>
-                <UserSearchTable ref={childRef}
+                <TipoDenunciaSearchTable ref={childRef}
                     idDisplay={true}
-                    userNameDisplay={true}
-                    emailDisplay={true}
-                    roleDisplay={true}
+                    linguaDisplay={true}
+                    tipoDenunciaDisplay={true}
+                    linguaAbreviacaoDisplay={false}
                     statusDisplay={true}
-                    actionsButtonDisplaySelect={false}
+                    actionsButtonDisplaySelect={false} // monstrar o campo = true
                     actionsButtonDisplayEditDelete={true}
-                    backGroundColor="blue"
-                    color="white"
-                    pageSize={8}
-                    rowPerPage={8}
+                    pageSize={10}
+                    rowPerPage={10}
                 />
             </div>
-
-            {/* <ConfirmDialog
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-            />
-            <Notifications
-                notify={notify}
-                setNotify={setNotify}
-            /> */}
 
             <Popup
                 openPopup={openPopup}
@@ -109,4 +119,4 @@ const UserList = () => {
         </div>
     )
 }
-export default UserList;
+export default ListagemDenuncia;

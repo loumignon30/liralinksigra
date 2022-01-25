@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class AgenciaService {
 
-    getAll(){
-        return http.get("/agencias");
+    getAll(sedeID){
+        return http.get(`/agencias?sedeID=${sedeID}`);
     }
 
     create(data){

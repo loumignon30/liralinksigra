@@ -18,7 +18,6 @@ import { useLocation } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 
-
 const initialFValues = {
     id: 0,
     code: '',
@@ -39,11 +38,11 @@ const NovaFuncao = () => {
     const [sede, setSede] = useState("");
     const [sedeID, setSedeID] = useState(0);
     const [agenciaID, setAgenciaID] = useState(0);
-    const [agencia, setAgencia] = useState();
+    const [agencia, setAgencia] = useState("");
 
     const [notificatinoShow, setNotificationShow] = useState(false);
 
-    const [count, setCount] = useState();
+    const [count, setCount] = useState(0);
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
 
     const location = useLocation();
@@ -52,14 +51,15 @@ const NovaFuncao = () => {
     const [color, setColor] = useState("");
     const [headerTitle, setHeaderTitle] = useState("");
     const [headerSubTitle, setHeaderSubTitle] = useState("");
-    const [buttonTitle, setButtonTitle] = useState();
-    const [textReset, setTextReset] = useState();
+    const [buttonTitle, setButtonTitle] = useState("");
+    const [textReset, setTextReset] = useState("");
 
     const { t } = useTranslation();
 
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
+
         updateValuesOnOpen(); // // update Usecontext
 
         getStateValuesFromSearchTable();
@@ -94,10 +94,10 @@ const NovaFuncao = () => {
         handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     const updateValuesOnOpen = () => {
-        userSavedValue.map(item => (
-            values.sedeID = item.sedeID,
-            setSede(item.nomeSede)
-        ));
+        // userSavedValue.map(item => (
+        //     values.sedeID = item.sedeID,
+        //     setSede(item.nomeSede)
+        // ));
     }
 
     const getStateValuesFromSearchTable = () => {
@@ -114,7 +114,6 @@ const NovaFuncao = () => {
             setValues(location.state);
             setSede(location.state.sede);
             setAgencia(location.state.agencia)
-
             setSedeID(location.state.sedeID)
             setAgenciaID(location.state.agenciaID)
 
@@ -130,11 +129,14 @@ const NovaFuncao = () => {
     }
 
     const ResetForm = () => {
-        setValues(initialFValues);
-        setNotificationShow(false);
+        //setValues(initialFValues);
+        //setNotificationShow(false);
 
-        values.sedeID = sedeID;
-        values.agenciaID = agenciaID;
+        //values.sedeID = sedeID;
+        //values.agenciaID = agenciaID;
+
+
+        tableFuncaoUpdateData1(sedeID, agenciaID);
 
         setBackGroundColor("darkGreen");
         setColor("white");
@@ -149,14 +151,11 @@ const NovaFuncao = () => {
         e.preventDefault();
         if (validate()) {
             saveFaculty(); // call save university
-            ResetForm();
+           ResetForm();
+
         }
     }
 
-    const tableFuncaoUpdateData = () => {
-        //childRef2.current.test3();
-        childRef2.current.getGetAllData();  // saveImage() = method called
-    }
 
     const onclicSedePopup = () => {
         setCount(1);
@@ -173,8 +172,6 @@ const NovaFuncao = () => {
 
         if (values.id > 0) {
             FuncaoService.update(values.id, values).then(response => {
-                setNotificationShow(true);
-                tableFuncaoUpdateData(); // update Faculty Data on FacultySearchTable.js
                 values.code = "";
                 values.funcao = "";
                 values.observacao = "";
@@ -183,7 +180,8 @@ const NovaFuncao = () => {
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
-                })
+                });
+                setNotificationShow(true);
 
             })
                 .catch(e => {
@@ -192,25 +190,36 @@ const NovaFuncao = () => {
 
         } else {
 
-            if (values.agenciaID === 0 && agenciaID > 0) {
-                values.agenciaID = agenciaID;
-            }
+            // if (values.agenciaID === 0 && agenciaID > 0) {
+            //     values.agenciaID = agenciaID;
+            // }
 
             FuncaoService.create(values).then(response => {
 
-                setNotificationShow(true);
-                tableFuncaoUpdateData(); // update Faculty Data on FacultySearchTable.js
+                values.code = "";
+                values.funcao = "";
+                values.observacao = "";
+                
+                tableFuncaoUpdateData1(sedeID, agenciaID); // update Faculty Data on FacultySearchTable.js
 
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
-                })
+                });
+                setNotificationShow(true);
 
             })
                 .catch(e => {
                     console.log(e)
                 });
+        }
+    }
+
+    const tableFuncaoUpdateData1 = (sedeID1, agenciaID1) => {
+
+        if (sedeID1 > 0 && agenciaID1 > 0) {
+            childRef2.current.getGetAllData(sedeID1, agenciaID1);  // saveImage() = method called
         }
     }
     return (
@@ -232,7 +241,7 @@ const NovaFuncao = () => {
                         <div>
                             <label className="inputLabel">Sede</label>
                             <Controls.Input
-                                name= {t('sede')}
+                                name={t('sede')}
                                 placeHolder={t('sede')}
                                 value={sede}
                                 onChange={handleInputChange}
@@ -297,7 +306,7 @@ const NovaFuncao = () => {
                                 multiline
                                 rows={5}
                                 height="140px"
-                               // width="290px"
+                            // width="290px"
                             />
                         </div>
 
@@ -312,11 +321,13 @@ const NovaFuncao = () => {
                             rowPerPage={3}
                             backGroundColor={backGroundColor}
                             color={color}
+                            sedeID={sedeID}
+                            agenciaID={agenciaID}
                             departamentoData={(id, code, departamento) => {
                                 //setSede(sede);
                                 values.sedeID = id
                                 setOpenPopup(false);
-                                tableFuncaoUpdateData(id);
+                               // tableFuncaoUpdateData1(agenciaID);
                             }
                             }
                         />
@@ -348,7 +359,6 @@ const NovaFuncao = () => {
                 </div>
 
             </Form>
-
 
             {notificatinoShow ?
                 <Notifications
@@ -408,11 +418,13 @@ const NovaFuncao = () => {
                             color={color}
                             pageSize={5}
                             rowPerPage={5}
+                            idSede={values.sedeID}
                             agenciaData={(id, code, agencia) => {
                                 values.agenciaID = id;
                                 setAgencia(agencia);
                                 setAgenciaID(id)
                                 setOpenPopup(false);
+                                tableFuncaoUpdateData1(sedeID, id)
                             }}
                         />
                     </Popup> : null

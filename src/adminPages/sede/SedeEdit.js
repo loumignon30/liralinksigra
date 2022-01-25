@@ -12,6 +12,9 @@ import * as statusData from "../../services/admin/StatusData";
 import SedeService from '../../services/admin/Sede.services';
 import Notifications from '../../components/reusableComponents/Notifications';
 
+import { useTranslation } from "react-i18next";
+
+
 const initialFValues = {
     id: 0,
     code: '',
@@ -50,6 +53,9 @@ const SedeEdit = (props) =>{
     const [notificatinoShow, setNotificationShow] = useState(false);
     const navigate = useNavigate();
 
+    const { t } = useTranslation();
+
+
     const saveImageFromImageUpload = () => {
         childRef.current.imageChangeFromOutSide(imageChangeFromOutSideURL);  // saveImage() = method called
     }
@@ -69,18 +75,17 @@ const SedeEdit = (props) =>{
         }catch(err) {
 
         }
-        
     }
 
     const edituser = () => {
         saveImageFromImageUploadEdit();
         SedeService.update(values.id, values).then(response => {
-            setNotificationShow(true);
             setNotify({
                 isOpen: true,
-                message: 'A Sede foi actualizada com Sucesso!',
+                message: t('mensagem_modificar_Nova_Agencia'),
                 type: 'success'
-            })
+            });
+            setNotificationShow(true);
         })
             .catch(e => {
                 console.log(e)
@@ -100,7 +105,7 @@ const SedeEdit = (props) =>{
     return (
         <div className="utilisateur">
             <div className="utilisateurTitreContainer">
-                <h1 className="UtilisateurTitre">Editar a Sede</h1>
+                <h1 className="UtilisateurTitre">{t('sedeEdit_editarDados_text')}</h1>
             </div>
 
             <div className="utilisateurContainer">
@@ -121,41 +126,41 @@ const SedeEdit = (props) =>{
 
                     <div className="utilisateurAfficherBasPage1">
 
-                        <span className="utilisateurAfficherTitre">Informação da Sede</span>
+                        <span className="utilisateurAfficherTitre">{t('sedeEdit_informacaoSede_text')}</span>
 
                         <div className="utilisateurInfo">
                             <PermIdentity className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>Código:</strong> {codeEdit}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('code')}:</strong> {codeEdit}</span>
                         </div>
                         <div className="utilisateurInfo">
                             <PermIdentity className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>Sede:</strong> {sedeEdit}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('sede')}:</strong> {sedeEdit}</span>
                         </div>
 
                         <div className="utilisateurInfo">
                             <CalendarViewDayTwoTone className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>Email:</strong> {emailEdit}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('email')}:</strong> {emailEdit}</span>
                         </div>
 
-                        <span className="utilisateurAfficherTitre">Contactos</span>
+                        <span className="utilisateurAfficherTitre">{t('sedeEdit_contactSede_text')}</span>
 
                         <div className="utilisateurInfo">
                             <Phone className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>Contacto: </strong> {contactoEdit}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('contacto')}: </strong> {contactoEdit}</span>
                         </div>
 
                         <div className="utilisateurInfo">
                             <Email className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>Endereço:</strong> {enderecoEdi}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('endereco')}:</strong> {enderecoEdi}</span>
                         </div>
 
                         <div className="utilisateurInfo">
                             <House className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>Cidade:</strong> {cidadeEdit}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('cidade')}:</strong> {cidadeEdit}</span>
                         </div>
                         <div className="utilisateurInfo">
                             <House className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre"><strong>País: </strong> {paisEdit}</span>
+                            <span className="userAfficherInfoTitre"><strong>{t('pais')}: </strong> {paisEdit}</span>
                         </div>
 
 
@@ -171,98 +176,91 @@ const SedeEdit = (props) =>{
 
 
                             <div style={{ marginTop: "-20px" }}>
-                                <label className="inputLabel">Código</label>
+                                <label className="inputLabel">{t('code')}</label>
                                 <Controls.Input
                                     name="code"
-                                    placeHolder="Código da Sede"
+                                    placeHolder={t('code')}
                                     value={values.code}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
                             <div>
-                                <label className="inputLabel">Nome da Sede</label>
+                                <label className="inputLabel">{t('sede')}</label>
                                 <Controls.Input
                                     name="sede"
-                                    placeHolder="Nome da Sede"
+                                    placeHolder={t('sede')}
                                     value={values.sede}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
                             <div>
-                                <label className="inputLabel">Email</label>
+                                <label className="inputLabel">{t('email')}</label>
                                 <Controls.Input
                                     name="email"
-                                    placeHolder="Email"
+                                    placeHolder={t('email')}
                                     value={values.email}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
                             <div>
-                                <label className="inputLabel">Contacto</label>
+                                <label className="inputLabel">{t('contacto')}</label>
                                 <Controls.Input
                                     name="contacto"
-                                    placeHolder="contacto"
+                                    placeHolder={t('contacto')}
                                     value={values.contacto}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
                             <div>
-                                <label className="inputLabel">Endereço</label>
+                                <label className="inputLabel">{t('endereco')}</label>
                                 <Controls.Input
                                     name="endereco"
-                                    placeHolder="Endereço da Sede"
+                                    placeHolder={t('endereco')}
                                     value={values.endereco}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
                             <div>
-                                <label className="inputLabel">Cidade</label>
+                                <label className="inputLabel">{t('cidade')}</label>
                                 <Controls.Input
                                     name="cidade"
-                                    placeHolder="Cidade"
+                                    placeHolder={t('cidade')}
                                     value={values.cidade}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge'}
                                 />
                             </div>
 
                             <div>
-                                <label className="inputLabel">País</label>
+                                <label className="inputLabel">{t('pais')}</label>
                                 <Controls.Input
                                     name="pais"
-                                    placeHolder="País"
+                                    placeHolder={t('pais')}
                                     value={values.pais}
                                     onChange={handleInputChange}
                                     type="text"
-                                    className={'textField-TextLarge-2'}
                                 />
                             </div>
                             
                             <div style={{ marginTop: "5px" }}>
-                                <label className="userLabel" htmlFor="status">Estato</label>
+                                <label className="userLabel" htmlFor="status">{t('status')}</label>
                                 <Controls.Select
                                     name="status"
                                     label="status"
                                     value={values.status}
                                     onChange={handleInputChange}
                                     options={statusData.getStatus()}
-                                    className={"select-buttonLarge2"}
+                                    className={"select-buttonLarge12"}
                                     typeOfSelect={2}
                                 />
                             </div>
@@ -270,20 +268,20 @@ const SedeEdit = (props) =>{
                             <div className='userphoto'>
                                 <ImageUpLoad ref={childRef}
                                 margnLeft="0px"
-                                fotoTitulo="Logo"
+                                fotoTitulo={t('foto')}
                                 uploadDisplay={true} />
                             </div>
 
                             <div>
                                 <Controls.Buttons
                                     type="button"
-                                    text="Gravar"
+                                    text={t('button_gravar')}
                                     className="button"
                                     onClick={edituser}
                                 />
                                 <Controls.Buttons
                                     type="button"
-                                    text="Pág. Anterior"
+                                    text={t('button_pagina_anterior')}
                                     color="secondary"
                                     className="button"
                                     onClick = {(e) => { 

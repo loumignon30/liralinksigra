@@ -35,7 +35,7 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
     const { idDisplay, codeDisplay, actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete, emailDisplay, telefoneDislay,
         cidadeDisplay, paisDisplay, statusDisplay, backGroundColor, color,
-        pageSize, rowPerPage } = props;
+        pageSize, rowPerPage, idSede } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
@@ -45,7 +45,9 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
 
 
     useEffect(() => {
-        getGetAllData();
+
+        getGetAllData(idSede);
+
         setUrl(urlImage());
 
     }, []);
@@ -62,8 +64,9 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
         setOpenPopup(false);
     }
 
-    const getGetAllData = () => {
-        AgenciaService.getAll()
+    const getGetAllData = (sedeID) => {
+
+        AgenciaService.getAll(sedeID)
             .then(response => {
                 setData(response.data)
             })

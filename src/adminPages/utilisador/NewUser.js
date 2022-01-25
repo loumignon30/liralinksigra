@@ -11,6 +11,9 @@ import PageHeader from '../../components/reusableComponents/PageHeader';
 import ImageUpLoad from '../../components/reusableComponents/ImageUpLoad';
 import UserService from '../../services/admin/User.service';
 import { useTranslation } from "react-i18next";
+import { Search } from '@mui/icons-material';
+import Popup from '../../components/reusableComponents/Popup';
+import SedeSearchTable from '../sede/SedeSearchTable';
 
 const initialFValues = {
     id: 0,
@@ -26,7 +29,8 @@ const initialFValues = {
     password: '',
     photofilename: '',
     status: 'Active',
-    country: ''
+    country: '',
+    sedeID: 0
 }
 
 export default function NewUSerForm() {
@@ -39,6 +43,13 @@ export default function NewUSerForm() {
     const [imageSRC, setImageSRC] = useState();
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
+
+    const [sede, setSede] = useState("");
+    const [sedeID, setSedeID] = useState(0);
+    const [count, setCount] = useState();
+    const [popupTitle, setPpupTitle] = useState("");
+    const [openPopup, setOpenPopup] = useState(false);
+    const [notificatinoShow, setNotificationShow] = useState(false);
 
     const { t } = useTranslation();
 
@@ -59,8 +70,14 @@ export default function NewUSerForm() {
         if ('telephone' in fieldValues)
             validationErrorM.telephone = fieldValues.telephone.length > 8 ? "" : "Minimum 9 caracters"
 
+        // if ('dateofbirth' in fieldValues)
+        // validationErrorM.dateofbirth = "yyyy-mm-dd" ? "" : " "
+
         if ('gender' in fieldValues)
             validationErrorM.gender = fieldValues.gender ? "" : " "
+
+        if ('role' in fieldValues)
+            validationErrorM.role = fieldValues.role ? "" : " "
 
         if ('password' in fieldValues)
             validationErrorM.password = fieldValues.password.length > 3 ? "" : "Minimum 3 caracters"
@@ -89,10 +106,10 @@ export default function NewUSerForm() {
         { id: t('sexo_outros'), title: t('sexo_outros') },
     ];
 
-      const getRole = [
-        {id: t('role_administrador'), title: t('role_administrador')},
-        {id: t('role_Funcionario'), title: t('role_Funcionario')},
-        {id: t('role_utilizador'), title: t('role_utilizador')}
+    const getRole = [
+        { id: t('role_administrador'), title: t('role_administrador') },
+        { id: t('role_Funcionario'), title: t('role_Funcionario') },
+        { id: t('role_utilizador'), title: t('role_utilizador') }
     ]
 
     const saveImageFromImageUpload = () => {
@@ -118,11 +135,19 @@ export default function NewUSerForm() {
         imageReset();
         setErrors({})
 
+        values.sedeID = sedeID;
+
         setNotify({
             isOpen: false,
             message: '',
             type: ''
         })
+    }
+
+    const onclicSedePopup = () => {
+        setCount(1);
+        setPpupTitle(t('lista_sede'));
+        setOpenPopup(true);
     }
 
     const saveUniversity = () => {
@@ -133,6 +158,7 @@ export default function NewUSerForm() {
                 message: t('mensagem_Gravar_Nova_Agencia'),
                 type: 'success'
             });
+            setNotificationShow(true);
 
         })
             .catch(e => {
@@ -159,26 +185,41 @@ export default function NewUSerForm() {
 
                         <div className="newUser">
                             <div>
+                                <label className="inputLabel">Sede</label>
+                                <Controls.Input
+                                    name={t('sede')}
+                                    placeHolder={t('sede')}
+                                    value={sede}
+                                    onChange={handleInputChange}
+                                    type="text"
+                                    width="65%"
+                                    error={errors.sede}
+                                />
+                                <Search style={{ marginTop: "10px", cursor: "pointer" }}
+                                    onClick={onclicSedePopup}
+                                />
+                            </div>
+
+                            <div>
                                 <label className="userLabel">{t('nome')}</label>
                                 <Controls.Input
                                     name="firstname"
                                     placeHolder={t('nome')}
                                     value={values.firstname}
                                     onChange={handleInputChange}
-                                    className='textField-TextLarge'
+                                    width="33%"
                                     type="text"
                                     error={errors.firstname}
                                 />
                                 {/* <span style={{marginTop:'5px', marginLeft:'2px', color:'red'}}>{errors.firstName}</span> */}
-                            </div>
-                            <div>
-                                <label className="userLabel">{t('apelido')}</label>
+
                                 <Controls.Input
                                     name="lastname"
                                     placeHolder={t('apelido')}
                                     value={values.lastname}
                                     onChange={handleInputChange}
                                     type="text"
+                                    width="32%"
                                     error={errors.lastname}
                                 />
                             </div>
@@ -242,13 +283,14 @@ export default function NewUSerForm() {
                         </div>
 
                         <div className="newUser2">
-                            <div>
+                            <div style={{ marginBottom: "10px" }}>
                                 <label className="userLabel">{t('data_nascimento')}</label>
                                 <Controls.Input
                                     name="dateofbirth"
                                     placeHolder={t('data_nascimento')}
                                     value={values.dateofbirth}
                                     onChange={handleInputChange}
+                                    width="55%"
                                     type="date"
                                 />
                             </div>
@@ -261,7 +303,8 @@ export default function NewUSerForm() {
                                     value={values.gender}
                                     onChange={handleInputChange}
                                     options={genderItems}
-                                    className={"select-buttonLarge11"}
+                                    width="55%"
+                                    height="40px"
                                     error={errors.gender}
                                 />
                             </div>
@@ -274,7 +317,9 @@ export default function NewUSerForm() {
                                     value={values.role}
                                     onChange={handleInputChange}
                                     options={getRole}
-                                    className={"select-buttonLarge11"}
+                                    error={errors.role}
+                                    width="55%"
+                                    height="40px"
                                 />
                             </div>
 
@@ -285,7 +330,7 @@ export default function NewUSerForm() {
                                     placeHolder={t('senha')}
                                     value={values.password}
                                     onChange={handleInputChange}
-                                    with="300px"
+                                    width="55%"
                                     type="password"
                                     error={errors.password}
                                 />
@@ -299,6 +344,7 @@ export default function NewUSerForm() {
                                     value={values.password}
                                     onChange={handleInputChange}
                                     type="password"
+                                    width="55%"
                                     error={errors.password}
                                 />
                             </div>
@@ -317,7 +363,7 @@ export default function NewUSerForm() {
 
                     <div className="newUserContainer">
 
-                        <div className="buttonContainer1">
+                        <div className="newUser">
                             <div >
                                 <Controls.Buttons
                                     type="submit"
@@ -335,10 +381,46 @@ export default function NewUSerForm() {
                 </Form>
             </div>
 
-            <Notifications
-                notify={notify}
-                setNotify={setNotify}
-            />
+            {notificatinoShow ?
+                <Notifications
+                    notify={notify}
+                    setNotify={setNotify}
+                /> : null
+            }
+
+            {
+                count === 1 ?
+                    <Popup
+                        openPopup={openPopup}
+                        setOpenPopup={setOpenPopup}
+                        buttonColor="secondary"
+                        title={popupTitle}
+                        width="600px"
+                        height="480px"
+                    >
+
+                        <SedeSearchTable
+                            idDisplay={true}
+                            codeDisplay={false}
+                            actionsButtonSelectDisplay={true}
+                            actionsButtonDisplayEditDelete={false}
+                            pageSize={5}
+                            rowPerPage={5}
+                            backGroundColor="#50394c"
+                            color="white"
+                            sedeData={(id, code, sede) => {
+                                setSede(sede);
+                                setSedeID(id)
+                                values.sedeID = id
+                                setOpenPopup(false);
+                            }
+                            }
+                        />
+                    </Popup> : null
+            }
+
+            {
+            }
 
         </>
     )

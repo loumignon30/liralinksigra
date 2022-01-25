@@ -144,19 +144,17 @@ export default function Topbar() {
                     </div>
                     <div className="topRight">
                         <div className="topbarIconContainer">
-                            <Language size={25} style={{color:"blue"}}
+                            <Language size={25} style={{ color: "blue" }}
                                 onClick={clicklanguage}
                                 ref={componentRefLanguages}
                                 text="Clique to change Language"
-                              
                             />
-                            
+
                             {showLnguage ?
                                 <div className="index-front-languages">
                                     {
-
                                         languages.map(({ code, name, country_code }) => (
-                                            <ul style={{ listStyle: "none" }}>
+                                            <ul key={country_code} style={{ listStyle: "none" }}>
                                                 <li key={country_code}>
                                                     <button className="dropdown-item-Language"
                                                         onClick={() => {
@@ -236,7 +234,7 @@ export default function Topbar() {
 
 
 
-            </div>                    
+            </div>
             {/* <Sidebar hideThis={false}
                 ref={childRefMenu}
 

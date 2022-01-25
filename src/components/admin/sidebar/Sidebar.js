@@ -33,6 +33,11 @@ const Sidebar = (props) => {
                     icon: <Icons.Bs.BsFillHouseFill />
                 },
                 {
+                    name: t('lista_sede'),
+                    to: "/sedeList",
+                    icon: <Icons.Bs.BsFillHouseFill />
+                },
+                {
                     name: t('agencia_menu'),
                     to: "/Agencia",
                     expanded: false,
@@ -126,7 +131,12 @@ const Sidebar = (props) => {
             subMenus: [
                 {
                     name: t('tipo_denuncias_menu'),
-                    to: "/",
+                    to: "/tipoDenuncia",
+                    icon: <Icons.md.MdOutlineEditCalendar className="a-menuItem-icon" />
+                },
+                {
+                    name: t('tipo_denuncia_menu'),
+                    to: "/listagemTipoDenuncia",
                     icon: <Icons.md.MdOutlineEditCalendar className="a-menuItem-icon" />
                 },
                 {

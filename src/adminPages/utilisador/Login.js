@@ -35,31 +35,31 @@ const Login = () => {
 
     const [message, setMessage] = useState("");
 
-    const getGetAllData = () => {
-        SedeService.getAll()
-            .then(response => {
-                response.data.map(info => {
-                    setSedeID(info.id)
-                    setCodeSede(info.code)
-                    setNomeSede(info.sede)
-                    setEmailSede(info.email)
-                    setSedeContacto(info.contacto)
-                    setSedeEndereco(info.endereco)
-                    setSedeCidade(info.cidade)
-                    setSedePais(info.pais)
-                    setSedeImageFile(info.imageName)
+    // const getGetAllData = () => {
+    //     SedeService.getAll()
+    //         .then(response => {
+    //             response.data.map(info => {
+    //                 setSedeID(info.id)
+    //                 setCodeSede(info.code)
+    //                 setNomeSede(info.sede)
+    //                 setEmailSede(info.email)
+    //                 setSedeContacto(info.contacto)
+    //                 setSedeEndereco(info.endereco)
+    //                 setSedeCidade(info.cidade)
+    //                 setSedePais(info.pais)
+    //                 setSedeImageFile(info.imageName)
                     
-                })
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }
+    //             })
+    //         })
+    //         .catch(e => {
+    //             console.log(e);
+    //         });
+    // }
 
     let testData = 0;
 
     useEffect(() => {
-        getGetAllData();
+       // getGetAllData();
     }, []);
 
     const userGetEmail = async () => {
@@ -77,15 +77,15 @@ const Login = () => {
                                         "firstname": info.firstname,
                                         "lastname": info.lastname,
                                         "photofilename": info.photofilename,
-                                        "sedeID": sedeID,
-                                        "codeSede": codeSede,
-                                        "nomeSede": nomeSede,
-                                        "emailSede": emailSede,
-                                        "sedeContacto": sedeContacto,
-                                        "sedeEndereco": sedeEndereco,
-                                        "sedeCidade": sedeCidade,
-                                        "sedePais": sedePais,
-                                        "sedeImageFile": sedeImageFile
+                                        // "sedeID": sedeID,
+                                        // "codeSede": codeSede,
+                                        // "nomeSede": nomeSede,
+                                        // "emailSede": emailSede,
+                                        // "sedeContacto": sedeContacto,
+                                        // "sedeEndereco": sedeEndereco,
+                                        // "sedeCidade": sedeCidade,
+                                        // "sedePais": sedePais,
+                                        // "sedeImageFile": sedeImageFile
                                     }
                                 ])
                             })

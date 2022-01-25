@@ -34,7 +34,7 @@
     "role_utilizador": "User",
 
     "denunciante": "Name of complainant",
-     "tipo_denuncia": "Type of Complaint",
+     "tipo_denuncia": "Complaint Type",
      "queixa": "Complaint",
      "queixaPlaceOrder": "Write the complaint against the Employee",
 
@@ -43,12 +43,16 @@
     "button_novo": "New",
     "button_limpar": "Reset",
     "sair": "Close",
+    "button_pagina_anterior": "Back",
+
     "agencia": "Agency",
     "lista_agencia": "List of Agencies",
     "lista_usuarios": "LIST OF APPLCATION USERS",
     "lista_funcionario": "LIST OF EMPLOYEES ",
     "lista_denuncia": "LIST OF COMPLAINTS",
     "lista_sede": "List of Headquaters",
+    "lista_tipoDenuncia": "LIST OF TYPE OF COMPLAINTS",
+    "tipo_denuncia_menu": "List Type-Complaints",
 
     "mensagem_Gravar_Nova_Agencia": "Datas was  Successfully registered!",
     "mensagem_modificar_Nova_Agencia": "Datas was Edited successfully",
@@ -68,6 +72,10 @@
     "user_contact": "User Contacts",
     "selecione": "Select",
     "action": "Action",
+
+    "sedeEdit_editarDados_text": "MODIFY THE HEADQUARTERS",
+    "sedeEdit_informacaoSede_text": "Headquarters Information",
+    "sedeEdit_contactSede_text": "Headquarters contact",
 
     "header_title_sede": "New Company Headquarters",
     "header_subTitle_sede": "Save New Company Headquarters",
@@ -95,6 +103,10 @@
     "header_title_denuncia_novo": "Register a new Complaint",
      "header_subTitle_denuncia_novo": "Register a New Complaint against am Employee",
      "denunciaNumeroPlaceOrder": "Enter the Employee Code",
+
+     "header_title_tipo_denuncia_gravar": "Register Type of Complaint",
+    "header_subTitle_tipo_denuncia_gravar": "Type of Complaint Registratino Form",
+
 
     "nome_Agencia": "Agency",
     "funcao": "Function",

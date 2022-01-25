@@ -35,7 +35,7 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
     const { idDisplay, nomeDisplay, tipoDenunciaDisplay, dataDisplay,
         horaDisplay, emailDisplay,telefoneDislay, statusDisplay, queixaDisplay,
         actionsButtonDisplaySelect,
-        actionsButtonDisplayEditDelete,
+        actionsButtonDisplayEditDelete, linguaQueixa,
         pageSize, rowPerPage } = props;
 
     const [data, setData] = useState([]);
@@ -62,8 +62,8 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
         setOpenPopup(false);
     }
 
-    const getGetAllData = () => {
-        DenunciaService.getAll()
+    const getGetAllData = (abreviationLangue) => {
+        DenunciaService.getAll(abreviationLangue)
             .then(response => {
                 setData(response.data)
             })
@@ -92,8 +92,32 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
         
         
         tipoDenunciaDisplay ?
-        { field: 'tipodenuncia', headerName: t('tipo_denuncia'),  flex: 1, headerClassName: classes.paper }:
+        {
+            field: 'tipodenuncia', headerName: t('tipo_denuncia'), flex: 1.5, headerClassName: classes.paper,
+            renderCell: (type) => {
+                return (
+                    <>
+                        {type.row.denunciaTipodenuncia.tipoDenuncia}
+                    </>
+                )
+            }
+        }:
         { field: 'tipodenuncia', headerName: t('tipo_denuncia'), hide: { tipoDenunciaDisplay }, headerClassName: classes.paper },
+
+        linguaQueixa ?
+        {
+            field: 'linguaqueixa', headerName: t('language'), flex: 1, headerClassName: classes.paper,
+            renderCell: (type) => {
+                return (
+                    <>
+                        {type.row.denunciaTipodenuncia.lingua}
+                    </>
+                )
+            }
+        }:
+        
+        { field: 'linguaqueixa', headerName: t('tipo_denuncia'), hide: { linguaQueixa }, headerClassName: classes.paper },
+
 
         emailDisplay ?
         { field: 'email', headerName: t('email'),  flex: 1, headerClassName: classes.paper }:

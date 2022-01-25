@@ -80,7 +80,8 @@ const AgenciaEdit = (props) =>{
                 isOpen: true,
                 message: t('mensagem_modificar_Nova_Agencia'),
                 type: 'success'
-            })
+            });
+            setNotificationShow(true);
         })
             .catch(e => {
                 console.log(e)
@@ -296,10 +297,14 @@ const AgenciaEdit = (props) =>{
 
             </div>
 
-            <Notifications
-                notify={notify}
-                setNotify={setNotify}
-            />
+            {
+                notificatinoShow ?
+                    <Notifications
+                        notify={notify}
+                        setNotify={setNotify}
+                    />
+                    : null
+            }
 
         </div>
     )

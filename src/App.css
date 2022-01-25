@@ -110,6 +110,16 @@ object-fit: cover;
   border-radius: 20px;
   object-fit: cover;
   }
+  .select-buttonLarge12 {
+    max-width: 400px;
+    width: 230px;
+    margin-top: 5px;
+    max-height: 30px;
+    height: 30px;
+    padding-bottom: 4px; 
+    border-radius: 20px;
+    object-fit: cover;
+    }
 .select-buttonLarge2 {
 max-width: 400px;
 width: 260px;

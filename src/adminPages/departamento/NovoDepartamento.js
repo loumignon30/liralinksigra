@@ -35,29 +35,32 @@ const NovoDepartamento = () => {
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' });
     const [openPopup, setOpenPopup] = useState(false);
     const [popupTitle, setPpupTitle] = useState("");
-    const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+    const childRefDepartement = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [sede, setSede] = useState("");
     const [notificatinoShow, setNotificationShow] = useState(false);
-    const [agencia, setAgencia] = useState();
-    const [count, setCount] = useState();
+    const [agencia, setAgencia] = useState("");
+    const [count, setCount] = useState(0);
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
 
     const [sedeID, setSedeID] = useState(0);
-    const [agenciaID, setAgenciaID] = useState();
+    const [agenciaID, setAgenciaID] = useState(0);
     const location = useLocation();
     const [backGroundColor, setBackGroundColor] = useState("");
     const [color, setColor] = useState("");
     const [headerTitle, setHeaderTitle] = useState("");
     const [headerSubTitle, setHeaderSubTitle] = useState("");
     const [buttonTitle, setButtonTitle] = useState();
-    const [textReset, setTextReset] = useState();
+    const [textReset, setTextReset] = useState("");
+
+    const childRefAgence = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+
 
     const { t } = useTranslation();
 
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
-        updateValuesOnOpen(); // update Usecontext
+       // updateValuesOnOpen(); // update Usecontext
         getStateValuesFromSearchTable();
 
     }, [(t('header_title_departamento_modificar'))]);
@@ -104,10 +107,11 @@ const NovoDepartamento = () => {
 
             setValues(location.state);
             setSede(location.state.sede);
+            
             setAgencia(location.state.agencia)
 
-            setSedeID(location.state.sedeID)
-            setAgenciaID(location.state.agenciaID)
+            // setSedeID(location.state.sedeID)
+            // setAgenciaID(location.state.agenciaID)
 
         } else {
             setBackGroundColor("darkGreen");
@@ -128,12 +132,18 @@ const NovoDepartamento = () => {
     }
 
     const ResetForm = () => {
-        setValues(initialFValues);
+       // setValues(initialFValues);
         setNotificationShow(false);
 
-        values.sedeID = sedeID;
-        values.agenciaID = agenciaID;
+        values.code =""
+        values.departamento = ""
+        values.observacao = "";
 
+       // values.sedeID = sedeID;
+       // values.agenciaID = agenciaID;
+
+        tableDepartamentoUpdateData1(sedeID, agenciaID);
+        
         setBackGroundColor("darkGreen");
             setColor("white");
             setHeaderTitle(t('header_title_departamento_novo'));
@@ -152,9 +162,14 @@ const NovoDepartamento = () => {
 
     }
 
-    const tableDepartamentoUpdateData = () => {
-        //childRef2.current.test3();
-        childRef2.current.getGetAllData();  // saveImage() = method called
+    const tableDepartamentoUpdateData1 = (sedeID1, agenciaID1) => {
+        if(sedeID1 > 0  && agenciaID1 > 0){
+            childRefDepartement.current.getGetAllData(sedeID1, agenciaID1);  // saveImage() = method called
+        }
+
+    }
+    const tableAgenciaUpdateData = (sedeID1) => {
+        //childRefAgence.current.getGetAllData(sedeID1);  // saveImage() = method called
     }
 
     const onclicSedePopup = () => {
@@ -172,13 +187,13 @@ const NovoDepartamento = () => {
 
         if (values.id > 0) {
             DepartamentoServices.update(values.id, values).then(response => {
-                setNotificationShow(true);
-                tableDepartamentoUpdateData(); // update Faculty Data on FacultySearchTable.js
+                tableDepartamentoUpdateData1(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
                     type: 'success'
                 })
+                setNotificationShow(true);
             })
                 .catch(e => {
                     console.log(e)
@@ -190,13 +205,13 @@ const NovoDepartamento = () => {
             }
 
             DepartamentoServices.create(values).then(response => {
-                setNotificationShow(true);
-                tableDepartamentoUpdateData(); // update Faculty Data on FacultySearchTable.js
+                tableDepartamentoUpdateData1(); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
                     type: 'success'
-                })
+                });
+                setNotificationShow(true);
             })
                 .catch(e => {
                     console.log(e)
@@ -243,7 +258,6 @@ const NovoDepartamento = () => {
                                 value={agencia}
                                 onChange={handleInputChange}
                                 type="text"
-                                disabled="true"
                                 error={errors.agencia}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}
@@ -290,7 +304,7 @@ const NovoDepartamento = () => {
 
                     </div>
                     <div className="newFaculty" style={{ marginTop: "-10px" }}>
-                        <DepartamentoSearchTable ref={childRef2}
+                        <DepartamentoSearchTable ref={childRefDepartement}
                             idDisplay={false}
                             codeDisplay={true}
                             actionsButtonDisplay={false}
@@ -299,13 +313,14 @@ const NovoDepartamento = () => {
                             rowPerPage={3}
                             backGroundColor={backGroundColor}
                             color={color}
-                            departamentoData={(id, code, departamento) => {
-                                //setSede(sede);
-                                values.sedeID = id
-                                setOpenPopup(false);
-                                tableDepartamentoUpdateData(id);
-                            }
-                            }
+                            sedeID= {values.sedeID}
+                            agenciaID= {values.agenciaID}
+                            // departamentoData={(id, code, departamento) => {
+                            //     //setSede(sede);
+                            //     //values.sedeID = id
+                            //     setOpenPopup(false);
+                            // }
+                            // }
                         />
                     </div>
 
@@ -365,9 +380,11 @@ const NovoDepartamento = () => {
                             color={color}
                             sedeData={(id, code, sede) => {
                                 setSede(sede);
+                                setSedeID(id)
                                 values.sedeID = id
                                 setOpenPopup(false);
-                                tableDepartamentoUpdateData(id);
+                                tableAgenciaUpdateData(id);
+                                //tableDepartamentoUpdateData(id);
                             }
                             }
                         />
@@ -385,7 +402,7 @@ const NovoDepartamento = () => {
                         height="580px"
                     >
 
-                        <AgenciaSearchTable
+                        <AgenciaSearchTable ref={childRefAgence}
                             idDisplay={false}
                             codeDisplay={true}
                             emailDisplay={false}
@@ -393,13 +410,19 @@ const NovoDepartamento = () => {
                             actionsButtonDisplaySelect={true}
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor={backGroundColor}
+                            idSede = {values.sedeID}
                             color={color}
                             pageSize={5}
                             rowPerPage={5}
                             agenciaData={(id, code, agencia) => {
                                 values.agenciaID = id;
                                 setAgencia(agencia);
+                                setAgenciaID(id)
                                 setOpenPopup(false);
+                                tableDepartamentoUpdateData1(sedeID, id); 
+                                                    
+
+                                
                             }}
                         />
                     </Popup> : null

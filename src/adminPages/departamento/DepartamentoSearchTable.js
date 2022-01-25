@@ -63,13 +63,17 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
     const [openPopup, setOpenPopup] = useState(false);
     const { idDisplay, codeDisplay, actionsButtonDisplay,
         actionsButtonDisplayEditDelete, statusDisplay,
-        pageSize, rowPerPage } = props;
+        pageSize, rowPerPage,
+    sedeID, agenciaID } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
+
     useEffect(() => {
-        getGetAllData();
+
+        getGetAllData(sedeID, agenciaID);
         setUrl(urlImage());
+
     }, []);
     useImperativeHandle(ref, () => (
         {
@@ -82,8 +86,9 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
         setOpenPopup(false);
     }
 
-    const getGetAllData = () => {
-        DepartamentoServices.getAll()
+    const getGetAllData = (sedeID1, agenciaID1) => {
+
+        DepartamentoServices.getAll(sedeID1, agenciaID1)
             .then(response => {
                 setData(response.data)
             })

@@ -56,7 +56,8 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
     const classes = useStyles();
 
     const [openPopup, setOpenPopup] = useState(false);
-    const { idDisplay, codeDisplay, actionsButtonSelectDisplay,
+    const { idDisplay, codeDisplay, ciadadeDisplay, paisDiplay,
+        actionsButtonSelectDisplay,
         actionsButtonDisplayEditDelete,
         pageSize, rowPerPage } = props;
 
@@ -123,6 +124,15 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
                 // C:\React app\world-university-backend\public\images
             }
         },
+
+        ciadadeDisplay ?
+        { field: 'cidade', headerName: t('cidade'), flex: 1, headerClassName: classes.paper }:
+        { field: 'cidade', headerName: 'cidade', hide: { ciadadeDisplay }, headerClassName: classes.paper },
+
+        paisDiplay ?
+        { field: 'pais', headerName: t('pais'), flex: 1, headerClassName: classes.paper }:
+        { field: 'pais', headerName: 'pais', hide: { ciadadeDisplay }, headerClassName: classes.paper },
+
 
         actionsButtonSelectDisplay ?
             {

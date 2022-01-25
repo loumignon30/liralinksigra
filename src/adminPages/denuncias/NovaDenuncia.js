@@ -14,14 +14,16 @@ import { Search, SetMeal } from '@mui/icons-material';
 import FuncionarioService from "../../services/admin/Funcionario.services";
 import urlImage from '../../http-common-images';
 import DenunciaService from '../../services/admin/Denuncias.services';
+import TipoDenunciaServices from "../../services/admin/TipoDenuncia.services";
 
 import { useTranslation } from "react-i18next";
+import cookies from 'js-cookie'
+
 
 const initialFValues = {
     id: 0,
     codigo: '',
     nome: '',
-    tipodenuncia: '',
     telepfoneDenunciante: '',
     emailDenunciante: '',
     queixa: '',
@@ -30,10 +32,17 @@ const initialFValues = {
     data: null,
     funcionarioID: 0,
     sedeID: 0,
-    agenciaID: 0
+    agenciaID: 0,
+    tipodenunciaID: '',
+    tipodenuncia: "",
+    abreviationLangue: ""
 }
 
 const NovaDenuncia = () => {
+
+    const { t } = useTranslation();
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
@@ -47,12 +56,13 @@ const NovaDenuncia = () => {
     const [sede, setSede] = useState("");
     const [sedeID, setSedeID] = useState(0);
     const [agenciaID, setAgenciaID] = useState(0);
-    const [agencia, setAgencia] = useState();
+    const [agencia, setAgencia] = useState("");
 
     const [openPopup, setOpenPopup] = useState(false);
     const [popupTitle, setPpupTitle] = useState("");
+    const [notificatinoShow, setNotificationShow] = useState(false);
 
-    const [count, setCount] = useState();
+    const [count, setCount] = useState(0);
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
     const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
     const [url, setUrl] = useState("");  // backend image  URL
@@ -64,11 +74,9 @@ const NovaDenuncia = () => {
     const [endereco, setEndereco] = useState("");
     const [cidade, setCidade] = useState("");
     const [pais, setPais] = useState("");
+    const [tipoDenunciaList, setSipoDenunciaList] = useState([]);
+
     let fotoFuncionario = "";
-
-    const { t } = useTranslation();
-
-
     // function for validating form
     const validate = (fieldValues = values) => {
         let validationErrorM = {}
@@ -80,8 +88,8 @@ const NovaDenuncia = () => {
         if ('nome' in fieldValues)
             validationErrorM.nome = fieldValues.nome ? "" : " "
 
-        if ('tipodenuncia' in fieldValues)
-            validationErrorM.tipodenuncia = fieldValues.tipodenuncia ? "" : " "
+        if ('tipodenunciaID' in fieldValues)
+            validationErrorM.tipodenunciaID = fieldValues.tipodenunciaID ? "" : " "
 
         if ('queixa' in fieldValues)
             validationErrorM.queixa = fieldValues.queixa ? "" : " "
@@ -112,10 +120,12 @@ const NovaDenuncia = () => {
         handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     useEffect(() => {
-       // setImageSRC("https://media-exp1.licdn.com/dms/image/C4E03AQFsD7qKHQJzYA/profile-displayphoto-shrink_800_800/0/1624105018084?e=1642032000&v=beta&t=HTny2PpWRl0YOFcXgDMAx2rXIE7XU2lbDjzFm4T2g5o");
+        // setImageSRC("https://media-exp1.licdn.com/dms/image/C4E03AQFsD7qKHQJzYA/profile-displayphoto-shrink_800_800/0/1624105018084?e=1642032000&v=beta&t=HTny2PpWRl0YOFcXgDMAx2rXIE7XU2lbDjzFm4T2g5o");
 
-        updateValuesOnOpen();
-        setUrl(urlImage());
+        // updateValuesOnOpen();
+        //setUrl(urlImage());
+
+        TipoDenunciaGetAll(currentLanguageCode);
 
     }, [t('header_title_denuncia_novo')]);
 
@@ -187,6 +197,7 @@ const NovaDenuncia = () => {
     const guardarDenuncias = () => {
 
         getTime(); // data e hora da denuncia
+        values.abreviationLangue = currentLanguageCode;
 
         DenunciaService.create(values).then(response => {
             setNotify({
@@ -194,6 +205,7 @@ const NovaDenuncia = () => {
                 message: t('mensagem_Gravar_Nova_Agencia'),
                 type: 'success'
             });
+            setNotificationShow(true);
 
         })
             .catch(e => {
@@ -208,61 +220,78 @@ const NovaDenuncia = () => {
 
     const pesquisaCodigoFuncionario = () => {
 
-        FuncionarioService.getID(values.codigo).then(response => {
+        if (values.codigo !== "") {
+           
+            FuncionarioService.getID(values.codigo).then(response => {
 
-            if (response.data.length === 0) {
-                alert(t('mensagem_erro_numero_funcionario_pesquisa'));
+                if (response.data.length === 0) {
+                    alert(t('mensagem_erro_numero_funcionario_pesquisa'));
 
-                setSede("");
-                setAgencia("");
-                setPrimeiroNome("");
-                setApelido("");
-                setTelefone("");
-                setEmail("");
-                setEndereco("");
-                setCidade("");
-                setPais("");
-                sendImageFromImageUpload("");
+                    setSede("");
+                    setAgencia("");
+                    setPrimeiroNome("");
+                    setApelido("");
+                    setTelefone("");
+                    setEmail("");
+                    setEndereco("");
+                    setCidade("");
+                    setPais("");
+                    sendImageFromImageUpload("");
+                    return 
+                } 
 
-                return
-            }
+                response.data.map(info => {
+                    setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
+                    sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
 
-            response.data.map(info => {
-                setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
-                sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
+                    fotoFuncionario = info.imageName;
 
-                fotoFuncionario = info.imageName;
+                    if (fotoFuncionario === "") {
+                        setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png");
+                        sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png");
+                    }
 
-                if(fotoFuncionario ===""){
-                    setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png");
-                    sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png");
-                }
+                    setSede(info.sedeFuncionario.sede)
+                    setAgencia(info.agenciaFuncionario.nome)
+                    setPrimeiroNome(info.primeironome);
+                    setApelido(info.ultimonome);
+                    setTelefone(info.agenciaFuncionario.telefone);
+                    setEmail(info.agenciaFuncionario.email)
+                    setEndereco(info.agenciaFuncionario.endereco);
+                    setCidade(info.agenciaFuncionario.cidade);
+                    setPais(info.agenciaFuncionario.pais);
 
-                setSede(info.sedeFuncionario.sede)
-                setAgencia(info.agenciaFuncionario.nome)
-                setPrimeiroNome(info.primeironome);
-                setApelido(info.ultimonome);
-                setTelefone(info.agenciaFuncionario.telefone);
-                setEmail(info.agenciaFuncionario.email)
-                setEndereco(info.agenciaFuncionario.endereco);
-                setCidade(info.agenciaFuncionario.cidade);
-                setPais(info.agenciaFuncionario.pais);
+                    values.funcionarioID = info.id;
+                    values.sedeID = info.sedeFuncionario.id;
+                    values.agenciaID = info.agenciaFuncionario.id;
 
-                values.funcionarioID = info.id;
-                values.sedeID = info.sedeFuncionario.id;
-                values.agenciaID = info.agenciaFuncionario.id;
+                })
+            
 
             })
+                .catch(e => {
+                    console.log(e)
+                });
 
-        })
+        } else {
+            alert(t('mensagem_erro_numero_funcionario_pesquisa'));
+        }
+    }
+
+    const TipoDenunciaGetAll = (abreviationLangue) => {
+        TipoDenunciaServices.getAll(abreviationLangue)
+            .then(response => {
+                setSipoDenunciaList(response.data)
+            })
             .catch(e => {
-                console.log(e)
+                console.log(e);
             });
     }
 
     const handleKeyPress = () => {
         pesquisaCodigoFuncionario();
     }
+
 
     return (
         <>
@@ -408,7 +437,7 @@ const NovaDenuncia = () => {
                         </div>
 
                         <div className="newUser2">
-                            <div>
+                            <div style={{ marginBottom: "15px" }}>
                                 <label className="userLabel">{t('denunciante')}</label>
                                 <Controls.Input
                                     name="nome"
@@ -421,18 +450,19 @@ const NovaDenuncia = () => {
                             </div>
 
                             <div>
-                                <label className="userLabel">{t('tipo_denuncia')}</label>
-                                <Controls.Input
-                                    name="tipodenuncia"
-                                    placeHolder={t('tipo_denuncia')}
-                                    value={values.tipodenuncia}
+                                <label className="inputLabel">{t('tipo_denuncia')}</label>
+                                <Controls.Select
+                                    name="tipodenunciaID"
+                                    label="tipodenunciaID"
+                                    value={values.tipodenunciaID}
                                     onChange={handleInputChange}
-                                    width="65%" type="text"
-                                    error={errors.tipodenuncia}
+                                    options={tipoDenunciaList}
+                                    width="65%"
+                                    height="40px"
+                                    typeOfSelect={2}
+                                    error={errors.tipodenunciaID}
                                 />
-                                <Search style={{ marginTop: "10px", cursor: "pointer" }}
-                                    onClick={onclickSedePopup}
-                                />
+
                             </div>
 
                             <div>
@@ -442,7 +472,7 @@ const NovaDenuncia = () => {
                                     placeHolder={t('contacto')}
                                     value={values.telepfoneDenunciante}
                                     onChange={handleInputChange}
-                                    width="65%" 
+                                    width="65%"
                                     type="text"
                                 />
                             </div>
@@ -498,10 +528,15 @@ const NovaDenuncia = () => {
                 </Form>
             </div>
 
-            <Notifications
-                notify={notify}
-                setNotify={setNotify}
-            />
+            {
+                notificatinoShow ?
+                    <Notifications
+                        notify={notify}
+                        setNotify={setNotify}
+                    />
+                    : null
+            }
+
 
         </>
     )
