@@ -11,7 +11,7 @@
     "endereco": "Endereço",
     "cidade": "cidade",
     "pais": "País",
-    "status": "Estatuto",
+    "status": "Estado",
     "button_gravar": "Gravar",
     "button_modificar": "Modificar",
     "button_novo": "Novo",
@@ -34,9 +34,21 @@
     "sexo_masculino": "Masculino",
     "sexo_feminino": "Feminino",
     "sexo_outros": "Outros",
+    "Recherche": "Pesquisar",
+    "total_employes": "Total Funcionários",
+    "resumo": "Resumo Por Sede",
+
     "role_administrador": "Administrador",
     "role_Funcionario": "Funcionário",
     "role_utilizador": "Utilizador",
+    "role_super_user": "Criador",
+
+    "status_actif": "Activo",
+    "status_inactive": "Inactivo",
+    "status_pendente": "Pendente",
+    "status_apagado": "Apagado",
+    
+
     "denunciante": "Nome Denúnciante",
     "tipo_denuncia": "Tipo Denúncia",
     "queixa": "Queixa",
@@ -47,8 +59,15 @@
     "lista_funcionario": "LISTA DE FUNCIONÁRIOS ",
     "lista_denuncia": "LISTA DE DENÚNCIAS ",
     "tipo_denuncia_menu": "Listagem  Tipo Denúncia",
+    "edit": "Editar",
 
     "lista_tipoDenuncia": "LISTA DE TIPO DE DENÚNCIAS ",
+
+    "AfetacaoGridView": "Afetação",
+    "codeExiste_do_trabalhador_na_base_de_dasos": "O Código introduzido existe na basa de dados",
+
+    "Email_Existe_do_usuario_na_base_de_dasos": "O Email introduzido existe com um outro Utilizador ",
+
 
     "mensagem_Gravar_Nova_Agencia": "Dados gravados com Sucesso!",
     "mensagem_modificar_Nova_Agencia": "Dados Modificadas com Sucesso!",
@@ -61,8 +80,10 @@
     "mensagem_denuncia_por_tratar": "Denúncias por Tratar",
     "mensagem_denuncia_comparado_com_o_mes_passado": "Comparado com o mês passado",
     "mensagem_denuncia_comparado_com_o_ano_passado": "Comparado com o ano passado",
-
     "mensagem_analise_denuncia_home_page": "Analíses de denúncias",
+
+    "mensagem_erro_menu_administrador": "Não tem o nível de acesso do administrador!",
+     "mensagem_erro_menu_atencao": "Atenção",
 
 
     "user_informstion": "Informação do Usúario",
@@ -78,7 +99,7 @@
     "action": "Ação",
     "header_title_sede": "Nova Sede da Empresa",
     "header_subTitle_sede": "Cadastrar uma nova sede da Empresa",
-    "header_title_agence_novo": "Cadastrar uma  nova Agência",
+    "header_title_agence_novo": "Cadastrar uma Agência",
     "header_subTitle_agence_novo": "Formulário de cadastro de   novas Agência",
     "header_title_agence_modificar": "Modificar dados da Agência",
     "header_subTitle_agence_modificar": "Formulário de modificação de dados da Agência",
@@ -102,7 +123,13 @@
     "header_subTitle_denuncia_novo": "Guardar a Denúncia feita contra o Funcionário",
 
     "header_title_tipo_denuncia_gravar": "Gravar Tipo de Denúncias",
-    "header_subTitle_tipo_denuncia_gravar": "Formulaire para Gravar Tipo de Denúncia",
+    "header_subTitle_tipo_denuncia_gravar": "Formulário para Gravar Tipo de Denúncia",
+
+    "header_subTitle_Listagem_denuncia": "Formulário de visualização de Denúncias",
+
+    "header_title_AfectacaoSede_Agencia": "Afectão Sede e Agência",
+    "header_subTitle_AfectacaoSede_Agencia": "Formulario de Afectação de Sede e Agências ao Utilizadores",
+
 
     "denunciaNumeroPlaceOrder": "Digite o Código do Funcionário",
     "nome_Agencia": "Agência",
@@ -116,6 +143,10 @@
     "listagem_agencia_menu": "Lista Agências",
     "provincias_menu": "Provincias",
     "novo_usuario_menu": "Novo Usúario",
+
+    "utilizador_afectacao_sede_agencia": "Afectação Sede e Agencia",
+
+
     "listagem_usuario_menu": "Lista Usúarios",
     "listagem_departemento_menu": "LISTA DE DEPARTAMENTOS",
     "departamentos_menu": "Departamentos",
@@ -141,6 +172,15 @@
     "denucia_por_agencia_menu": "Evaluação de Denúncias",
 
     "total_denuncias": "Total denúncias",
+
+    "estatistica_grafica_por_sede": "Gráfica por Sede",
+    "estatistica_grafica_por_Agencia": "Gráfica-Agência",
+    "estatistica_resumo_denuncia": "Resumo-Denúncias",
+    "estatistica_denuncia_nao_tratadas": "Dúnuncias-não-Tratadas",
+    "estatistica_denuncia_tratadas": "Dúnuncias-Tratadas",
+    "estatistica_header": "Estatísticas",
+    "estatistica_sub_header": "Estatísticas-Anual",
+    "grafique_plaine_sidebar_menu": "Gráfica de Denúncias",
 
     "janeiro": "janeiro",
     "fevereiro": "fevereiro",

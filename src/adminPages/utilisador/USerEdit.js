@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import "./userEdit.css"
 import {
     PermIdentity, CalendarViewDayTwoTone, Phone,
@@ -15,7 +15,8 @@ import Notifications from '../../components/reusableComponents/Notifications';
 import { useTranslation } from "react-i18next";
 import Popup from '../../components/reusableComponents/Popup';
 import SedeSearchTable from '../sede/SedeSearchTable';
-
+import { UserLoggedContext } from './UserLoggedContext';
+import semfoto from "../../assets/images/semfoto.png";
 
 const initialFValues = {
     id: 0,
@@ -25,12 +26,12 @@ const initialFValues = {
     telephone: '',
     address: '',
     city: '',
-    dateofbirth: '',
+    //dateofbirth: '',
     gender: '',
     role: '',
-    password: '',
+    //password: '',
     photofilename: '',
-    status: 'Active',
+    status: '1',
     country: '',
     sedeID: 0
 }
@@ -42,22 +43,20 @@ export default function Utilisateur(props) {
     //     city, dateofbirth, gender, role, password, status, country,
     //     imageChangeFromOutSideURL } = location.state; // getting data from Edit link from UserSearchTable.js
 
-    const [fname, setFname] = useState();
-
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [imageFileName, setImageFileName] = useState("");
     const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
 
-    const [firstname, setFirstname] = useState();
-    const [lastname, setLastname] = useState();
-    const [email, setEmail] = useState();
-    const [telephone, setTelephone] = useState();
-    const [address, setaddress] = useState();
-    const [role, setRole] = useState();
+    const [firstnameV, setFirstnameV] = useState("");
+    const [lastnameV, setLastnameV] = useState("");
+    const [email, setEmail] = useState("");
+    const [telephone, setTelephone] = useState("");
+    const [address, setaddress] = useState("");
+    const [role, setRole] = useState("");
 
-    const [city, setCity] = useState();
-    const [country, setCountry] = useState();
+    const [city, setCity] = useState("");
+    const [country, setCountry] = useState("");
 
     const [sede, setSede] = useState("");
     const [sedeID, setSedeID] = useState(0);
@@ -65,31 +64,97 @@ export default function Utilisateur(props) {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const [count, setCount] = useState();
+    const [count, setCount] = useState(0);
     const [popupTitle, setPpupTitle] = useState("");
     const [openPopup, setOpenPopup] = useState(false);
     const [notificatinoShow, setNotificationShow] = useState(false);
 
+    const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
+
+    const getRole = [
+        { id: 1, title: t('role_administrador') },
+        { id: 2, title: t('role_Funcionario') },
+        { id: 3, title: t('role_utilizador') },
+        { id: 101, title: t('role_super_user') }
+
+    ]
+
+    const getStatus = [
+        { id: '1', title: t('status_actif') },
+        { id: '2', title: t('status_inactive') },
+        { id: '3', title: t('status_pendente') },
+        { id: '4', title: t('status_apagado') }
+    ]
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
-        setSede(location.state.sede);
-        setSedeID(location.state.sedeID);
 
-        setFirstname(location.state.firstname);
-        setLastname(location.state.lastname);
-        setEmail(location.state.email);
-        setTelephone(location.state.telephone);
-        setaddress(location.state.address);
-        setRole(location.state.role);
-        setCity(location.state.city);
-        setCountry(location.state.country);
-        setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
+        if (props.topbar === "topbar") {
+            userDataFromContext();
+        } else {
+            setValues(location.state);
+            setSede(location.state.sede);
+            setSedeID(location.state.sedeID);
 
-        getStateValuesFromUSerSearchTable();
+            setFirstnameV(location.state.firstname);
+            setLastnameV(location.state.lastname);
+            setEmail(location.state.email);
+            setTelephone(location.state.telephone);
+            setaddress(location.state.address);
+            // setRole(location.state.role);
+            setCity(location.state.city);
+            setCountry(location.state.country);
+            setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
+
+            getStateValuesFromUSerSearchTable(location.state.imageChangeFromOutSideURL);
+
+            getRole.map((info) => {
+
+                if (Number(info.id) === Number(location.state.role)) {
+                    setRole(info.title);
+                }
+            })
+
+        }
 
     }, []);
 
+    const userDataFromContext = () => {
+        userSavedValue.map(item => (
+            setFirstnameV(item.firstname),
+            setLastnameV(item.lastname),
+            setSede(item.sede),
+            setSedeID(item.sedeID),
+            setEmail(item.email),
+            setTelephone(item.contacto),
+            setCity(item.cidade),
+            setCountry(item.pais),
+            values.sedeID = item.sedeID,
+            values.id = item.id,
+            values.firstname = item.firstname,
+            values.lastname = item.lastname,
+            values.gender = item.sexo,
+            values.email = item.email,
+            values.telephone = item.contacto,
+            values.address = item.endereco,
+            values.status = item.status,
+            values.city = item.cidade,
+            values.country = item.pais,
+            values.role = item.nivelAcesso,
+            values.photofilename = item.photofilename,
+            setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + item.photofilename),
+            getStateValuesFromUSerSearchTable("https://s3.amazonaws.com/liralink.sigra/" + item.photofilename),
+
+            //  setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + item.photofilename),
+            // childRef.current.imageChangeFromOutSide("https://s3.amazonaws.com/liralink.sigra/" + item.photofilename),
+            getRole.map((info) => {
+                if (Number(info.id) === Number(item.nivelAcesso)) {
+                    setRole(info.title);
+                }
+            })
+
+        ));
+    }
     // function for validating form
     const validate = (fieldValues = values) => {
         let validationErrorM = {}
@@ -118,8 +183,8 @@ export default function Utilisateur(props) {
         if ('status' in fieldValues)
             validationErrorM.status = fieldValues.status ? "" : " "
 
-        if ('password' in fieldValues)
-            validationErrorM.password = fieldValues.password.length > 3 ? "" : "Minimum 3 caracters"
+        // if ('password' in fieldValues)
+        //     validationErrorM.password = fieldValues.password.length > 3 ? "" : "Minimum 3 caracters"
 
         setErrors({
             ...validationErrorM
@@ -137,17 +202,37 @@ export default function Utilisateur(props) {
 
 
     //     city, dateofbirth, gender, role, password, status, country
-    const saveImageFromImageUpload = () => {
-        childRef.current.imageChangeFromOutSide(location.state.imageChangeFromOutSideURL);  // saveImage() = method called
+    const saveImageFromImageUpload = (image) => {
+
+        childRef.current.imageChangeFromOutSide(image);  // saveImage() = method called
     }
 
-    const getStateValuesFromUSerSearchTable = () => {
-        setValues(location.state);
-        saveImageFromImageUpload();
+    const getStateValuesFromUSerSearchTable = (image) => {
+        saveImageFromImageUpload(image);
     }
 
-    const edituser = () => {
+    const sendImageFromImageUpload = (image) => {
+        childRef.current.imageChangeFromOutSide(image);  // saveImage() = method called
+    }
+
+    const edituserData = (e) => {
+
+        e.preventDefault();
+
         if (validate()) {
+
+            if (childRef.current.imageSelected) {  // save image only if selected
+                childRef.current.getFuncionarioCode(values.firstname, "code");  // saveImage() = method called
+                saveImageFromImageUpload();
+            } else {
+
+                if (values.id === 0) {
+                    sendImageFromImageUpload(semfoto);  // enviar a imagem de sem foto
+                    childRef.current.getFuncionarioCode(values.firstname, "code");  // saveImage() = method called
+                    saveImageFromImageUpload();
+                }
+            }
+
             saveImageFromImageUploadEdit();
             UserService.update(values.id, values).then(response => {
                 // imageReset();
@@ -175,11 +260,18 @@ export default function Utilisateur(props) {
     }
 
     const onclicSedePopup = () => {
-        setCount(1);
-        setPpupTitle(t('lista_sede'));
-        setOpenPopup(true);
+        if (props.topbar !== "topbar") {
+            setCount(1);
+            setPpupTitle(t('lista_sede'));
+            setOpenPopup(true);
+        }
     }
 
+    const close = () => {
+        // navigate('/Home');
+        setOpenPopup(false);
+        props.closeUSer();
+    }
 
     return (
         <div className="utilisateur">
@@ -197,7 +289,7 @@ export default function Utilisateur(props) {
                             alt=""
                         />
                         <div className="utilisateurAfficherTopTitre">  {/* titre du nom et fonction  */}
-                            <span className="utilisateurAffichageNom">{firstname + " " + lastname}</span>
+                            <span className="utilisateurAffichageNom">{firstnameV + " " + lastnameV}</span>
                             <span className="utilisateurAffichageFonction">{role}</span>
                         </div>
                     </div>
@@ -209,11 +301,11 @@ export default function Utilisateur(props) {
 
                         <div className="utilisateurInfo">
                             <PermIdentity className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre">{firstname}</span>
+                            <span className="userAfficherInfoTitre">{firstnameV}</span>
                         </div>
                         <div className="utilisateurInfo">
                             <PermIdentity className="utilisateurAfficherIcon" />  {/* icon de material*/}
-                            <span className="userAfficherInfoTitre">{lastname}</span>
+                            <span className="userAfficherInfoTitre">{lastnameV}</span>
                         </div>
                         <span className="utilisateurAfficherTitre">{t('user_contact')}</span>
 
@@ -254,7 +346,7 @@ export default function Utilisateur(props) {
                                     onChange={handleInputChange}
                                     type="text"
                                     width="65%"
-                                    error={errors.sede}
+                                // error={errors.sede}
                                 />
                                 <Search style={{ marginTop: "10px", cursor: "pointer" }}
                                     onClick={onclicSedePopup}
@@ -270,7 +362,7 @@ export default function Utilisateur(props) {
                                     onChange={handleInputChange}
                                     type="text"
                                     width="32%"
-                                    error={errors.firstname}
+                                //error={errors.firstname}
                                 />
 
                                 <Controls.Input
@@ -280,7 +372,7 @@ export default function Utilisateur(props) {
                                     onChange={handleInputChange}
                                     type="text"
                                     width="33%"
-                                    error={errors.lastname}
+                                // error={errors.lastname}
                                 />
                             </div>
                             <div>
@@ -292,7 +384,7 @@ export default function Utilisateur(props) {
                                     onChange={handleInputChange}
                                     type="text"
                                     width="40%"
-                                    error={errors.email}
+                                //error={errors.email}
 
                                 />
 
@@ -303,6 +395,8 @@ export default function Utilisateur(props) {
                                     onChange={handleInputChange}
                                     type="text"
                                     width="25%"
+                                //error={errors.telephone}
+
                                 />
                             </div>
 
@@ -325,70 +419,97 @@ export default function Utilisateur(props) {
                                     value={values.city}
                                     onChange={handleInputChange}
                                     type="text"
+                                    width="40%"
                                 />
-                            </div>
 
-                            <div>
-                                <label className="inputLabel">{t('pais')}</label>
                                 <Controls.Input
                                     name="country"
                                     placeHolder={t('pais')}
                                     value={values.country}
                                     onChange={handleInputChange}
                                     type="text"
-                                />
-                            </div>
-                            <div style={{ paddingTop: "5px", }}>
-                                <label className="userLabel" htmlFor="role">{t('nivel_accesso')}</label>
-                                <Controls.Select
-                                    name="role"
-                                    label="Role"
-                                    value={values.role}
-                                    onChange={handleInputChange}
-                                    options={userRole.getRole()}
-                                    className={"select-buttonLarge11"}
-                                    error={errors.role}
+                                    width="25%"
 
                                 />
                             </div>
-                            <div style={{ marginTop: "5px" }}>
-                                <label className="userLabel" htmlFor="status">{t('status')}</label>
-                                <Controls.Select
-                                    name="status"
-                                    label="status"
-                                    value={values.status}
-                                    onChange={handleInputChange}
-                                    options={statusData.getStatus()}
-                                    typeOfSelect={2}
-                                    className={"select-buttonLarge11"}
-                                    // error={errors.status}
-                                />
-                            </div>
+                            {
+                                (props.topbar !== "topbar") ?
+                                    <div style={{ paddingTop: "5px", }}>
+                                        <label className="userLabel" htmlFor="role">{t('nivel_accesso')}</label>
+                                        <Controls.Select
+                                            name="role"
+                                            label="Role"
+                                            value={values.role}
+                                            onChange={handleInputChange}
+                                            options={getRole}
+                                            typeOfSelect={1}
+                                            width="65%"
+                                            height="40px"
+                                        // error={errors.role}
+                                        />
+                                    </div> : null}
+
+                            {
+                                (props.topbar !== "topbar") ?
+                                    <div style={{ marginTop: "5px" }}>
+                                        <label className="userLabel" htmlFor="status">{t('status')}</label>
+                                        <Controls.Select
+                                            name="status"
+                                            label="status"
+                                            value={values.status}
+                                            onChange={handleInputChange}
+                                            options={getStatus}
+                                            typeOfSelect={1}
+                                            width="65%"
+                                            height="40px"
+                                        // error={errors.status}
+                                        />
+                                    </div> : null}
 
                             <div className='userphoto'>
                                 <ImageUpLoad ref={childRef}
                                     fotoTitulo={t('foto')}
                                     uploadDisplay={true}
                                 />
-
                             </div>
 
                             <div>
+
                                 <Controls.Buttons
-                                    type="button"
-                                    text={t('button_gravar')}
+                                    type="submit"
+                                    text={t('button_modificar')}
                                     className="button"
-                                    onClick={edituser}
+                                    onClick={edituserData}
                                 />
-                                <Controls.Buttons
-                                    type="button"
-                                    text={t('button_pagina_anterior')}
-                                    color="secondary"
-                                    className="button"
-                                    onClick={(e) => {
-                                        navigate(-1)
-                                    }}
-                                />
+                                {
+
+                                    (props.topbar !== "topbar") ?
+                                        <Controls.Buttons
+                                            type="button"
+                                            text={t('button_pagina_anterior')}
+                                            color="secondary"
+                                            className="button"
+                                            onClick={() => {
+                                                setUserSavedValue(prevState => {
+                                                    prevState[0].sedeID_pesquisas = sedeID
+                                                    prevState[0].sede_pesquisa = sede
+                                                    prevState[0].provenienciaFormulario = "EditUser"
+                                                    return [...prevState]
+                                                })
+
+                                                navigate(-1)
+                                            }}
+                                        /> :
+
+                                        <Controls.Buttons
+                                            type="button"
+                                            text={t('sair')}
+                                            color="secondary"
+                                            className="button"
+                                            onClick={close}
+                                        />
+                                }
+
                             </div>
                         </div>
 

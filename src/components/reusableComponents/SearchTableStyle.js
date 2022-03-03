@@ -5,7 +5,7 @@ const useStyles = makeStyles(props => ({
     gridHeader: {
         color: ({ color }) => color,
         background: ({ backGroundColor }) => backGroundColor,
-        fontSize: "16px",
+        fontSize: ({ fontSize }) => fontSize || "16px",
         fontFamily: "Times New Roman', Times, serif",
         textAlign: "center",
     },
@@ -105,7 +105,65 @@ const useStyles = makeStyles(props => ({
         borderRadius: "10px",
         objectFit: "cover",
         fontWeight: "bold"
-        },
+    },
+
+    sideBarmainContenair: {
+        //flex: 1,
+        height: "160hv",
+        background: "rgb(15, 15, 66)",  // "rgb(15, 15, 66)", props.backGroundColor ||
+        position: "sticky",
+        top: "0px",
+        left: "0",
+        transition: "350ms",
+        textAlign: "left",
+        width: ({ width1 }) => width1,
+        // width: width1,
+        // width: "40px",
+        position: "relative"
+    },
+    ButtonStatutDataGrid_actif: {
+        padding: "5px 7px",
+        border: "none",
+        borderRadius: "30px",
+        width: "80px",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "lightblue",
+        fontWeight: 600
+    },
+    ButtonStatutDataGrid_inactif: {
+        padding: "5px 7px",
+        border: "none",
+        borderRadius: "30px",
+        width: "80px",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "rgb(250, 188, 188)",
+        fontWeight: 600
+    },
+    ButtonStatutDataGrid_pendent: {
+        padding: "5px 7px",
+        border: "none",
+        borderRadius: "30px",
+        width: "80px",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "rgb(152, 138, 236)",
+        fontWeight: 600
+    },
+    ButtonStatutDataGrid_deleted: {
+        padding: "5px 7px",
+        border: "none",
+        borderRadius: "30px",
+        width: "80px",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "black",
+        color: "white",
+        fontWeight: 600,
+        textDecoration: "line-through"
+
+    }
 }));
 
 

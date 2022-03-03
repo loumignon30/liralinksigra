@@ -10,12 +10,13 @@ const styles = makeStyles({
 })
 
 export default function UsableTable(props) {
-    const { records, columns, pageSize, rowPerPage } = props;
+    const { records, columns, pageSize, rowPerPage, campoPesquisa, firstNameSearch } = props;
     const classes = styles();
     return (
         <>
             <div>
                 <DataGrid
+                //getRowId={(row) => row.agenciaID}
                     rows={records}
                     disableSelectionOnClick
                     columns={columns}
@@ -25,8 +26,15 @@ export default function UsableTable(props) {
                     autoHeight={true}
                     //"MuiDataGrid-viewport1"
                     disableExtendRowFullWidth={true}
-                    rowHeight={40}
-                    //addColumnsToStore = {true}
+                    rowHeight={35}
+                    // getRowId={(row) => row.no}
+                   // loading={loading}                  
+                      //addColumnsToStore = {true}
+                    filterModel={{
+                        items: [
+                            { columnField: campoPesquisa, operatorValue: 'contains', value: firstNameSearch},
+                        ],
+                      }}
                 >
 
 

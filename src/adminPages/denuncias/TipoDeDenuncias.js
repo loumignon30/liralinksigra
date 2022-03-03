@@ -29,7 +29,7 @@ const TipoDeDeNuncia = (props) => {
         id: 0,
         tipoDenuncia: '',
         sedeID: 0,
-        status: 'Active',
+        status: '1',
         lingua: '',
         abreviationLangue: ''
     }
@@ -51,11 +51,12 @@ const TipoDeDeNuncia = (props) => {
     const navigate = useNavigate();
     const [idSede, setIDSede] = useState(0);
     const [sede, setSede] = useState("");
+    const [sedeID, setSedeID] = useState("");
 
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
     const [popupTitle, setPpupTitle] = useState("");
-    const [count, setCount] = useState();
+    const [count, setCount] = useState(0);
     const [backGroundColor, setBackGroundColor] = useState("");
     const [color, setColor] = useState("");
     const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -77,7 +78,7 @@ const TipoDeDeNuncia = (props) => {
         
         window.scrollTo(0, 0); // open the page on top
         updateValuesOnOpen();
-        tableTipoDenunciaUpdateData();
+        tableTipoDenunciaUpdateData(currentLanguageCode, sedeID);
        // alert(currentLanguage["country_code"])
 
         codigoLinguaPesquisa();
@@ -140,7 +141,7 @@ const TipoDeDeNuncia = (props) => {
 
         if (values.id > 0) {
             TipoDenunciaServices.update(values.id, values).then(response => {
-                //  tableSedeData(); // update DataGrid Table used form universitySearchTable.js
+                tableTipoDenunciaUpdateData(currentLanguageCode)
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
@@ -155,8 +156,7 @@ const TipoDeDeNuncia = (props) => {
 
         } else {
             TipoDenunciaServices.create(values).then(response => {
-                // tableSedeData(); // update DataGrid Table used form universitySearchTable.js
-                //setNotificationShow(true);
+                tableTipoDenunciaUpdateData(currentLanguageCode)
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
@@ -176,7 +176,7 @@ const TipoDeDeNuncia = (props) => {
         if (validate()) {
             gavarTipoDenuncia(); // call save university
             ResetForm();
-            tableTipoDenunciaUpdateData();
+            //tableTipoDenunciaUpdateData(currentLanguageCode, sedeID);
             // close();
         }
     }
@@ -193,8 +193,9 @@ const TipoDeDeNuncia = (props) => {
         setOpenPopup(true);
     }
 
-    const tableTipoDenunciaUpdateData = () => {
-        childRef.current.getGetAllData(currentLanguageCode);  // saveImage() = method called
+    const tableTipoDenunciaUpdateData = (langue, sedeID1) => {
+       
+        childRef.current.getGetAllData(langue, sedeID1);  // saveImage() = method called
     }
 
     return (
@@ -323,7 +324,6 @@ const TipoDeDeNuncia = (props) => {
                         width="600px"
                         height="480px"
                     >
-
                         <SedeSearchTable
                             idDisplay={false}
                             codeDisplay={true}
@@ -335,8 +335,10 @@ const TipoDeDeNuncia = (props) => {
                             color={color}
                             sedeData={(id, code, sede) => {
                                 setSede(sede);
+                                setSedeID(id);
                                 values.sedeID = id
                                 setOpenPopup(false);
+                                tableTipoDenunciaUpdateData(currentLanguageCode, id);
                             }
                             }
                         />

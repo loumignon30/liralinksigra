@@ -19,7 +19,7 @@ const Login = () => {
     const { values, setValues, handleInputChange } = useForm(initialValues)  // useForm = useForm.js
     const [userData, setUserData] = useState({});
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
-    const [exampleState, setExampleState] = useState();
+    const [exampleState, setExampleState] = useState("");
     const navigate = useNavigate();
     const [data, setData] = useState([]);
 
@@ -48,7 +48,7 @@ const Login = () => {
     //                 setSedeCidade(info.cidade)
     //                 setSedePais(info.pais)
     //                 setSedeImageFile(info.imageName)
-                    
+
     //             })
     //         })
     //         .catch(e => {
@@ -57,9 +57,10 @@ const Login = () => {
     // }
 
     let testData = 0;
+    let nivelAcessoTest = 0;
 
     useEffect(() => {
-       // getGetAllData();
+        // getGetAllData();
     }, []);
 
     const userGetEmail = async () => {
@@ -71,25 +72,34 @@ const Login = () => {
                     UserLoginService.getUserEmail(values.email, values.password)
                         .then(response => {
                             response.data.map(info => {
+                                nivelAcessoTest = info.status;
                                 setUserSavedValue([
                                     {
-                                        "id": info.id,
-                                        "firstname": info.firstname,
-                                        "lastname": info.lastname,
-                                        "photofilename": info.photofilename,
-                                        // "sedeID": sedeID,
-                                        // "codeSede": codeSede,
-                                        // "nomeSede": nomeSede,
-                                        // "emailSede": emailSede,
-                                        // "sedeContacto": sedeContacto,
-                                        // "sedeEndereco": sedeEndereco,
-                                        // "sedeCidade": sedeCidade,
-                                        // "sedePais": sedePais,
-                                        // "sedeImageFile": sedeImageFile
+                                        id: info.id,
+                                        firstname: info.firstname,
+                                        lastname: info.lastname,
+                                        sexo: info.gender,
+                                        photofilename: info.photofilename,
+                                        nivelAcesso: info.role,
+                                        status: info.status,
+                                        sedeID: info.sedeID,
+                                        sede: info.userSede.sede,
+                                        email: info.email,
+                                        contacto: info.telephone,
+                                        endereco: info.address,
+                                        cidade: info.city,
+                                        pais: info.country,
+                                        sedeID_pesquisas: "",
+                                        sede_pesquisa: "",
+                                        agenciaID_pesquisa: "",
+                                        agencia_pesquisa: "",
+                                        provenienciaFormulario: ""
                                     }
                                 ])
                             })
+
                             navigate('/Home');
+
                         })
                         .catch(e => {
                             console.log(e);
@@ -106,6 +116,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         userGetEmail(); // 
+
         //ResetForm();
         //tableUpdateData();
         // if (validate()) {
@@ -115,7 +126,7 @@ const Login = () => {
     }
     return (
 
-       
+
 
         <div className='bodyLogin'>
 
@@ -125,9 +136,9 @@ const Login = () => {
                     className='loginImage'
                 />
             </div>
-           
-                <Form onSubmit={handleSubmit}>
-                
+
+            <Form onSubmit={handleSubmit}>
+
                 <div className="center">
 
                     <div>
@@ -166,8 +177,8 @@ const Login = () => {
                             onClick={handleSubmit}
                         />
                     </div>
-                    </div>
-                </Form>
+                </div>
+            </Form>
         </div>
     )
 }

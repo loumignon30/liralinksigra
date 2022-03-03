@@ -306,6 +306,10 @@ width: 80px;
 display: flex;
 justify-content: center;
 }
+.ButtonStatutDataGrid.Actif {
+  background-color: lightblue;
+  font-weight: 600;
+  }
 
 .ButtonStatutDataGrid.Active {
 background-color: lightblue;

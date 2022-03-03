@@ -25,15 +25,24 @@ const initialFValues = {
     cidade: '',
     pais: '',
     imageName: '',
-    status: 'Active'
+    status: '1'
 }
 
-const SedeEdit = (props) =>{
-  
+const SedeEdit = (props) => {
+
+    const { t } = useTranslation();
+
+
+    const getStatus = [
+        { id: '1', title: t('status_actif') },
+        { id: '2', title: t('status_inactive') },
+        { id: '3', title: t('status_pendente') },
+        { id: '4', title: t('status_apagado') }
+    ]
 
     const location = useLocation();
 
-        const { id, code, sede, email, contacto, endereco,
+    const { id, code, sede, email, contacto, endereco,
         cidade, pais, estatus, imageName,
         imageChangeFromOutSideURL } = location.state; // getting data from Edit link from UserSearchTable.js
 
@@ -42,7 +51,7 @@ const SedeEdit = (props) =>{
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [imageFileName, setImageFileName] = useState("");
-    
+
     const [codeEdit, setCode] = useState(location.state.code);
     const [sedeEdit, setSede] = useState(location.state.sede);
     const [emailEdit, setEmail] = useState(location.state.email);
@@ -52,9 +61,6 @@ const SedeEdit = (props) =>{
     const [paisEdit, setPais] = useState(location.state.pais);
     const [notificatinoShow, setNotificationShow] = useState(false);
     const navigate = useNavigate();
-
-    const { t } = useTranslation();
-
 
     const saveImageFromImageUpload = () => {
         childRef.current.imageChangeFromOutSide(imageChangeFromOutSideURL);  // saveImage() = method called
@@ -69,10 +75,10 @@ const SedeEdit = (props) =>{
     }, []);
 
     const getStateValuesFromUSerSearchTable = () => {
-        try{
+        try {
             setValues(location.state);
             saveImageFromImageUpload();
-        }catch(err) {
+        } catch (err) {
 
         }
     }
@@ -100,7 +106,6 @@ const SedeEdit = (props) =>{
             childRef.current.saveImage();  // saveImage() = method called
         }
     }
-
 
     return (
         <div className="utilisateur">
@@ -251,7 +256,7 @@ const SedeEdit = (props) =>{
                                     type="text"
                                 />
                             </div>
-                            
+
                             <div style={{ marginTop: "5px" }}>
                                 <label className="userLabel" htmlFor="status">{t('status')}</label>
                                 <Controls.Select
@@ -259,17 +264,18 @@ const SedeEdit = (props) =>{
                                     label="status"
                                     value={values.status}
                                     onChange={handleInputChange}
-                                    options={statusData.getStatus()}
-                                    className={"select-buttonLarge12"}
-                                    typeOfSelect={2}
+                                    options={getStatus}
+                                    typeOfSelect={1}
+                                    width="65%"
+                                    height="40px"
                                 />
                             </div>
 
                             <div className='userphoto'>
                                 <ImageUpLoad ref={childRef}
-                                margnLeft="0px"
-                                fotoTitulo={t('foto')}
-                                uploadDisplay={true} />
+                                    margnLeft="0px"
+                                    fotoTitulo={t('foto')}
+                                    uploadDisplay={true} />
                             </div>
 
                             <div>
@@ -284,8 +290,9 @@ const SedeEdit = (props) =>{
                                     text={t('button_pagina_anterior')}
                                     color="secondary"
                                     className="button"
-                                    onClick = {(e) => { 
-                                        navigate(-1)}}
+                                    onClick={(e) => {
+                                        navigate(-1)
+                                    }}
                                 />
                             </div>
                         </div>
@@ -295,11 +302,11 @@ const SedeEdit = (props) =>{
 
             </div>
 
-            {notificatinoShow?
-            <Notifications
-                notify={notify}
-                setNotify={setNotify}
-            />:null
+            {notificatinoShow ?
+                <Notifications
+                    notify={notify}
+                    setNotify={setNotify}
+                /> : null
             }
 
         </div>

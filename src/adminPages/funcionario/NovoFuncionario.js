@@ -3,6 +3,8 @@ import '../../App.css';
 import Notifications from '../../components/reusableComponents/Notifications';
 import { House, Image, Search } from '@mui/icons-material';
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom"
+
 import PageHeader from "../../components/reusableComponents/PageHeader";
 import Controls from '../../components/reusableComponents/Controls';
 import { useForm, Form } from '../../components/reusableComponents/useForm';
@@ -16,12 +18,16 @@ import FuncionarioSearchTable from "../funcionario/FuncionarioSearchTable";
 import DepartamentoSearchTable from "../departamento/DepartamentoSearchTable";
 import FuncaoSearchTable from "../funcao/FuncaoSearchTable";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
-import { useLocation } from "react-router-dom";
 import semfoto from "../../assets/images/semfoto.png";
 import { v4 as uuidv4 } from 'uuid';
 
-import { useTranslation } from "react-i18next";
+import SedeUtilizadorSearchTable from '../utilisador/SedeUtilizadorSearchTable';
 
+import { useTranslation } from "react-i18next";
+import AgenciaUtilizadorSearchTable from "../utilisador/AgenciaUtilizadorSearchTable";
+import { Button } from "@mui/material";
+
+import swal from 'sweetalert';
 
 const initialFValues = {
     id: 0,
@@ -34,7 +40,7 @@ const initialFValues = {
     funcao: '',
     departmento: '',
     dataamissao: null,
-    status: 'Active',
+    status: '1',
     imageName: '',
     observacao: '',
     sedeID: 0,
@@ -45,6 +51,16 @@ const initialFValues = {
 
 const NovoFuncionario = () => {
 
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+
+    const getStatus = [
+        { id: '1', title: t('status_actif') },
+        { id: '2', title: t('status_inactive') },
+        { id: '3', title: t('status_pendente') },
+        { id: '4', title: t('status_apagado') }
+    ]
+
     // notification with SnackBar
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' });
     const [openPopup, setOpenPopup] = useState(false);
@@ -53,7 +69,7 @@ const NovoFuncionario = () => {
     const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const childRefSideBar = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
-    const [slideImgCategory, setSlideImgCategory] = useState();
+    const [slideImgCategory, setSlideImgCategory] = useState("");
     const [sede, setSede] = useState("");
     const [agencia, setAgencia] = useState("");
     const [count, setCount] = useState(0);
@@ -65,7 +81,7 @@ const NovoFuncionario = () => {
     const [agenciaID, setAgenciaID] = useState(0);
     const [sedeID, setSedeID] = useState(0);
 
-    const location = useLocation();
+    const [deviceWidth, setDeviceWidth] = useState(window.screen.width);
 
     const [backGroundColor, setBackGroundColor] = useState("");
     const [color, setColor] = useState("");
@@ -73,9 +89,15 @@ const NovoFuncionario = () => {
     const [headerSubTitle, setHeaderSubTitle] = useState("");
     const [buttonTitle, setButtonTitle] = useState("");
     const [textReset, setTextReset] = useState("");
-    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
+    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState("");
+    const [userID, setUserID] = useState(0);
 
-    const { t } = useTranslation();
+    const [nivelAcesso, setNivelAcesso] = useState(0);
+
+    const [testExistCode, setExistCode] = useState(0);
+    const [provenienciaEdit, setProvenienciaEdit] = useState(0);
+
+    const location = useLocation();
 
     const saveImageFromImageUpload = () => {
         setImageFileName(childRef.current.fileName);
@@ -84,10 +106,14 @@ const NovoFuncionario = () => {
     }
 
     const updateValuesOnOpen = () => {
-        // userSavedValue.map(item => (
-        //     values.sedeID = item.sedeID,
-        //     setSede(item.nomeSede)
-        // ));
+        userSavedValue.map(item => (
+            values.userID = item.id,
+            setUserID(item.id),
+            setSedeID(item.sedeID),
+            setSede(item.sede),
+            values.sedeID = item.sedeID,
+            setNivelAcesso(item.nivelAcesso)
+        ));
     }
 
     const imageReset = () => {
@@ -100,7 +126,7 @@ const NovoFuncionario = () => {
 
         updateValuesOnOpen();
         getStateValuesFromSearchTable();
-    }, [t('header_title_funcionario_modificar')]);
+    }, [t('header_title_funcionario_modificar'), location.state]);
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -144,6 +170,8 @@ const NovoFuncionario = () => {
 
         if ((location.state) !== null) {
 
+            setProvenienciaEdit(1);
+
             setBackGroundColor("darkBlue");
             setColor("white");
             setHeaderTitle(t('header_title_funcionario_modificar'));
@@ -155,22 +183,25 @@ const NovoFuncionario = () => {
             setSede(location.state.sede);
             setAgencia(location.state.agencia)
             setSedeID(location.state.sedeID)
-            setAgenciaID(location.state.agenciaID)
+            setAgenciaID(location.state.agenciaId)
 
             setFuncao(location.state.funcao);
-            setDepartamento(location.state.departamento)
+            setDepartamento(location.state.departamento);
+
+            tableDepartamentoUpdateData1(location.state.sedeID, location.state.agenciaId)
 
             setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
             sendImageFromImageUpload(location.state.imageChangeFromOutSideURL);
 
 
         } else {
-            setBackGroundColor("darkGreen");
-            setColor("white");
-            setHeaderTitle(t('header_title_funcionario_novo'));
-            setHeaderSubTitle(t('header_subTitle_funcionario_novo'));
-            setButtonTitle(t('button_gravar'));
-            setTextReset(t('button_novo'));
+            ResetForm();
+            // setBackGroundColor("darkGreen");
+            // setColor("white");
+            // setHeaderTitle(t('header_title_funcionario_novo'));
+            // setHeaderSubTitle(t('header_subTitle_funcionario_novo'));
+            // setButtonTitle(t('button_gravar'));
+            // setTextReset(t('button_novo'));
         }
     }
 
@@ -199,18 +230,31 @@ const NovoFuncionario = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (validate()) {
+        FuncionarioService.getAll(sedeID, userID, "codigoPesquisa", values.code)
+            .then(response => {
 
-            if (values.sedeID === 0) {
-                values.sedeID = sedeID;
-            }
-            if (values.agenciaID === 0) {
-                values.agenciaID = agenciaID;
-            }
+                if (response.data.length > 0 && values.id == 0) {  // tester si le code exist
+                    return (swal(t('mensagem_erro_menu_atencao'), t('codeExiste_do_trabalhador_na_base_de_dasos'), "warning"));
+                }
+                else {
 
-            saveFuncionario(); // call save university
-            //ResetForm();
-        }
+                    if (validate()) {
+                        if (values.sedeID === 0) {
+                            values.sedeID = sedeID;
+                        }
+                        if (values.agenciaID === 0) {
+                            values.agenciaID = agenciaID;
+                        }
+
+                        saveFuncionario(); // call save university
+
+                        if ((location.state) === null) {  // reset quando é um novo funcionario
+                            ResetForm();
+                        }
+                    }
+                }
+
+            });
     }
 
     const tableFuncionarioUpdateData = () => {
@@ -218,12 +262,20 @@ const NovoFuncionario = () => {
     }
 
     const onclickSedePopup = () => {
-        setCount(1);
+        if (Number(nivelAcesso) !== 101) {
+            setCount(1);
+        } else {
+            setCount(5);
+        }
         setPpupTitle(t('lista_sede'));
         setOpenPopup(true);
     }
     const onclickAgenciaPopup = () => {
-        setCount(2);
+        if (Number(nivelAcesso) !== 101) {
+            setCount(2);
+        } else {
+            setCount(6);
+        }
         setPpupTitle(t('lista_agencia'));
         setOpenPopup(true);
     }
@@ -239,13 +291,17 @@ const NovoFuncionario = () => {
     }
 
     const saveFuncionario = () => {
+
         if (childRef.current.imageSelected) {  // save image only if selected
             childRef.current.getFuncionarioCode(values.code, "code");  // saveImage() = method called
             saveImageFromImageUpload();
         } else {
-            sendImageFromImageUpload(semfoto);  // enviar a imagem de sem foto
-            childRef.current.getFuncionarioCode(values.code, "code");  // saveImage() = method called
-            saveImageFromImageUpload();
+
+            if (values.id === 0) {
+                sendImageFromImageUpload(semfoto);  // enviar a imagem de sem foto
+                childRef.current.getFuncionarioCode(values.code, "code");  // saveImage() = method called
+                saveImageFromImageUpload();
+            }
         }
 
         if (values.id > 0) {
@@ -262,6 +318,7 @@ const NovoFuncionario = () => {
                     console.log(e)
                 });
         } else {
+
             FuncionarioService.create(values).then(response => {
                 tableDepartamentoUpdateData1(sedeID, agenciaID)
                 setNotify({
@@ -274,14 +331,19 @@ const NovoFuncionario = () => {
                 .catch(e => {
                     console.log(e)
                 });
+
+            //setExistCode(response.data.length);
+            // testCode(response.data.length)
+            //}
+
         }
     }
 
     const tableDepartamentoUpdateData1 = (sedeID1, agenciaID1) => {
-        if(sedeID1 > 0  && agenciaID1 > 0){
+        
+        if (sedeID1 > 0 && agenciaID1 > 0) {
             childRef2.current.getGetAllData(sedeID1, agenciaID1);  // saveImage() = method called
         }
-
     }
 
     return (
@@ -293,7 +355,6 @@ const NovoFuncionario = () => {
                 backGroundColor={backGroundColor}
                 color={color}>
             </PageHeader>
-
 
             <Form onSubmit={handleSubmit} autoComplete="off">
 
@@ -373,21 +434,18 @@ const NovoFuncionario = () => {
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="65%"
+                                width="40%"
                                 error={errors.email}
 
                             />
-                        </div>
 
-                        <div>
-                            <label className="inputLabel">{t('contacto')}</label>
                             <Controls.Input
                                 name="telefone"
                                 placeHolder={t('contacto')}
                                 value={values.telefone}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="65%"
+                                width="25%"
                                 error={errors.telefone}
                             />
                         </div>
@@ -423,27 +481,48 @@ const NovoFuncionario = () => {
                             />
                         </div>
 
-                    </div>
-                    <div className="newFaculty">
+                        <div>
+                            {location.state !== null ?
+                                <div style={{ marginTop: "5px" }}>
+                                    <label className="userLabel" htmlFor="status">{t('status')}</label>
+                                    <Controls.Select
+                                        name="status"
+                                        label="status"
+                                        value={values.status}
+                                        onChange={handleInputChange}
+                                        options={getStatus}
+                                        typeOfSelect={1}
+                                        width="65%"
+                                        height="40px"
+                                    // error={errors.status}
+                                    />
+                                </div> : null
+                            }
 
-                        <FuncionarioSearchTable ref={childRef2}
-                            idDisplay={false}
-                            codeDisplay={true}
-                            facultyDisplay={true}
-                            emailDisplay={false}
-                            deanDisplay={false}
-                            statusDiplay={false}
-                            actionsButtonDisplaySelect={false}
-                            actionsButtonDisplayEditDelete={false}
-                            backGroundColor={backGroundColor}
-                            sedeID={sedeID}
-                            agenciaID={agenciaID}
-                            color={color}
-                            pageSize={5}
-                            rowPerPage={5}
+                        </div>
 
-                        />
                     </div>
+                    {
+                        deviceWidth > 820 ?
+                            <div className="newFaculty">
+                                <FuncionarioSearchTable ref={childRef2}
+                                    idDisplay={false}
+                                    codeDisplay={true}
+                                    facultyDisplay={true}
+                                    emailDisplay={false}
+                                    deanDisplay={false}
+                                    statusDiplay={false}
+                                    actionsButtonDisplaySelect={false}
+                                    actionsButtonDisplayEditDelete={false}
+                                    backGroundColor={backGroundColor}
+                                    sedeID={sedeID}
+                                    agenciaID={agenciaID}
+                                    color={color}
+                                    pageSize={5}
+                                    rowPerPage={5}
+                                />
+                            </div> : null
+                    }
 
                 </div>
 
@@ -460,47 +539,57 @@ const NovoFuncionario = () => {
 
                     </div>
 
-
-
                     <div className="newFaculty">
                         <Controls.Buttons
                             type="submit"
                             text={t('button_gravar')}
                             className="button"
                         />
-                        <Controls.Buttons
-                            type="button"
-                            text={t('button_limpar')}
-                            color="secondary"
-                            className="button"
-                            onClick={ResetForm}
-                        />
+                        {location.state !== null ?
+                            <Controls.Buttons
+                                type="button"
+                                text={t('button_pagina_anterior')}
+                                color="secondary"
+                                className="button"
+                                onClick={() => {
+
+                                    setUserSavedValue(prevState => {
+                                        prevState[0].sedeID_pesquisas = sedeID
+                                        prevState[0].sede_pesquisa = sede
+                                        prevState[0].agenciaID_pesquisa = agenciaID
+                                        prevState[0].agencia_pesquisa = agencia
+                                        prevState[0].provenienciaFormulario = "EditFuncionario"
+                                        return [...prevState]
+                                    })
+
+                                    // setUserSavedValue([
+                                    //     ...userSavedValue,
+                                    //     {
+                                    //         sedeID_pesquisas: sedeID,
+                                    //         sede_pesquisa: sede,
+                                    //         agenciaID_pesquisa: agenciaID,
+                                    //         agencia_pesquisa: agencia
+                                    //     }
+                                    // ]);
+                                    navigate(-1)
+                                }}
+                            /> :
+
+                            <Controls.Buttons
+                                type="button"
+                                text={t('button_limpar')}
+                                color="secondary"
+                                className="button"
+                                onClick={ResetForm}
+                            />
+                        }
                     </div>
 
                 </div>
 
             </Form>
 
-            {/* <div className="faculty-datagrid-style">
-                <div style={{ height: '230px', width: '100%', marginTop: "0px" }}>
 
-                    <FuncionarioSearchTable ref={childRef2}
-                        idDisplay={false}
-                        codeDisplay={true}
-                        facultyDisplay={true}
-                        emailDisplay={false}
-                        deanDisplay={false}
-                        statusDiplay={false}
-                        actionsButtonDisplaySelect={false}
-                        actionsButtonDisplayEditDelete={false}
-                        backGroundColor={backGroundColor}
-                        color={color}
-                        pageSize={5}
-                        rowPerPage={5}
-
-                    />
-                </div>
-            </div> */}
             {notificatinoShow ?
                 <Notifications
                     notify={notify}
@@ -516,19 +605,22 @@ const NovoFuncionario = () => {
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="550px"
-                        height="500px"
+                        width="650px"
+                        height="520px"
+                        marginTop="10px"
                     >
-
-                        <SedeSearchTable
+                        <SedeUtilizadorSearchTable
                             idDisplay="true"
                             codeDisplay={false}
+                            statusDisplay={true}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
                             pageSize={5}
                             rowPerPage={5}
                             backGroundColor={backGroundColor}
                             color={color}
+                            sedeID={sedeID}
+                            userID={userID}
                             sedeData={(id, code, sede) => {
                                 setSede(sede);
                                 values.sedeID = id
@@ -554,18 +646,20 @@ const NovoFuncionario = () => {
                         title={popupTitle}
                         width="640px"
                         height="550px"
+                        marginTop="10px"
                     >
-                        <AgenciaSearchTable
+                        <AgenciaUtilizadorSearchTable
                             idDisplay={true}
                             codeDisplay={true}
-                            statusDiplay={false}
+                            statusDisplay={true}
                             actionsButtonDisplaySelect={true}
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor={backGroundColor}
                             color={color}
-                            pageSize={5}
-                            rowPerPage={5}
-                            idSede = {sedeID}
+                            pageSize={7}
+                            rowPerPage={7}
+                            sedeID={sedeID}
+                            userID={userID}
                             agenciaData={(id, code, agencia) => {
                                 values.agenciaID = id;
                                 setAgencia(agencia);
@@ -589,17 +683,19 @@ const NovoFuncionario = () => {
                         title={popupTitle}
                         width="640px"
                         height="550px"
+                        marginTop="10px"
                     >
 
                         <DepartamentoSearchTable
                             idDisplay={true}
                             codeDisplay={false}
+                            statusDisplay={true}
                             actionsButtonDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={3}
-                            rowPerPage={3}
-                            sedeID = {sedeID} 
-                            agenciaID = {agenciaID}
+                            pageSize={6}
+                            rowPerPage={6}
+                            sedeID={sedeID}
+                            agenciaID={agenciaID}
                             backGroundColor={backGroundColor}
                             departamentoData={(id, code, departamento) => {
                                 setDepartamento(departamento);
@@ -621,18 +717,20 @@ const NovoFuncionario = () => {
                         title={popupTitle}
                         width="640px"
                         height="550px"
+                        marginTop="10px"
                     >
 
                         <FuncaoSearchTable
                             idDisplay={false}
                             codeDisplay={true}
+                            statusDisplay={true}
                             actionsButtonDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={3}
-                            rowPerPage={3}
+                            pageSize={6}
+                            rowPerPage={6}
                             backGroundColor="darkGreen"
-                            sedeID = {sedeID} 
-                            agenciaID = {agenciaID}
+                            sedeID={sedeID}
+                            agenciaID={agenciaID}
                             funcaoData={(id, code, funcao) => {
                                 setFuncao(funcao);
                                 values.funcaoID = id;
@@ -643,6 +741,79 @@ const NovoFuncionario = () => {
                         />
                     </Popup> : ""
             }
+
+            {
+                count === 5 ?
+                    <Popup
+                        openPopup={openPopup}
+                        setOpenPopup={setOpenPopup}
+                        buttonColor="secondary"
+                        title={popupTitle}
+                        width="600px"
+                        height="480px"
+                        marginTop="10px"
+                    >
+                        <SedeSearchTable
+                            idDisplay={false}
+                            codeDisplay={true}
+                            statusDisplay={true}
+                            actionsButtonSelectDisplay={true}
+                            actionsButtonDisplayEditDelete={false}
+                            pageSize={7}
+                            rowPerPage={7}
+                            backGroundColor={backGroundColor}
+                            color={color}
+                            // userID={userID2}
+                            // sedeID={sedeID}
+                            sedeData={(id, code, sede) => {
+                                setSede(sede);
+                                setSedeID(id)
+                                values.sedeID = id
+                                setOpenPopup(false);
+                               // tableFuncionarioUpdateData(id);
+                                setAgencia("");
+                                //tableDepartamentoUpdateData(id);
+                            }
+                            }
+                        />
+                    </Popup> : null
+            }
+
+            {
+                count === 6 ?
+                    <Popup
+                        openPopup={openPopup}
+                        setOpenPopup={setOpenPopup}
+                        buttonColor="secondary"
+                        title={popupTitle}
+                        width="770px"
+                        height="550px"
+                        marginTop="10px"
+                    >
+                        <AgenciaSearchTable
+                            idDisplay={false}
+                            codeDisplay={true}
+                            emailDisplay={false}
+                            statusDisplay={true}
+                            actionsButtonDisplaySelect={true}
+                            actionsButtonDisplayEditDelete={false}
+                            backGroundColor={backGroundColor}
+                            idSede={sedeID}
+                            userID={userID}
+                            color={color}
+                            pageSize={5}
+                            rowPerPage={5}
+                            agenciaData={(id, code, agencia) => {
+                                values.agenciaID = id;
+                                setAgencia(agencia);
+                                setAgenciaID(id)
+                                setOpenPopup(false);
+                                tableDepartamentoUpdateData1(sedeID, id)
+                            }}
+                        />
+                    </Popup> : null
+            }
+
 
 
         </div>

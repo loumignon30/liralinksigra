@@ -1,6 +1,7 @@
 import { Delete, Done } from '@mui/icons-material';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import UsableTable from '../../components/reusableComponents/UsableTable';
+import useStylesSearchTable from '../../components/reusableComponents/SearchTableStyle';
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
@@ -53,8 +54,13 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
             objectFit: "cover",
             marginRight: "10px"
         }
-
     });
+
+    const propsTableGrid = {  // grid style: SearchTableStyle.js
+        backGroundColor: props.backGroundColor,
+        color: props.color
+    }
+    const classes2 = useStylesSearchTable(propsTableGrid);
 
     const classes = useStyles();
     const { t } = useTranslation();
@@ -64,14 +70,14 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
     const { idDisplay, codeDisplay, actionsButtonDisplay,
         actionsButtonDisplayEditDelete, statusDisplay,
         pageSize, rowPerPage,
-    sedeID, agenciaID } = props;
+        sedeID, agenciaID } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
 
     useEffect(() => {
 
-        getGetAllData(sedeID, agenciaID);
+       getGetAllData(sedeID, agenciaID);
         setUrl(urlImage());
 
     }, []);
@@ -88,7 +94,7 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
 
     const getGetAllData = (sedeID1, agenciaID1) => {
 
-        DepartamentoServices.getAll(sedeID1, agenciaID1)
+        DepartamentoServices.getAll(sedeID1, agenciaID1, "geral")
             .then(response => {
                 setData(response.data)
             })
@@ -97,13 +103,13 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
             });
     }
     const columns = [
-        idDisplay?
-        { field: 'id', headerName: 'ID', width: 100, headerClassName: classes.paper }:
-        { field: 'id', headerName: 'ID', hide: { idDisplay }, width: 100, headerClassName: classes.paper },
+        idDisplay ?
+            { field: 'id', headerName: 'ID', width: 100, headerClassName: classes.paper } :
+            { field: 'id', headerName: 'ID', hide: { idDisplay }, width: 100, headerClassName: classes.paper },
 
-        codeDisplay?
-        { field: 'code', headerName: t('code'), flex:1, headerClassName: classes.paper }:
-        { field: 'code', headerName: t('code'), hide: { codeDisplay }, headerClassName: classes.paper },
+        codeDisplay ?
+            { field: 'code', headerName: t('code'), flex: 1, headerClassName: classes.paper } :
+            { field: 'code', headerName: t('code'), hide: { codeDisplay }, headerClassName: classes.paper },
 
 
         { field: 'departamento', headerName: t('departamento'), flex: 3, headerClassName: classes.paper },
@@ -114,8 +120,21 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
                 renderCell: (type) => {
                     return (
                         <>
-                            <button className={"ButtonStatutDataGrid " + type.row.status}>{type.row.status}</button>
-                        </>
+                            <button className={type.row.status == "1" ?
+                                classes2.ButtonStatutDataGrid_actif :
+                                type.row.status == "2" ?
+                                    classes2.ButtonStatutDataGrid_inactif :
+                                    type.row.status == "3" ?
+                                        classes2.ButtonStatutDataGrid_pendent :
+                                        type.row.status == "4" ?
+                                            classes2.ButtonStatutDataGrid_deleted : ""}
+                            >
+                                {type.row.status == "1" ? t('status_actif') :
+                                    type.row.status == "2" ? t('status_inactive') :
+                                        type.row.status == "3" ? t('status_pendente') :
+                                            type.row.status == "4" ? t('status_apagado') :
+                                                ""}
+                            </button>                        </>
                     )
                 }
             } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
@@ -140,7 +159,7 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action2', headerName: t('action'), flex:1, headerClassName: classes.paper,
+                field: 'action2', headerName: t('action'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -152,12 +171,12 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
                                     observacao: params.row.observacao,
                                     sedeID: params.row.sedeDepartamento.id,
                                     sede: params.row.sedeDepartamento.sede,
-                                    agenciaID : params.row.agenciaDepsrtamento.id,
+                                    agenciaID: params.row.agenciaDepsrtamento.id,
                                     agencia: params.row.agenciaDepsrtamento.nome,
                                     status: params.row.status,
-                    
+
                                 }}>
-                                <button className={classes.editButton}>Edit</button>
+                                <button className={classes.editButton}>{t('edit')}</button>
                             </Link>
 
                             <Delete className={classes.deleleButton}

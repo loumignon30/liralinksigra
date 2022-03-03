@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import "./agencia.css";
 import '../../App.css'
 import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog"
@@ -11,6 +11,8 @@ import { Search } from '@mui/icons-material';
 import { useForm } from '../../components/reusableComponents/useForm';
 import SedeSearchTable from '../sede/SedeSearchTable';
 import Popup from '../../components/reusableComponents/Popup';
+import { InputAdornment } from '@mui/material';
+import { UserLoggedContext } from '../utilisador/UserLoggedContext';
 
 const ListagemAgencias = () => {
 
@@ -18,16 +20,46 @@ const ListagemAgencias = () => {
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [sede, setSede] = useState("");
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+    const childRefSede = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
 
     const [openPopup, setOpenPopup] = useState(false);
     const [popupTitle, setPpupTitle] = useState("");
-    
+    const [sedeID, setSedeID] = useState(0);
+    const [sedePesquisa, setSedePesquisa] = useState("");    
+    const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
+
+
     const { t } = useTranslation();
 
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
+        updateValuesOnOpen();
     }, []);
+
+    const updateValuesOnOpen = () => {
+
+        let testEdit  = 0;
+        let sedeIDP = 0;
+        let sedeIDP_text = "";
+    
+        userSavedValue.map(item => (
+            setSedeID(item.sedeID),
+            setSede(item.sede),
+
+            testEdit = item.provenienciaFormulario,
+            sedeIDP = item.sedeID_pesquisas,
+            sedeIDP_text = item.sede_pesquisa
+        ));
+
+        if(testEdit ==="EditAgencia")
+        {
+            setSedeID(sedeIDP);
+            setSede(sedeIDP_text);
+            childRef.current.getGetAllData(sedeIDP);  // saveImage() = method called
+        }
+    }
+
 
     const onclickAgenciaPopup = () => {
         setPpupTitle(t('lista_sede'));
@@ -36,6 +68,11 @@ const ListagemAgencias = () => {
 
     const tableAgenciaUpdateData = (sedeID) => {
         childRef.current.getGetAllData(sedeID);  // saveImage() = method called
+    }
+
+    const sedeSearchToToDataGrid = (e) => {
+        setSedePesquisa(e.target.value)
+        childRefSede.current.sedSearch(e.target.value); // search the firstname
     }
 
 
@@ -62,7 +99,7 @@ const ListagemAgencias = () => {
                 <AgenciaSearchTable ref={childRef}
                     idDisplay={false}
                     codeDisplay={true}
-                    actionsButtonDisplaySelect={true}
+                    actionsButtonDisplaySelect={false}
                     actionsButtonDisplayEditDelete={true}
                     emailDisplay={false}
                     telefoneDislay={true}
@@ -71,8 +108,8 @@ const ListagemAgencias = () => {
                     statusDisplay={true}
                     backGroundColor="darkBlue"
                     color="white"
-                    pageSize={15}
-                    rowPerPage={15} />
+                    pageSize={10}
+                    rowPerPage={10} />
             </div>
 
             <Popup
@@ -80,22 +117,45 @@ const ListagemAgencias = () => {
                 setOpenPopup={setOpenPopup}
                 //pageHeader={PopupHeaderUniversity()}
                 buttonColor="secondary"
-                width="550px"
+                width="650px"
                 height="520px"
+                marginTop="10px"
                 title={popupTitle}>
-                <SedeSearchTable
+
+                <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+                    <label className="userLabel">{t('Recherche')}</label>
+                    <Controls.Input
+                        name="sedePesquisa"
+                        type="text"
+                        value={sedePesquisa}
+                        placeHolder={t('sede')}
+                        width="55%"
+                        marginLeft="-20px"
+                        onChange={sedeSearchToToDataGrid}
+                        InputProps={{
+                            startAdornment: (<InputAdornment position='start'>
+                                <Search />
+                            </InputAdornment>)
+                        }}
+                    />
+                </div>
+                <SedeSearchTable ref={childRefSede} 
                     idDisplay={true}
                     codeDisplay={false}
+                    statusDisplay={true}
                     actionsButtonSelectDisplay={true} // monstrar o campo = true
                     actionsButtonDisplayEditDelete={false}
-                    pageSize={5}
-                    rowPerPage={5}
+                    pageSize={7}
+                    rowPerPage={7}
                     backGroundColor="darkBlue"
                     color="white"
                     sedeData={(id, code, sede) => {
                         setSede(sede);
+                        setSedeID(id);
                         setOpenPopup(false);
                         tableAgenciaUpdateData(id);
+                        setSedePesquisa("")
+
                     }
                     }
                 />

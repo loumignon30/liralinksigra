@@ -7,7 +7,8 @@ export default function Buttons(props) {
     const { text, size, color, variant, onClick, classNameB, ...other } = props  // ... = other properties    
 
     return (
-        <MButton style={{margin:'12px', textTransform:'capitalize', backgroundColor: "black !important"}}
+        <MButton style={{margin:'12px', textTransform:'capitalize', 
+        backgroundColor: "black !important"}}
             variant={variant || "contained"}
             size={size  || "large"}
             text={text}

@@ -18,7 +18,6 @@
      "button_limpar": "واضح",
      "button_pagina_anterior": "رجوع",
 
-
      "sair": "أغلق",
      "agencia": "وكالة",
      "lista_agencia": "قائمة الوكالة",
@@ -32,8 +31,6 @@
      "sedeEdit_editarDados_text": "تعديل المقر",
      "sedeEdit_informacaoSede_text": "معلومات المقر",
      "sedeEdit_contactSede_text": "الاتصال بالمقر",
-
-     
 
      "data": "تاريخ",
      "hora": "ساعة",
@@ -54,15 +51,31 @@
      "sexo_masculino": "ذكر",
      "sexo_feminino": "انثي",
      "sexo_outros": "الاخرين",
+     "edit": "حرر",
+     "Recherche": "بحث",
+     "total_employes": "إجمالي العمال",
+     "resumo": "موجز حسب المقر",
 
      "role_administrador": "مسؤول",
     "role_Funcionario": "الموظف",
     "role_utilizador": "المستخدم ",
+    "role_super_user": "خالق",
+
+    "status_actif": "أكتيف",
+    "status_inactive": "غير نشط",
+    "status_pendente": "بندنتي",
+    "status_apagado": "محذوف",
 
      "denunciante": "اسم صاحب الشكوى",
      "tipo_denuncia": "نوع الشكوى",
      "queixa": "شكوى",
      "queixaPlaceOrder": "كتابة الشكوى ضد الموظف",
+
+     "AfetacaoGridView": "المقاطعة",
+
+     "codeExiste_do_trabalhador_na_base_de_dasos": "التعليمات البرمجية التي تم إدخالها موجودة في قاعدة البيانات",
+
+     "Email_Existe_do_usuario_na_base_de_dasos": "البريد الإلكتروني الذي تم إدخاله موجود في قاعدة البيانات مع مستخدم آخر",
 
      "header_title_sede": "مقر الشركة الجديد",
      "header_subTitle_sede": "حفظ مقر الشركة الجديدة",
@@ -96,6 +109,10 @@
      "header_subTitle_denuncia_novo": "تسجيل شكوى ضد عامل",
      "denunciaNumeroPlaceOrder": "إدخال كود الموظف",
 
+     "header_title_AfectacaoSede_Agencia": "إضافة المقر والوكالة",
+    "header_subTitle_AfectacaoSede_Agencia": "نموذج لتخصيص المقر والوكالات لمستخدمي البرمجيات",
+
+
      "header_title_tipo_denuncia_gravar": "تسجيل نوع الشكوى",
     "header_subTitle_tipo_denuncia_gravar": "نوع نموذج تسجيل الشكوى",
 
@@ -112,6 +129,10 @@
      "agencia_menu": "وكالة",
      "listagem_agencia_menu": "قائمة الوكالات",
      "provincias_menu": "المقاطعات",
+
+     "utilizador_afectacao_sede_agencia": "Aمحافظة المقاطعات والوكالة",
+
+
      "novo_usuario_menu": "أوسواريو الجديدة",
      "listagem_usuario_menu": "قائمة المستخدمين",
      "listagem_departemento_menu": "قائمة الأقسام",
@@ -133,6 +154,9 @@
      "mensagem_denuncia_comparado_com_o_mes_passado": "مقارنة بالشهر الماضي",
      "mensagem_denuncia_comparado_com_o_ano_passado": "مقارنة بالعام الماضي",
      "mensagem_analise_denuncia_home_page": "تحليل الشكاوى",
+
+     "mensagem_erro_menu_administrador": "ليس لديك مستوى وصول المسؤول!",
+     "mensagem_erro_menu_atencao": "تحذير",
 
      "departamentos_menu": "الادارات",
      "Novo_departamento_menu": "قسم جديد",
@@ -162,6 +186,17 @@
      "denucia_por_agencia_menu": "تقييم الشكاوى",
 
      "total_denuncias": "مجموع الشكاوى",
+     "header_subTitle_Listagem_denuncia": "نموذج معاينة الشكاوى",
+
+
+     "estatistica_grafica_por_sede": "مخطط المقر",
+    "estatistica_grafica_por_Agencia": "مخطط الوكالة",
+    "estatistica_resumo_denuncia": "الشكاوى الموجزة",
+    "estatistica_denuncia_nao_tratadas": "الشكاوى التي تم حلها",
+    "estatistica_denuncia_tratadas": "Uالشكاوى غير المجهزة",
+    "estatistica_header": "الاحصاءات",
+    "estatistica_sub_header": "الإحصاءات السنوية",
+    "grafique_plaine_sidebar_menu": "شكاوى جرافيك",
 
      "janeiro": " ْيَنَايِر",
     "fevereiro": "  ْفَبْرَايِر",

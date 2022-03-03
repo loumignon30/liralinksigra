@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import "./sedeEdit.css"
+import "./agencia.css"
 import {
     PermIdentity, CalendarViewDayTwoTone, Phone,
     Email, House, Publish
@@ -12,6 +12,8 @@ import * as statusData from "../../services/admin/StatusData";
 import SedeService from '../../services/admin/Sede.services';
 import Notifications from '../../components/reusableComponents/Notifications';
 
+import { useTranslation } from "react-i18next";
+
 const initialFValues = {
     id: 0,
     code: '',
@@ -22,11 +24,12 @@ const initialFValues = {
     cidade: '',
     pais: '',
     imageName: '',
-    status: 'Active'
+    status: '1'
 }
 
 const AgenciaEdit = (props) =>{
   
+    const { t } = useTranslation();
 
     const location = useLocation();
 
@@ -40,7 +43,7 @@ const AgenciaEdit = (props) =>{
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [imageFileName, setImageFileName] = useState("");
     
-    const [codeEdit, setCode] = useState(location.state.code);
+    const [codeEdit, setCode] = useState("");
     const [sedeEdit, setSede] = useState(location.state.sede);
     const [emailEdit, setEmail] = useState(location.state.email);
     const [contactoEdit, setContacto] = useState(location.state.contacto);
@@ -48,6 +51,7 @@ const AgenciaEdit = (props) =>{
     const [cidadeEdit, setCidade] = useState(location.state.cidade);
     const [paisEdit, setPais] = useState(location.state.pais);
 
+    const [notificatinoShow, setNotificationShow] = useState(false);
 
     const saveImageFromImageUpload = () => {
         childRef.current.imageChangeFromOutSide(imageChangeFromOutSideURL);  // saveImage() = method called
@@ -55,7 +59,7 @@ const AgenciaEdit = (props) =>{
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
-        getStateValuesFromUSerSearchTable();
+       // getStateValuesFromUSerSearchTable();
 
         //values.firstname= fname;
 

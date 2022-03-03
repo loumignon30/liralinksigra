@@ -12,8 +12,9 @@ import Popup from "../../components/reusableComponents/Popup";
 import AgenciaService from "../../services/admin/Agencia.service";
 import ImageUpLoad from "../../components/reusableComponents/ImageUpLoad";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { InputAdornment } from "@mui/material";
 
 const initialFValues = {
     id: 0,
@@ -25,12 +26,21 @@ const initialFValues = {
     cidade: "",
     pais: "",
     nomeRepresentante: '',
-    status: 'Active',
+    status: '1',
     imageName: '',
     sedeID: 0,
 }
 
 const Agencia = () => {
+
+    const { t } = useTranslation();
+
+    const getStatus = [
+        { id: '1', title: t('status_actif') },
+        { id: '2', title: t('status_inactive') },
+        { id: '3', title: t('status_pendente') },
+        { id: '4', title: t('status_apagado') }
+    ]
 
     // notification with SnackBar
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' });
@@ -40,8 +50,13 @@ const Agencia = () => {
     const childRef2 = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
 
-    //const [slideImgCategory, setSlideImgCategory] = useState();
+    const childRefSede = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+    const navigate = useNavigate();
+
+    //const [slideImgCategory, setSlideImgCategory] = useState("");
     const [sede, setSede] = useState("");
+    const [sedeID, setSedeID] = useState("");
+
     const [notificatinoShow, setNotificationShow] = useState(false);
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
     const location = useLocation();
@@ -50,10 +65,11 @@ const Agencia = () => {
     const [color, setColor] = useState("");
     const [headerTitle, setHeaderTitle] = useState("");
     const [headerSubTitle, setHeaderSubTitle] = useState("");
-    const [buttonTitle, setButtonTitle] = useState();
-    const [textReset, setTextReset] = useState();
+    const [buttonTitle, setButtonTitle] = useState("");
+    const [textReset, setTextReset] = useState("");
+    const [sedePesquisa, setSedePesquisa] = useState("");    
 
-    const { t } = useTranslation();
+    const [deviceWidth, setDeviceWidth] = useState(window.screen.width);
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
@@ -62,7 +78,10 @@ const Agencia = () => {
         getStateValuesFromSearchTable();
         updateValuesOnOpen();  // useContext
 
-    }, [t('sede')]);
+        // alert(window.screen.width);
+        // console.log(1);
+
+    }, [t, location.state]);
 
     // function for validating form
     const validate = (fieldValues = values) => {
@@ -115,21 +134,20 @@ const Agencia = () => {
             setHeaderSubTitle(t('header_subTitle_agence_modificar'));
             setButtonTitle(t('button_modificar'));
             setTextReset(t('button_novo'));
-
+            setSedeID(location.state.sedeID)
+            setSede(location.state.sede)
             setValues(location.state);
-
-            //setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
-            //sendImageFromImageUpload(location.state.imageChangeFromOutSideURL);
-
+            tableAgenciaUpdateData(location.state.sedeID);
 
         } else {
-            setBackGroundColor("darkGreen");
-            setColor("white");
-            setHeaderTitle(t('header_title_agence_novo'));
-            setHeaderSubTitle(t('header_subTitle_agence_novo'));
-            setButtonTitle(t('button_gravar'));
-            setTextReset("Limpar");
-            setTextReset(t('button_limpar'));
+            ResetForm();
+            // setBackGroundColor("darkGreen");
+            // setColor("white");
+            // setHeaderTitle(t('header_title_agence_novo'));
+            // setHeaderSubTitle(t('header_subTitle_agence_novo'));
+            // setButtonTitle(t('button_gravar'));
+            // setTextReset("Limpar");
+            // setTextReset(t('button_limpar'));
         }
     }
 
@@ -139,8 +157,11 @@ const Agencia = () => {
 
     const updateValuesOnOpen = () => {
         // userSavedValue.map(item => (
-        //     values.sedeID = item.sedeID,
-        //     setSede(item.nomeSede)
+        // values.userID = item.id,
+        // setUserID(item.id),
+        //(item.sedeID),
+        //setSede(item.sede),
+        //values.sedeID = item.sedeID
         // ));
     }
 
@@ -183,14 +204,16 @@ const Agencia = () => {
         e.preventDefault();
         if (validate()) {
             saveAgencia(); // call save university
-            ResetForm();
+            if ((location.state) === null) {  // reset quando é um novo funcionario
+                ResetForm();
+            }
         }
 
     }
 
-    const tableAgenciaUpdateData = () => {
+    const tableAgenciaUpdateData = (sedeID1) => {
         //childRef2.current.test3();
-        childRef2.current.getGetAllData(values.sedeID);  // saveImage() = method called
+        childRef2.current.getGetAllData(sedeID1);  // saveImage() = method called
     }
 
     const onclickUniversityPopup = () => {
@@ -205,7 +228,7 @@ const Agencia = () => {
 
         if (values.id > 0) {
             AgenciaService.update(values.id, values).then(response => {
-                tableAgenciaUpdateData(); // update Faculty Data on FacultySearchTable.js
+                tableAgenciaUpdateData(sedeID); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_modificar_Nova_Agencia'),
@@ -218,7 +241,7 @@ const Agencia = () => {
                 });
         } else {
             AgenciaService.create(values).then(response => {
-                tableAgenciaUpdateData(); // update Faculty Data on FacultySearchTable.js
+                tableAgenciaUpdateData(sedeID); // update Faculty Data on FacultySearchTable.js
                 setNotify({
                     isOpen: true,
                     message: t('mensagem_Gravar_Nova_Agencia'),
@@ -242,6 +265,11 @@ const Agencia = () => {
     }
     const imageAgenciaDisplay = (image) => {
         childRef.current.imageChangeFromOutSide(image);  // saveImage() = method called
+    }
+
+    const sedeSearchToToDataGrid = (e) => {
+        setSedePesquisa(e.target.value)
+        childRefSede.current.sedSearch(e.target.value); // search the firstname
     }
 
     return (
@@ -336,10 +364,11 @@ const Agencia = () => {
                                 value={values.email}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="40%"
+                                width="42%"
+                                // width="40%"
                                 error={errors.email}
                             />
-                        
+
                             {/* <label className="inputLabel">{t('contacto')}</label> */}
                             <Controls.Input
                                 name="telefone"
@@ -347,7 +376,7 @@ const Agencia = () => {
                                 value={values.telefone}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="25%"
+                                width="23%"
                                 error={errors.telefone}
                             />
                         </div>
@@ -360,10 +389,10 @@ const Agencia = () => {
                                 value={values.cidade}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="33%"
+                                width="42%"
                                 error={errors.cidade}
                             />
-                        
+
                             {/* <label className="inputLabel">{t('pais')}</label> */}
                             <Controls.Input
                                 name="pais"
@@ -371,81 +400,130 @@ const Agencia = () => {
                                 value={values.pais}
                                 onChange={handleInputChange}
                                 type="text"
-                                width="32%"
+                                width="23%"
                                 error={errors.pais}
                             />
                         </div>
 
+                        {location.state !== null ?
+                            <div style={{ marginTop: "5px" }}>
+                                <label className="userLabel" htmlFor="status">{t('status')}</label>
+                                <Controls.Select
+                                    name="status"
+                                    label="status"
+                                    value={values.status}
+                                    onChange={handleInputChange}
+                                    options={getStatus}
+                                    typeOfSelect={1}
+                                    width="65%"
+                                    height="40px"
+                                // error={errors.status}
+                                />
+                            </div> : null
+                        }
                     </div>
-                    <div className="newFaculty">
-                        <AgenciaSearchTable ref={childRef2}
-                            idDisplay={true}
-                            codeDisplay={true}
-                            emailDisplay={false}
-                            statusDiplay={false}
-                            actionsButtonDisplaySelect={false}
-                            actionsButtonDisplayEditDelete={false}
-                            backGroundColor={backGroundColor}
-                            color={color}
-                            pageSize={5}
-                            rowPerPage={5}
-                            editClick={(id, code, nome, endereco, email, telefone, cidade,
-                                pais, nomeRepresentante, status, imageChangeFromOutSideURL,
-                                imageName
-                            ) => {
-                                values.id = id
-                                values.code = code
-                                values.nome = nome
-                                values.endereco = endereco
-                                values.email = email
-                                values.telefone = telefone
-                                values.cidade = cidade
-                                values.pais = pais
-                                values.nomeRepresentante = nomeRepresentante
-                                values.status = status
-                                values.imageName = imageName
+                    {
+                        deviceWidth > 820 ?
 
-                                setImageFileName(imageName)
-                                imageAgenciaDisplay(imageChangeFromOutSideURL)
-                                setOpenPopup(false);
-                                tableAgenciaUpdateData(id);
+                            <div className="newFaculty">
+                                <AgenciaSearchTable ref={childRef2}
+                                    idDisplay={true}
+                                    codeDisplay={true}
+                                    emailDisplay={false}
+                                    statusDiplay={false}
+                                    actionsButtonDisplaySelect={false}
+                                    actionsButtonDisplayEditDelete={false}
+                                    backGroundColor={backGroundColor}
+                                    color={color}
+                                    pageSize={5}
+                                    rowPerPage={5}
+                                    //idSede={sedeID}
+                                    editClick={(id, code, nome, endereco, email, telefone, cidade,
+                                        pais, nomeRepresentante, status, imageChangeFromOutSideURL,
+                                        imageName
+                                    ) => {
+                                        values.id = id
+                                        values.code = code
+                                        values.nome = nome
+                                        values.endereco = endereco
+                                        values.email = email
+                                        values.telefone = telefone
+                                        values.cidade = cidade
+                                        values.pais = pais
+                                        values.nomeRepresentante = nomeRepresentante
+                                        values.status = status
+                                        values.imageName = imageName
 
-                                editCliqued();  // color 
-                            }
-                            }
+                                        setImageFileName(imageName)
+                                        imageAgenciaDisplay(imageChangeFromOutSideURL)
+                                        setOpenPopup(false);
+                                        tableAgenciaUpdateData(id);
 
-                        />
-                    </div>
+                                        editCliqued();  // color 
+                                    }
+                                    }
+
+                                />
+                            </div> : null
+                    }
 
                 </div>
 
                 <div className="facultyItemContainer">
 
+                    {
+                        deviceWidth > 800 ?
+
+                            <div className="newFaculty">
+
+                            </div> : null
+                    }
+
                     <div className="newFaculty">
-
-
-
-                    </div>
-
-                    <div className="newFaculty">
+                        
+                    {((location.state) === null) ?
                         <Controls.Buttons
                             type="submit"
-                            text={buttonTitle}
+                            text={t('button_gravar')}
                             className="button"
-                        />
+                        />:
+                        <Controls.Buttons
+                            type="submit"
+                            text={t('button_modificar')}
+                            className="button"
+                        />}
+
+                        {((location.state) === null) ?
                         <Controls.Buttons
                             type="button"
-                            text={textReset}
+                            text={t('button_limpar')}
                             color="secondary"
                             className="button"
                             onClick={ResetForm}
+                        />:
+                        <Controls.Buttons
+                            type="button"
+                            text={t('button_pagina_anterior')}
+                            color="secondary"
+                            className="button"
+                            onClick={() => {
+
+                                setUserSavedValue(prevState => {
+                                    prevState[0].sedeID_pesquisas = sedeID
+                                    prevState[0].sede_pesquisa = sede
+                                    prevState[0].provenienciaFormulario = "EditAgencia"
+                                    return [...prevState]
+                                })
+
+                                navigate(-1)
+                            }}
                         />
+                    }
                     </div>
 
                 </div>
 
             </Form>
-
 
             {notificatinoShow ?
                 <Notifications
@@ -457,25 +535,47 @@ const Agencia = () => {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                //pageHeader={PopupHeaderUniversity()}
                 buttonColor="secondary"
-                width="550px"
+                width="650px"
                 height="520px"
                 title={popupTitle}>
-                <SedeSearchTable
+
+                <div style={{ marginBottom: "10px", marginTop:"-20px"}}>
+                    <label className="userLabel">{t('Recherche')}</label>
+                    <Controls.Input
+                        name="sedePesquisa"
+                        type="text"
+                        value={sedePesquisa}
+                        placeHolder={t('sede')}
+                        width="55%"
+                        marginLeft="-20px"
+                        onChange={sedeSearchToToDataGrid}
+                        InputProps={{
+                            startAdornment: (<InputAdornment position='start'>
+                                <Search />
+                            </InputAdornment>)
+                        }}
+                    />
+                </div>
+
+                <SedeSearchTable ref={childRefSede} 
                     idDisplay={true}
                     codeDisplay={false}
+                    statusDisplay={true}
                     actionsButtonSelectDisplay={true} // monstrar o campo = true
                     actionsButtonDisplayEditDelete={false}
-                    pageSize={5}
-                    rowPerPage={5}
+                    pageSize={7}
+                    rowPerPage={7}
                     backGroundColor={backGroundColor}
                     color={color}
                     sedeData={(id, code, sede) => {
                         setSede(sede);
+                        setSedeID(id);
                         values.sedeID = id
                         setOpenPopup(false);
                         tableAgenciaUpdateData(id);
+                        setSedePesquisa("")
+
                     }
                     }
                 />

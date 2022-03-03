@@ -27,7 +27,7 @@ const initialFValues = {
     telepfoneDenunciante: '',
     emailDenunciante: '',
     queixa: '',
-    status: 'Active',
+    status: '1',
     hora: '',
     data: null,
     funcionarioID: 0,
@@ -49,7 +49,7 @@ const NovaDenuncia = () => {
     }, []);
 
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
-    const [imageSRC, setImageSRC] = useState();
+    const [imageSRC, setImageSRC] = useState("");
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
 
@@ -64,7 +64,7 @@ const NovaDenuncia = () => {
 
     const [count, setCount] = useState(0);
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
-    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
+    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState("");
     const [url, setUrl] = useState("");  // backend image  URL
 
     const [primeiroNome, setPrimeiroNome] = useState("");
@@ -125,7 +125,7 @@ const NovaDenuncia = () => {
         // updateValuesOnOpen();
         //setUrl(urlImage());
 
-        TipoDenunciaGetAll(currentLanguageCode);
+        TipoDenunciaGetAll(currentLanguageCode, values.sedeID);
 
     }, [t('header_title_denuncia_novo')]);
 
@@ -186,12 +186,7 @@ const NovaDenuncia = () => {
         sendImageFromImageUpload("");
         setUrl(urlImage())
         imageReset(); // reset the image
-
-        setNotify({
-            isOpen: false,
-            message: '',
-            type: ''
-        })
+        setNotificationShow(false)
     }
 
     const guardarDenuncias = () => {
@@ -265,6 +260,9 @@ const NovaDenuncia = () => {
                     values.sedeID = info.sedeFuncionario.id;
                     values.agenciaID = info.agenciaFuncionario.id;
 
+                    TipoDenunciaGetAll(currentLanguageCode, values.sedeID);
+
+
                 })
             
 
@@ -278,8 +276,9 @@ const NovaDenuncia = () => {
         }
     }
 
-    const TipoDenunciaGetAll = (abreviationLangue) => {
-        TipoDenunciaServices.getAll(abreviationLangue)
+    const TipoDenunciaGetAll = (abreviationLanguem1, sedeID1) => {
+
+        TipoDenunciaServices.getAll(abreviationLanguem1, sedeID1)
             .then(response => {
                 setSipoDenunciaList(response.data)
             })
@@ -291,7 +290,6 @@ const NovaDenuncia = () => {
     const handleKeyPress = () => {
         pesquisaCodigoFuncionario();
     }
-
 
     return (
         <>

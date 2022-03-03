@@ -2,6 +2,7 @@ import { Delete, Done } from '@mui/icons-material';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import UsableTable from '../../components/reusableComponents/UsableTable';
 import FuncionarioService from "../../services/admin/Funcionario.services";
+import useStylesSearchTable from '../../components/reusableComponents/SearchTableStyle';
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
@@ -37,25 +38,38 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
         actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete,
         pageSize, rowPerPage,
-        sedeID, agenciaID } = props;
+        sedeID, agenciaID, agenciaDisplay } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
+    const [firstNameSearch, setFirstNameSearch] = useState("");
+    const [campoPesquisa, setCampoPesquisa] = useState("");
+
+    
+
     const classes = useStyles();
+
+
+    const propsTableGrid = {  // grid style: SearchTableStyle.js
+        backGroundColor: props.backGroundColor,
+        color: props.color
+    }
+    const classes2 = useStylesSearchTable(propsTableGrid);
 
     const { t } = useTranslation();
 
     useEffect(() => {
-        getGetAllData(sedeID,  agenciaID);
+       // getGetAllData(sedeID, agenciaID);
         setUrl(urlImage());
 
     }, []);
 
     useImperativeHandle(ref, () => (
         {
-            getGetAllData: getGetAllData // it's calling the method : unversityGetAll()
-            // test3: test,
-        }
+            getFirstnameSearch: getFirstnameSearch,
+            getLasttnameSearch: getLasttnameSearch,
+            getGetAllData: getGetAllData, // it's calling the method : unversityGetAll()
+            getGetAllDataFuncionarioAgencia : getGetAllDataFuncionarioAgencia       }
     ));
 
     const getFuncionarioData = (id, code, agencia) => {
@@ -64,9 +78,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
     }
 
     const getGetAllData = (sedeID, agenciaID) => {
-        
 
-        FuncionarioService.getAll(sedeID, agenciaID)
+        FuncionarioService.getAll(sedeID, agenciaID, "codigoPesquisa2", "")
             .then(response => {
                 setData(response.data)
             })
@@ -74,14 +87,46 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                 console.log(e);
             });
     }
+    const getGetAllDataFuncionarioAgencia = (sedeID) => {
+        FuncionarioService.getAll(sedeID, 0, "TodasAsAgencia", "")
+            .then(response => {
+                setData(response.data)
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    const getFirstnameSearch = (firstNameToSearch) => {
+        setCampoPesquisa("primeironome");
+        setFirstNameSearch(firstNameToSearch);
+    }
+    const getLasttnameSearch = (lastNameToSearch) => {
+        setCampoPesquisa("ultimonome");
+        setFirstNameSearch(lastNameToSearch)
+    }
+
     const columns = [
         idDisplay ?
 
             { field: 'id', headerName: 'ID', flex: 1, headerClassName: classes.paper } :
             { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
 
+            agenciaDisplay ?
+            {field: 'agencia', headerName: t('agencia'), flex: 1.5, headerClassName: classes.paper,
+            renderCell: (params) => {
+                return (
+                    <>
+                            {params.row.agenciaFuncionario.nome}
+                    </>
+                )
+
+                // C:\React app\world-university-backend\public\images
+            }
+        }: { field: 'agencia', headerName: t('agencia'), flex: 1, hide: { agenciaDisplay }, headerClassName: classes.gridHeader },,
+
         codeDisplay ?
-            { field: 'code', headerName: t('code'), flex: 1, headerClassName: classes.paper } :
+            { field: 'code', headerName: t('code'), flex: 0.5, headerClassName: classes.paper } :
             { field: 'code', headerName: t('code'), hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
 
         {
@@ -91,8 +136,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                     <>
                         <div className="UtilisateurListPlusPhoto">
                             <img className="UtilisateurListImage"
-                                src={params.row.imageName !== "" ?"https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
-                               // src={params.row.imageName !== "" ? url + "/images/" + params.row.imageName : url + "/images/" + "semfoto.png"}
+                                src={params.row.imageName !== "" ? "https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
+                                // src={params.row.imageName !== "" ? url + "/images/" + params.row.imageName : url + "/images/" + "semfoto.png"}
                                 //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
 
                                 //src={params.row.imageName}
@@ -127,8 +172,21 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                 renderCell: (type) => {
                     return (
                         <>
-                            <button className={"ButtonStatutDataGrid " + type.row.status}>{type.row.status}</button>
-                        </>
+                            <button className={type.row.status == "1" ?
+                                classes2.ButtonStatutDataGrid_actif :
+                                type.row.status == "2" ?
+                                    classes2.ButtonStatutDataGrid_inactif :
+                                    type.row.status == "3" ?
+                                        classes2.ButtonStatutDataGrid_pendent :
+                                        type.row.status == "4" ?
+                                            classes2.ButtonStatutDataGrid_deleted : ""}
+                            >
+                                {type.row.status == "1" ? t('status_actif') :
+                                    type.row.status == "2" ? t('status_inactive') :
+                                        type.row.status == "3" ? t('status_pendente') :
+                                            type.row.status == "4" ? t('status_apagado') :
+                                                ""}
+                            </button>                        </>
                     )
                 }
             } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
@@ -176,7 +234,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                                     funcaoID: params.row.funcaoFuncionario.id,
                                     funcao: params.row.funcaoFuncionario.funcao,
                                 }}>
-                                <button className="utilisateurButtonEdit">Edit</button>
+                                <button className="utilisateurButtonEdit">{t('edit')}</button>
                             </Link>
 
                             <Delete className="utilisateurButtonDelete"
@@ -194,6 +252,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                 columns={columns}
                 pageSize={pageSize}
                 rowPerPage={rowPerPage}
+                firstNameSearch={firstNameSearch}
+                campoPesquisa={campoPesquisa}
             />
         </>
     )

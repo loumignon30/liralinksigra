@@ -1,6 +1,8 @@
 import { Delete, Done } from '@mui/icons-material';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import UsableTable from '../../components/reusableComponents/UsableTable';
+import useStylesSearchTable from '../../components/reusableComponents/SearchTableStyle';
+
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
@@ -57,10 +59,16 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
 
     const classes = useStyles();
 
+    const propsTableGrid = {  // grid style: SearchTableStyle.js
+        backGroundColor: props.backGroundColor,
+        color: props.color
+    }
+    const classes2 = useStylesSearchTable(propsTableGrid);
+
     const [openPopup, setOpenPopup] = useState(false);
     const { idDisplay, codeDisplay, actionsButtonDisplay,
         actionsButtonDisplayEditDelete,
-        pageSize, rowPerPage, sedeID, agenciaID} = props;
+        pageSize, rowPerPage, sedeID, agenciaID, statusDisplay } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
@@ -100,18 +108,45 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
     const columns = [
 
         idDisplay ?
-        { field: 'id', headerName: 'ID', flex:1, headerClassName: classes.paper }:
-        { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
-        
-        codeDisplay?
-        { field: 'code', headerName: t('code'),flex:1, headerClassName: classes.paper }:
-        { field: 'code', headerName: t('code'), hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
-        
-        { field: 'funcao', headerName: t('funcao'),  flex: 3, headerClassName: classes.paper },
+            { field: 'id', headerName: 'ID', flex: 0.4, headerClassName: classes.paper } :
+            { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
+
+        codeDisplay ?
+            { field: 'code', headerName: t('code'), flex: 0.7, headerClassName: classes.paper } :
+            { field: 'code', headerName: t('code'), hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
+
+        { field: 'funcao', headerName: t('funcao'), flex: 3, headerClassName: classes.paper },
+
+        statusDisplay ?
+            {
+                field: 'status', headerName: t('status'), flex: 1, headerClassName: classes.paper,
+                renderCell: (type) => {
+                    return (
+                        <>
+                            <button className={type.row.status == "1" ?
+                                classes2.ButtonStatutDataGrid_actif :
+                                type.row.status == "2" ?
+                                    classes2.ButtonStatutDataGrid_inactif :
+                                    type.row.status == "3" ?
+                                        classes2.ButtonStatutDataGrid_pendent :
+                                        type.row.status == "4" ?
+                                            classes2.ButtonStatutDataGrid_deleted : ""}
+                            >
+                                {type.row.status == "1" ? t('status_actif') :
+                                    type.row.status == "2" ? t('status_inactive') :
+                                        type.row.status == "3" ? t('status_pendente') :
+                                            type.row.status == "4" ? t('status_apagado') :
+                                                ""}
+                            </button>
+                        </>
+                    )
+                }
+            } : { field: 'status', headerName: t('status'), flex: 1, hide: { statusDisplay }, headerClassName: classes.gridHeader },
+
 
         actionsButtonDisplay ?
             {
-                field: 'action', headerName: t('funcao'), flex: 0.5, headerClassName: classes.paper,
+                field: 'action', headerName: t('action'), flex: 0.5, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -124,11 +159,11 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
                         </>
                     )
                 }
-            } : { field: 'action', headerName: t('funcao'), hide: { actionsButtonDisplay }, flex: 1, headerClassName: classes.paper }
+            } : { field: 'action', headerName: t('action'), hide: { actionsButtonDisplay }, flex: 1, headerClassName: classes.paper }
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action2', headerName: t('funcao'), flex: 0.5, headerClassName: classes.paper,
+                field: 'action2', headerName: t('action'), flex: 0.5, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -141,10 +176,10 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
                                     status: params.row.status,
                                     sedeID: params.row.sedeFuncao.id,
                                     sede: params.row.sedeFuncao.sede,
-                                    agenciaID : params.row.agenciaFuncao.id,
+                                    agenciaID: params.row.agenciaFuncao.id,
                                     agencia: params.row.agenciaFuncao.nome,
                                 }}>
-                                <button className={classes.editButton}>Edit</button>
+                                <button className={classes.editButton}>{t('edit')}</button>
                             </Link>
 
                             <Delete className={classes.deleleButton}
@@ -152,7 +187,7 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
                         </>
                     )
                 }
-            } : { field: 'action2', headerName: t('funcao'), hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
+            } : { field: 'action2', headerName: t('action'), hide: { actionsButtonDisplayEditDelete }, flex: 1, headerClassName: classes.paper },
 
     ];
     return (

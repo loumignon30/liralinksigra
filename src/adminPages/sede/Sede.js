@@ -28,14 +28,14 @@ const Sede = (props) => {
         endereco: '',
         cidade: '',
         pais: '',
-        status: 'Active',
+        status: '1',
         imageName: ''
     }
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
 
     // notification with SnackBar
     const [url, setUrl] = useState(urlImage);  // backend image  URL
-    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
+    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState("");
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageFileName, setImageFileName] = useState("");
@@ -47,6 +47,9 @@ const Sede = (props) => {
     const navigate = useNavigate();
     const [id, setID] = useState(0);
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
+
+    const [deviceWidth, setDeviceWidth] = useState(window.screen.width);
+
 
     let imageDisplay;
     let logoCheck = "";
@@ -181,7 +184,7 @@ const Sede = (props) => {
 
         } else {
             SedeService.create(values).then(response => {
-               // alert(t('mensagem_alteracao_sede'));
+                // alert(t('mensagem_alteracao_sede'));
                 tableSedeData(); // update DataGrid Table used form universitySearchTable.js
                 setNotify({
                     isOpen: true,
@@ -328,23 +331,26 @@ const Sede = (props) => {
 
                     </div>
 
-                    <div className="newUniversity">
-                        <div>
+                    {
+                        deviceWidth > 820 ?
+                            <div className="newUniversity">
+                                <div>
+                                    <SedeSearchTable
+                                        ref={childRef2}
+                                        idDisplay={true}
+                                        codeDisplay={false}
+                                        actionsButtonSelectDisplay={false} // monstrar o campo = true
+                                        actionsButtonDisplayEditDelete={true}
+                                        pageSize={4}
+                                        rowPerPage={4}
+                                    />
 
-                            <SedeSearchTable
-                                ref={childRef2}
-                                idDisplay={true}
-                                codeDisplay={false}
-                                actionsButtonSelectDisplay={false} // monstrar o campo = true
-                                actionsButtonDisplayEditDelete={true}
-                                pageSize={4}
-                                rowPerPage={4}
-                            />
-
-                        </div>
-                    </div>
-
+                                </div>
+                            </div> : null
+                    }
                 </div>
+
+
 
                 <div className="unversityItemContainer">
 
@@ -370,7 +376,7 @@ const Sede = (props) => {
                                 color="secondary"
                                 className="button"
                                 onClick={ResetForm}
-                                // onClick={close}
+                            // onClick={close}
                             />
                         </div>
                     </div>

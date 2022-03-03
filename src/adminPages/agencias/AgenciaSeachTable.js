@@ -2,7 +2,7 @@ import { Delete, Done } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid'
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import UsableTable from '../../components/reusableComponents/UsableTable';
-//import { UniversityData, headerCells } from "../../services/admin/UniversityDataNew";
+import useStylesSearchTable from '../../components/reusableComponents/SearchTableStyle';
 import AgenciaService from "../../services/admin/Agencia.service";
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
@@ -31,6 +31,12 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
         },
     });
 
+    const propsTableGrid = {  // grid style: SearchTableStyle.js
+        backGroundColor: props.backGroundColor,
+        color: props.color
+    }
+    const classes2 = useStylesSearchTable(propsTableGrid);
+
     const [openPopup, setOpenPopup] = useState(false);
     const { idDisplay, codeDisplay, actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete, emailDisplay, telefoneDislay,
@@ -41,31 +47,32 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
     const [url, setUrl] = useState("");  // backend image  URL
     const classes = useStyles();
 
+    const [agenciaSearch, setAgenciaSearch] = useState("");
+    const [campoPesquisa, setCampoPesquisa] = useState("");
+
     const { t } = useTranslation();
 
-
     useEffect(() => {
-
+       
         getGetAllData(idSede);
-
         setUrl(urlImage());
-
     }, []);
 
     useImperativeHandle(ref, () => (
         {
             getGetAllData: getGetAllData, // it's calling the method : unversityGetAll()
-            editCliqued: editCliqued
+            editCliqued: editCliqued,
+            agenciaSearchData: agenciaSearchData
         }
     ));
 
     const getAgenciaData = (id, code, agencia) => {
+        
         props.agenciaData(id, code, agencia);
         setOpenPopup(false);
     }
 
     const getGetAllData = (sedeID) => {
-
         AgenciaService.getAll(sedeID)
             .then(response => {
                 setData(response.data)
@@ -73,6 +80,11 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
             .catch(e => {
                 console.log(e);
             });
+    }
+
+    const agenciaSearchData = (agenciaToSearch) => {
+        setCampoPesquisa("nome");
+        setAgenciaSearch(agenciaToSearch);
     }
 
     const editCliqued = (id, code, nome, endereco, email, telefone, cidade,
@@ -95,23 +107,6 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
 
         {
             field: 'nome', headerName: t('nome_Agencia'), flex: 3, headerClassName: classes.paper,
-            // renderCell: (params) => {
-            //     return (
-            //         <>
-            //             <div className="UtilisateurListPlusPhoto">
-            //                 <img className="UtilisateurListImage"
-            //                     src={url + "/images/" + params.row.imageName}
-            //                     //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
-
-            //                     //src={params.row.imageName}
-            //                     alt="" />
-            //                 {params.row.nome}
-            //             </div>
-            //         </>
-            //     )
-
-            //     // C:\React app\world-university-backend\public\images
-            // }
         },
         emailDisplay ?
             { field: 'email', headerName: t('email'), flex: 1, headerClassName: classes.paper } :
@@ -135,7 +130,21 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
                 renderCell: (type) => {
                     return (
                         <>
-                            <button className={"ButtonStatutDataGrid " + type.row.status}>{type.row.status}</button>
+                            <button className={type.row.status == "1" ?
+                                classes2.ButtonStatutDataGrid_actif :
+                                type.row.status == "2" ?
+                                    classes2.ButtonStatutDataGrid_inactif :
+                                    type.row.status == "3" ?
+                                        classes2.ButtonStatutDataGrid_pendent :
+                                        type.row.status == "4" ?
+                                            classes2.ButtonStatutDataGrid_deleted : ""}
+                            >
+                                {type.row.status == "1" ? t('status_actif') :
+                                    type.row.status == "2" ? t('status_inactive') :
+                                        type.row.status == "3" ? t('status_pendente') :
+                                            type.row.status == "4" ? t('status_apagado') :
+                                                ""}
+                            </button>
                         </>
                     )
                 }
@@ -157,7 +166,6 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
                     )
                 }
             } : { field: 'action', headerName: t('action'), flex: 1, hide: { actionsButtonDisplaySelect }, headerClassName: classes.paper },
-        ,
 
         actionsButtonDisplayEditDelete ?
             {
@@ -176,32 +184,13 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
                                     cidade: params.row.cidade,
                                     pais: params.row.pais,
                                     nomeRepresentante: params.row.nomeRepresentante,
-                                    status: params.row.status
-                                    // imageChangeFromOutSideURL: url + "/images/" + params.row.imageName
+                                    status: params.row.status,
+                                    sede: params.row.sedeAgencia.sede,
+                                    sedeID: params.row.sedeAgencia.id
+
                                 }}
                             >
-                                <button className="utilisateurButtonEdit">Edit</button>
-
-                                {/* <button type='button' className="utilisateurButtonEdit"
-                                onClick={() => {
-                                    editCliqued(params.row.id,
-                                        params.row.code,
-                                        params.row.nome,
-                                        params.row.endereco,
-                                        params.row.email,
-                                        params.row.telefone,
-                                        params.row.cidade,
-                                        params.row.pais,
-                                        params.row.nomeRepresentante,
-                                        params.row.status,
-                                        url + "/images/" + params.row.imageName,
-                                        params.row.imageName
-                                    )
-                                }
-                                } 
-                            >Edit</button>
-                            */}
-
+                                <button className="utilisateurButtonEdit">{t('edit')}</button>
                             </Link>
 
                             <Delete className="utilisateurButtonDelete"
@@ -210,8 +199,6 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
                     )
                 }
             } : { field: 'action2', headerName: t('action'), flex: 1, hide: { actionsButtonDisplayEditDelete }, headerClassName: classes.paper },
-        ,
-
     ];
     return (
         <>
@@ -220,6 +207,8 @@ const AgenciaSearchTable = forwardRef((props, ref) => { // forwardRef is used to
                 columns={columns}
                 pageSize={pageSize}
                 rowPerPage={rowPerPage}
+                firstNameSearch={agenciaSearch}
+                campoPesquisa={campoPesquisa}
             />
         </>
     )

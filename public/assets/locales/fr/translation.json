@@ -11,7 +11,7 @@
     "endereco": "Adresse",
     "cidade": "Ville",
     "pais": "Pays",
-    "status": "Status",
+    "status": "État",
     "button_gravar": "Enregistrer",
      "button_modificar": "Modifier",
      "button_novo": "Nouveau",
@@ -19,6 +19,7 @@
      "button_pagina_anterior": "Rétrocéder",
      "lista_agencia": "Liste de Agences",
      "lista_usuarios": "LISTE DES UTILISATEURS DU LOGICIEL",
+     
      "userEdit_editarDados_text": "MODIFIER LES DONNÉES",
      "lista_funcionario": "LISTE DE TRAVAILLEURS ",
      "user_informstion": "Information de l'utilisateur",
@@ -47,15 +48,27 @@
      "sexo_masculino": "Masculin",
      "sexo_feminino": "Féminin",
      "sexo_outros": "Autres",
+     "Recherche": "Rechercher",
+     "total_employes": "Total Travailleurs",
+     "resumo": "Résumé par siège",
 
      "role_administrador": "Administrateur",
      "role_Funcionario": "Travailleur",
      "role_utilizador": "Utilisateur",
+     "role_super_user": "Créateur",
+
+    "status_actif": "Actif",
+    "status_inactive": "Inactif",
+    "status_pendente": "Suspendu",
+    "status_apagado": "Supprimé",
 
      "denunciante": "Nom du Plaignant",
      "tipo_denuncia": "Type de Plainte",
      "queixa": "Plainte",
      "queixaPlaceOrder": "Ecrivez la plainte contre le Travailleur",
+
+     "edit": "Editer",
+     "AfetacaoGridView": "Afectation",
 
      "mensagem_Gravar_Nova_Agencia": "Les données ont été enregistrée avec succès!",
      "mensagem_modificar_Nova_Agencia": "Les donnée ont été Modifiée avec succès!",
@@ -69,8 +82,12 @@
     "mensagem_denuncia_comparado_com_o_ano_passado": "Par rapport à l’année dernière",
     
     "mensagem_analise_denuncia_home_page": "Analyse des Plaintes",
-
      "mensagem_erro_numero_funcionario_pesquisa": "Le code du Travailleur n'existe pas dans la base de données!",
+     
+     "mensagem_erro_menu_administrador": "Vous n'avez pas le niveau d'accèss d'administrateur!",
+     "mensagem_erro_menu_atencao": "Attention",
+     "codeExiste_do_trabalhador_na_base_de_dasos": "Le code introduit existe dans la base de données",
+     "Email_Existe_do_usuario_na_base_de_dasos": "L'email introduit existe dans la base des données avec un autre utilisateur",
 
 
     "selecione": "Sélectionner",
@@ -78,7 +95,7 @@
     "header_title_sede": "Siège de l'entreprise",
      "header_subTitle_sede": "Enregistrez un nouveau siège de l'entreprise",
 
-     "header_title_agence_novo": "Enregistrer une nouvelle agence",
+     "header_title_agence_novo": "Enregistrer une agence",
      "header_subTitle_agence_novo": "Formulaire d’inscription pour la nouvelle agence",
      "header_title_agence_modificar": "Modifier les données de l’Agence",
      "header_subTitle_agence_modificar": "Formulaire de modification des données de l’agence",
@@ -110,6 +127,10 @@
 
      "header_title_tipo_denuncia_gravar": "Enregistrer Type de Plainte",
     "header_subTitle_tipo_denuncia_gravar": "Formulaire d'enregistrement de Type de Plaintes",
+    "header_subTitle_Listagem_denuncia": "Formulaire de visualisation des Plainte",
+
+    "header_title_AfectacaoSede_Agencia": "Afection de Siège e Agence",
+    "header_subTitle_AfectacaoSede_Agencia": "Formulaire de Afectation des Sièges et Agences aux Utilisateurs do Logiciel",
 
 
      "nome_Agencia": "Agence",
@@ -124,9 +145,12 @@
      "definicoes_menu": "Configurations",
      "sedeMenu_menu": "Siège de l'Entreprise",
      "agencia_menu": "Agences",
-     "listagem_agencia_menu": "Liste Agênces",
+     "listagem_agencia_menu": "Liste Agences",
      "provincias_menu": "Provinces",
      "novo_usuario_menu": "Nouvau Utilisateur",
+
+     "utilizador_afectacao_sede_agencia": "Afectation Siège et Agence",
+
      
      "lista_sede": "Liste de Siège",
      "listagem_usuario_menu": "Liste Utilisateurs",
@@ -163,6 +187,16 @@
      "denucia_por_agencia_menu": "Evaluer Plaintes",
 
      "total_denuncias": "Total Plaintes",
+
+     "estatistica_grafica_por_sede": "Graphique-Siège",
+    "estatistica_grafica_por_Agencia": "Graphique-Agencia",
+    "estatistica_resumo_denuncia": "Résumé-plaintes",
+    "estatistica_denuncia_nao_tratadas": "plaintes Traitées",
+    "estatistica_denuncia_tratadas": "plaintes non-Traitées",
+    "estatistica_header": "Statistiques",
+    "estatistica_sub_header": "Statistiques Annuelle",
+    "grafique_plaine_sidebar_menu": "Graphique des Plaintes",
+
 
 
      "janeiro": "janvier",

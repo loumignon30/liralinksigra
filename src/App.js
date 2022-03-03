@@ -6,6 +6,8 @@ import SedeEmpresa from './adminPages/sede/Sede';
 import SedeEdit from './adminPages/sede/SedeEdit';
 import SedeList from './adminPages/sede/SedeList';
 import Agencia from './adminPages/agencias/agencia';
+import AgenciaEdit from './adminPages/agencias/AgenciaEdit';
+
 import NovoFuncionario from './adminPages/funcionario/NovoFuncionario';
 import { BrowserRouter as Router, Routes, Route, Navigate }  from "react-router-dom";
 import NovoDepartamento from "./adminPages/departamento/NovoDepartamento";
@@ -22,6 +24,8 @@ import NovaDenuncia from './adminPages/denuncias/NovaDenuncia';
 import ListagemDenuncia from './adminPages/denuncias/ListagemDenuncia';
 import TipoDeDenuncias from './adminPages/denuncias/TipoDeDenuncias';
 import ListagemTipoDenuncia from './adminPages/denuncias/ListagemTipoDenuncia';
+import AfetacaoSedeAgencia from "./adminPages/utilisador/AfetacaoSedeAgencia";
+import EstisticaPorSede from "./adminPages/gestaoDenuncia/EstisticaPorSede"
 
 import { useState } from 'react';
 import Login from './adminPages/utilisador/Login';
@@ -44,7 +48,7 @@ const App = () => {
             closeButtonDisplay={false}
             width="920px"
             height="450px"
-            marginTop = "0"
+            marginTop = "-10px"
           >
             <div style={{marginTop:"-25px"}}>
             <TipoDeDenuncias
@@ -78,6 +82,7 @@ const App = () => {
              <Route path="/sedeList" element={<SedeList/>} />
             <Route path="/sedeEdit/:sedeId" element={<SedeEdit/>} />
             <Route path="/agencia" element={<Agencia/>} />
+            {/* <Route path="/agenciaEdit/:id" element={<AgenciaEdit/>} /> */}
             <Route path="/agencia/:id" element={<Agencia/>} />
             <Route path="/funcionario" element={<NovoFuncionario/>} />
             <Route path="/funcionario/:id" element={<NovoFuncionario/>} />
@@ -97,7 +102,11 @@ const App = () => {
             <Route path="/tipoDenunciaConfig" element={<TipoDeDenuncias />} />
             <Route exact path="/tipoDenuncia/*" element={<TipoDenunciaComponent />} />
             <Route path="/listaAgencias" element={<ListagemAgencias />} />
+            <Route path="/afetacaoSedeAgencia/:id" element={<AfetacaoSedeAgencia />} />   
 
+            <Route path="/gestaoDenuncias" element={<EstisticaPorSede />} />
+
+            
           </Routes >
           </div>
           </div>

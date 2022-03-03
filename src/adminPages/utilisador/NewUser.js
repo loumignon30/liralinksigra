@@ -14,6 +14,10 @@ import { useTranslation } from "react-i18next";
 import { Search } from '@mui/icons-material';
 import Popup from '../../components/reusableComponents/Popup';
 import SedeSearchTable from '../sede/SedeSearchTable';
+import { Button, InputAdornment } from '@mui/material';
+import swal from 'sweetalert';
+import { useNavigate } from "react-router-dom";
+
 
 const initialFValues = {
     id: 0,
@@ -28,28 +32,33 @@ const initialFValues = {
     role: '',
     password: '',
     photofilename: '',
-    status: 'Active',
+    status: '1',
     country: '',
     sedeID: 0
 }
 
-export default function NewUSerForm() {
+export default function NewUSerForm(props) {
 
     useEffect(() => {
         window.scrollTo(0, 0); // open the page on top
+        ResetForm();
+
     }, []);
 
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
-    const [imageSRC, setImageSRC] = useState();
+    const [imageSRC, setImageSRC] = useState("");
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
     const [imageFileName, setImageFileName] = useState("");
 
     const [sede, setSede] = useState("");
     const [sedeID, setSedeID] = useState(0);
-    const [count, setCount] = useState();
+    const [count, setCount] = useState(0);
     const [popupTitle, setPpupTitle] = useState("");
     const [openPopup, setOpenPopup] = useState(false);
     const [notificatinoShow, setNotificationShow] = useState(false);
+    const [sedePesquisa, setSedePesquisa] = useState("");
+    const childRefSede = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+    const navigate = useNavigate();
 
     const { t } = useTranslation();
 
@@ -97,19 +106,23 @@ export default function NewUSerForm() {
         handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     useEffect(() => {
-        setImageSRC("https://media-exp1.licdn.com/dms/image/C4E03AQFsD7qKHQJzYA/profile-displayphoto-shrink_800_800/0/1624105018084?e=1642032000&v=beta&t=HTny2PpWRl0YOFcXgDMAx2rXIE7XU2lbDjzFm4T2g5o");
+       
+        values.email= "";
+        values.password= "";
+
     }, []);
 
     const genderItems = [
-        { id: t('sexo_masculino'), title: t('sexo_masculino') },
-        { id: t('sexo_feminino'), title: t('sexo_feminino') },
-        { id: t('sexo_outros'), title: t('sexo_outros') },
+        { id: 1, title: t('sexo_masculino') },
+        { id: 2, title: t('sexo_feminino') },
+        { id: 3, title: t('sexo_outros') },
     ];
 
     const getRole = [
-        { id: t('role_administrador'), title: t('role_administrador') },
-        { id: t('role_Funcionario'), title: t('role_Funcionario') },
-        { id: t('role_utilizador'), title: t('role_utilizador') }
+        { id: 1, title: t('role_administrador') },
+        { id: 2, title: t('role_Funcionario') },
+        { id: 3, title: t('role_utilizador') },
+        { id: 101, title: t('role_super_user') }
     ]
 
     const saveImageFromImageUpload = () => {
@@ -124,24 +137,28 @@ export default function NewUSerForm() {
     const handleSubmit = e => {
         e.preventDefault();
 
-        if (validate()) {
-            saveUniversity(); // save new user
-            ResetForm();
-        }
+        UserService.getAll(sedeID, "emailPesquisa", values.email)
+            .then(response => {
+
+                if (response.data.length > 0 && values.id == 0) {  // tester si le code exist
+                    return (swal(t('mensagem_erro_menu_atencao'), t('Email_Existe_do_usuario_na_base_de_dasos'), "warning"));
+                } else {
+
+                    if (validate()) {
+                        saveUniversity(); // save new user
+                        ResetForm();
+                    }
+                }
+            })
     }
 
     const ResetForm = () => {
+        
         setValues(initialFValues);
         imageReset();
         setErrors({})
 
         values.sedeID = sedeID;
-
-        setNotify({
-            isOpen: false,
-            message: '',
-            type: ''
-        })
     }
 
     const onclicSedePopup = () => {
@@ -166,6 +183,23 @@ export default function NewUSerForm() {
             });
     }
 
+    const testEmailExist = () => {
+        alert("je suis ici");
+
+        UserService.getAll(sedeID, "emailPesquisa", values.email)
+            .then(response => {
+
+                if (response.data.length > 0 && values.id == 0) {  // tester si le code exist
+                    return (swal(t('mensagem_erro_menu_atencao'), t('Email_Existe_do_usuario_na_base_de_dasos'), "warning"));
+                }
+            })
+    }
+
+    const sedeSearchToToDataGrid = (e) => {
+        setSedePesquisa(e.target.value)
+        childRefSede.current.sedSearch(e.target.value); // search the firstname
+    }
+
     return (
         <>
             <div className="newUserMainContainer">
@@ -178,6 +212,13 @@ export default function NewUSerForm() {
                     icon={<ArticleIcon />}>
                 </PageHeader>
 
+                {/* <div>
+                    <Button variant="contained"
+                        onClick={testEmailExist}
+                        size="small"
+                        color="primary">{t('button_gravar')}</Button>
+                </div> */}
+
 
                 <Form onSubmit={handleSubmit}>
 
@@ -185,7 +226,7 @@ export default function NewUSerForm() {
 
                         <div className="newUser">
                             <div>
-                                <label className="inputLabel">Sede</label>
+                                <label className="inputLabel">{t('sede')}</label>
                                 <Controls.Input
                                     name={t('sede')}
                                     placeHolder={t('sede')}
@@ -233,6 +274,8 @@ export default function NewUSerForm() {
                                     onChange={handleInputChange}
                                     type="text"
                                     error={errors.email}
+                                    autoComplete="new-password"
+                                    autofill="off"
                                 />
                             </div>
 
@@ -305,6 +348,7 @@ export default function NewUSerForm() {
                                     options={genderItems}
                                     width="55%"
                                     height="40px"
+                                    typeOfSelect={1}
                                     error={errors.gender}
                                 />
                             </div>
@@ -317,6 +361,7 @@ export default function NewUSerForm() {
                                     value={values.role}
                                     onChange={handleInputChange}
                                     options={getRole}
+                                    typeOfSelect={1}
                                     error={errors.role}
                                     width="55%"
                                     height="40px"
@@ -332,6 +377,7 @@ export default function NewUSerForm() {
                                     onChange={handleInputChange}
                                     width="55%"
                                     type="password"
+                                    autoComplete="new-password"
                                     error={errors.password}
                                 />
                             </div>
@@ -344,10 +390,13 @@ export default function NewUSerForm() {
                                     value={values.password}
                                     onChange={handleInputChange}
                                     type="password"
+                                    autoComplete="new-password"
                                     width="55%"
                                     error={errors.password}
                                 />
                             </div>
+
+
                             <div>
                                 <div style={{ marginTop: "10px" }}>
                                     <ImageUpLoad
@@ -364,16 +413,26 @@ export default function NewUSerForm() {
                     <div className="newUserContainer">
 
                         <div className="newUser">
-                            <div >
+                            <div style={{ marginTop: "-20px" }}>
                                 <Controls.Buttons
                                     type="submit"
                                     text={t('button_gravar')}
                                 />
+                                
                                 <Controls.Buttons
                                     type="button"
                                     text={t('button_limpar')}
                                     color="secondary"
-                                    onClick={ResetForm} />
+                                onClick={ResetForm}
+                                 />
+                                 {/* <Controls.Buttons
+                                    type="button"
+                                    text={t('sair')}
+                                    color="secondary"
+                                    onClick={close} 
+                                 /> */}
+
+                                
                             </div>
                         </div>
                     </div>
@@ -381,11 +440,12 @@ export default function NewUSerForm() {
                 </Form>
             </div>
 
-            {notificatinoShow ?
-                <Notifications
-                    notify={notify}
-                    setNotify={setNotify}
-                /> : null
+            {
+                notificatinoShow ?
+                    <Notifications
+                        notify={notify}
+                        setNotify={setNotify}
+                    /> : null
             }
 
             {
@@ -395,17 +455,34 @@ export default function NewUSerForm() {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="600px"
-                        height="480px"
+                        width="650px"
+                        height="520px"
                     >
-
-                        <SedeSearchTable
+                        <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+                            <label className="userLabel">{t('Recherche')}</label>
+                            <Controls.Input
+                                name="sedePesquisa"
+                                type="text"
+                                value={sedePesquisa}
+                                placeHolder={t('sede')}
+                                width="55%"
+                                marginLeft="-20px"
+                                onChange={sedeSearchToToDataGrid}
+                                InputProps={{
+                                    startAdornment: (<InputAdornment position='start'>
+                                        <Search />
+                                    </InputAdornment>)
+                                }}
+                            />
+                        </div>
+                        <SedeSearchTable ref={childRefSede}
                             idDisplay={true}
                             codeDisplay={false}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={5}
-                            rowPerPage={5}
+                            statusDisplay={true}
+                            pageSize={7}
+                            rowPerPage={7}
                             backGroundColor="#50394c"
                             color="white"
                             sedeData={(id, code, sede) => {
@@ -413,6 +490,7 @@ export default function NewUSerForm() {
                                 setSedeID(id)
                                 values.sedeID = id
                                 setOpenPopup(false);
+                                setSedePesquisa("");
                             }
                             }
                         />

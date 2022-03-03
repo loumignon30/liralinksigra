@@ -6,7 +6,7 @@ import { Publish } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
 import semmagem from "../../assets/images/sem-imagem.jpg"
 import { v4 as uuidv4 } from 'uuid';
-
+import { width } from '@mui/system';
 
 const ImageUpLoad = forwardRef((props, ref) => {
 
@@ -17,10 +17,14 @@ const ImageUpLoad = forwardRef((props, ref) => {
         imageIcon: {
             marginLeft: props.iconMarginLeft || "220px",
             marginTop: props.iconMarginTop || "-10px",
+            background: "yellow",
+            width: "30px",
+            height: "30px"
         },
         labelStyle: {
             marginLeft: props.margnLeft || "0px",
             fontWeight: "bold",
+
         },
         file: {
             display: "none"
@@ -45,11 +49,10 @@ const ImageUpLoad = forwardRef((props, ref) => {
 
         if (imageSelected)  // save the image only if an image is selected
         {
-           
             const formData = new FormData();
             formData.append('photo', file);
 
-            if(campoImageNaBaseDeDados === "code"){
+            if (campoImageNaBaseDeDados === "code") {
                 formData.append('code', codigo);
             }
 
@@ -107,12 +110,12 @@ const ImageUpLoad = forwardRef((props, ref) => {
         setImageSelected(true);
         setFileName(e.target.files[0].name);
 
-       // uuidvRandom = uuidv4();
+        // uuidvRandom = uuidv4();
         //setfileNameRandom(uuidvRandom)
         //setFileName(uuidvRandom);
-       
 
-       // console.log(fileName);
+
+        // console.log(fileName);
 
     }
 
@@ -120,9 +123,11 @@ const ImageUpLoad = forwardRef((props, ref) => {
         <div className="App">
             {
                 uploadDisplay ?
-                    <label htmlFor="file" >
-                        <Publish className={classes.imageIcon} />
-                    </label>
+                    <div style={{ marginTop: "10px", marginLeft: "-20px" }}>
+                        <label htmlFor="file" >
+                            <Publish className={classes.imageIcon} />
+                        </label>
+                    </div>
                     : null
             }
 
@@ -130,7 +135,7 @@ const ImageUpLoad = forwardRef((props, ref) => {
                 className={classes.file}
             />
 
-            <div style={{ marginTop: "5px" }}>
+            <div style={{ marginTop: "5px", marginLeft:"0px"}}>
                 <label className={classes.labelStyle}>{fotoTitulo}</label>
                 <img className="ImageContainer"
                     src={fileDisplay}

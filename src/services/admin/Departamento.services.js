@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class DepartamentoServices {
 
-        getAll(sedeID, agenciaID){
-        return http.get(`/departamentos?sedeID=${sedeID}&agenciaID=${agenciaID}`);
+        getAll(sedeID, agenciaID, tipoImpressao){
+        return http.get(`/departamentos?sedeID=${sedeID}&agenciaID=${agenciaID}&tipoImpressao=${tipoImpressao}`);
     }
 
     create(data){

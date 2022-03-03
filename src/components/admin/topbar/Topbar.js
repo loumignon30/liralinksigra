@@ -6,17 +6,20 @@ import { menuItemsNotifications } from "../../../menuData/admin/menuItemsNotific
 import { menuItemsSettings } from "../../../menuData/admin/topBarMenuSettingData"
 import { NotificationsNone, Settings, Language } from '@mui/icons-material';
 import { UserLoggedContext } from '../../../adminPages/utilisador/UserLoggedContext';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import urlImage from '../../../http-common-images';
 import { Icons } from "../../../components/reusableComponents/Icons";
 import liralinkLogo from "../../../assets/images/liralink.jpg";
 import * as languagesFile from "../../../services/admin/Languages";
+
+import USerEdit from '../../../adminPages/utilisador/USerEdit'
 
 import { useTranslation } from "react-i18next";
 import 'flag-icon-css/css/flag-icons.min.css';
 import i18next from 'i18next';
 import cookies from 'js-cookie'
 import IconWithTooltip from 'icon-with-tooltip';
+import Popup from "../../reusableComponents/Popup";
 
 
 const languages = [
@@ -52,7 +55,7 @@ export default function Topbar() {
     const componentRefSettings = useRef();
     const componentRefLanguages = useRef();
     const navigate = useNavigate();
-    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState();
+    const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState("");
     const [url, setUrl] = useState(urlImage);  // backend image  URL
 
     const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
@@ -61,12 +64,15 @@ export default function Topbar() {
     const [lastName, setLastName] = useState("");
     const [userPhoto, setUserPhoto] = useState(null);
 
-    const [exampleState, setExampleState] = useState();
+    const [exampleState, setExampleState] = useState("");
 
     const { t } = useTranslation();
     const currentLanguageCode = cookies.get('i18next') || 'en';
     const currentLanguage = languages.find(l => l.code === currentLanguageCode);
 
+    const [popupTitle, setPpupTitle] = useState("");
+    const [openPopup, setOpenPopup] = useState(false);
+    const [count, setCount] = useState(0);
     //const childRefMenu = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
 
     useEffect(() => {
@@ -112,7 +118,10 @@ export default function Topbar() {
         setShow(!show);
     }
     const clickSettings = () => {
-        setShowSetting(!showSettings);
+        // setShowSetting(!showSettings);
+        setCount(1);
+        setPpupTitle(t('lista_sede'));
+        setOpenPopup(true);
     }
 
     const closeButton = () => {
@@ -122,7 +131,6 @@ export default function Topbar() {
 
     const clicklanguage = () => {
         setShowLnguage(!showLnguage);
-
     }
 
     // const MenuDataDisplay = () => {
@@ -201,21 +209,10 @@ export default function Topbar() {
                             <Settings size={25}
                                 onClick={clickSettings}
                                 ref={componentRefSettings} />
-                            {showSettings ?
-                                <div className="index-front">{
-                                    menuItemsSettings.map((menuItem, index) => (
-                                        <MenuItems
-                                            key={index}
-                                            name={menuItem.name}
-                                            to={menuItem.to}
-                                            icon={menuItem.icon}
-                                            expanded={menuItem.expanded}
-                                            className="a-style-popup"
-                                            subMenus={menuItem.subMenus || []}
-                                        />
-                                    ))}
+                            {/* {showSettings ?
+                                <div className="index-front">
                                 </div>
-                                : ""}
+                                : ""} */}
                         </div>
 
                         <img alt="" src={imageChangeFromOutSideURL}
@@ -239,6 +236,28 @@ export default function Topbar() {
                 ref={childRefMenu}
 
             /> */}
+
+            {
+                count === 1 ?
+                    <Popup
+                        openPopup={openPopup}
+                        setOpenPopup={setOpenPopup}
+                        buttonColor="secondary"
+                        closeButtonDisplay={false}
+                        marginTop="-35px"
+                        // title={popupTitle}
+                        width="900px"
+                        height="600px"
+                    >
+                        <USerEdit topbar="topbar"
+                            closeUSer={() => {
+                                setOpenPopup(false);
+                            }
+                            }
+                        />
+
+                    </Popup> : ""
+            }
 
         </>
     )
