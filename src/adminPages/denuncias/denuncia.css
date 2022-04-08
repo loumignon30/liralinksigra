@@ -1,0 +1,23 @@
+.newUser4 {
+    /* flex: 2; */
+    width: 45%;
+    height: 340px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-bottom: 30px;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+}
+
+.buttonContainerDenuncias{
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 3px rgba(0,0,0,0.13);
+    /* flex: 2; */
+    width: 100%;
+    height: 60px;
+    margin-top: 160px;
+    margin-left: -17px;
+    /* height: 85px;
+    width: 500px; */
+    
+}

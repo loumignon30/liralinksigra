@@ -7,6 +7,8 @@ import { makeStyles } from '@mui/styles';
 import semmagem from "../../assets/images/sem-imagem.jpg"
 import { v4 as uuidv4 } from 'uuid';
 import { width } from '@mui/system';
+import Swal from 'sweetalert2'
+
 
 const ImageUpLoad = forwardRef((props, ref) => {
 
@@ -38,7 +40,7 @@ const ImageUpLoad = forwardRef((props, ref) => {
     const [imageSelected, setImageSelected] = useState(false);
     const [fileNameRandom, setfileNameRandom] = useState("");
 
-    const { imageChangeFromOutSideURL } = props;
+    const { imageChangeFromOutSideURL, primeironome, apelido, agencia } = props;
     const classes = useStyles();
 
     let codigo = "";
@@ -119,6 +121,17 @@ const ImageUpLoad = forwardRef((props, ref) => {
 
     }
 
+    const funcionarioImageClick = () => {
+        Swal.fire({
+            title: primeironome + " " + apelido,
+            text: agencia,
+            imageUrl:fileDisplay,
+            imageWidth: 300,
+            imageHeight: 240,
+            imageAlt: 'Custom image',
+          })
+    }
+
     return (
         <div className="App">
             {
@@ -135,11 +148,12 @@ const ImageUpLoad = forwardRef((props, ref) => {
                 className={classes.file}
             />
 
-            <div style={{ marginTop: "5px", marginLeft:"0px"}}>
+            <div style={{ marginTop: "5px", marginLeft:"0px", cursor:"pointer"}}>
                 <label className={classes.labelStyle}>{fotoTitulo}</label>
                 <img className="ImageContainer"
                     src={fileDisplay}
                     alt=""
+                    onClick={funcionarioImageClick}
                 />
 
             </div>

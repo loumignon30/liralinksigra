@@ -18,7 +18,18 @@ import TipoDenunciaServices from "../../services/admin/TipoDenuncia.services";
 
 import { useTranslation } from "react-i18next";
 import cookies from 'js-cookie'
+import i18next from 'i18next';
+import { Rating, SvgIcon } from '@mui/material';
+import Popup from '../../components/reusableComponents/Popup';
+import FuncionarioSearchTable from '../funcionario/FuncionarioSearchTable';
+import RatingServices from "../../services/admin/RatingServices";
+import RatingMotivoService from '../../services/admin/RatingMotivo.service';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import MUIRichTextEditor from 'mui-rte'
+import { convertToRaw } from 'draft-js'
+
+// import Rating from 'react-simple-star-rating'
 
 const initialFValues = {
     id: 0,
@@ -35,26 +46,53 @@ const initialFValues = {
     agenciaID: 0,
     tipodenunciaID: '',
     tipodenuncia: "",
-    abreviationLangue: ""
+    abreviationLangue: "",
+    rating: 0,
+    ratingID: '',
+    ratingMotivoID: ''
 }
 
-const NovaDenuncia = () => {
+const languages = [
+    {
+        code: 'fr',
+        name: 'Français',
+        country_code: 'fr'
+    },
+    {
+        code: 'en',
+        name: 'English',
+        country_code: 'gb'
+    },
+    {
+        code: 'pt',
+        name: 'Português',
+        country_code: 'pt'
+    },
+    {
+        code: 'ar',
+        name: 'العربية',
+        country_code: 'sa',
+        dir: 'rtl'
+    }
+]
 
+
+const NovaDenuncia = (props) => {
+
+    
+    const currentLanguageCode = 'pt'  // cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find(l => l.code === currentLanguageCode);
     const { t } = useTranslation();
-    const currentLanguageCode = cookies.get('i18next') || 'en';
-
-
-    useEffect(() => {
-        window.scrollTo(0, 0); // open the page on top
-    }, []);
 
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: '' })
     const [imageSRC, setImageSRC] = useState("");
     const childRef = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+    const childRefFuncionario = useRef(null);  // it's using a reference of a method from ImageUpLoad.js
+
     const [imageFileName, setImageFileName] = useState("");
 
-    const [sede, setSede] = useState("");
-    const [sedeID, setSedeID] = useState(0);
+    const [sede, setSede] = useState("LiraLink Tecnologia Lda");
+    const [sedeID, setSedeID] = useState(1);
     const [agenciaID, setAgenciaID] = useState(0);
     const [agencia, setAgencia] = useState("");
 
@@ -75,6 +113,13 @@ const NovaDenuncia = () => {
     const [cidade, setCidade] = useState("");
     const [pais, setPais] = useState("");
     const [tipoDenunciaList, setSipoDenunciaList] = useState([]);
+    const [starValue, setStarValue] = useState(1);
+    const [rating, setRating] = useState(0) // initial rating value
+    const [Ratingdata, setRatingData] = useState([]);
+    const [RatingMotivodata, setRatingMotivoData] = useState([]);
+
+    const [countOneStar, setCountOneStar] = useState(1);
+    const [value, setValue] = useState('')
 
     let fotoFuncionario = "";
     // function for validating form
@@ -88,11 +133,11 @@ const NovaDenuncia = () => {
         if ('nome' in fieldValues)
             validationErrorM.nome = fieldValues.nome ? "" : " "
 
-        if ('tipodenunciaID' in fieldValues)
-            validationErrorM.tipodenunciaID = fieldValues.tipodenunciaID ? "" : " "
+        // if ('tipodenunciaID' in fieldValues)
+        //     validationErrorM.tipodenunciaID = fieldValues.tipodenunciaID ? "" : " "
 
-        if ('queixa' in fieldValues)
-            validationErrorM.queixa = fieldValues.queixa ? "" : " "
+        // if ('queixa' in fieldValues)
+        //     validationErrorM.queixa = fieldValues.queixa ? "" : " "
 
         if ('emailDenunciante' in fieldValues)
             validationErrorM.emailDenunciante = (/$^|.+@.+..+/).test(fieldValues.emailDenunciante) ? "" : " "
@@ -120,24 +165,30 @@ const NovaDenuncia = () => {
         handleInputChange } = useForm(initialFValues, true, validate);  // useForm = useForm.js. We defined - validateOnChange=false
 
     useEffect(() => {
-        // setImageSRC("https://media-exp1.licdn.com/dms/image/C4E03AQFsD7qKHQJzYA/profile-displayphoto-shrink_800_800/0/1624105018084?e=1642032000&v=beta&t=HTny2PpWRl0YOFcXgDMAx2rXIE7XU2lbDjzFm4T2g5o");
+       // window.scrollTo(0, 0); // open the page on top
+       
+       // i18next.changeLanguage("pt");
 
-        // updateValuesOnOpen();
+       // updateValuesOnOpen();
         //setUrl(urlImage());
 
-        TipoDenunciaGetAll(currentLanguageCode, values.sedeID);
+       // TipoDenunciaGetAll(currentLanguageCode, values.sedeID);
 
-    }, [t('header_title_denuncia_novo')]);
+    }, []);
 
     const updateValuesOnOpen = () => {
-        userSavedValue.map(item => (
-            values.sedeID = item.sedeID,
-            setSede(item.nomeSede)
-        ));
+        userSavedValue.map(item => {
+            values.sedeID = 1; // item.sedeID;
+            setSede("LiraLink Tecnologia Lda");  //
+            setSedeID(1);  //item.sedeID
+            values.codigo = "";
+        });
     }
 
+
     const sendImageFromImageUpload = (image) => {
-        childRef.current.imageChangeFromOutSide(image);  // saveImage() = method called
+
+        childRef.current.imageChangeFromOutSide("https://s3.amazonaws.com/liralink.sigra/" + image);  // saveImage() = method called
     }
 
 
@@ -172,7 +223,8 @@ const NovaDenuncia = () => {
 
     const ResetForm = () => {
         setValues(initialFValues);
-        setSede("");
+        values.codigo = "";
+        //  setSede("");
         setAgencia("");
         setPrimeiroNome("");
         setApelido("");
@@ -186,7 +238,9 @@ const NovaDenuncia = () => {
         sendImageFromImageUpload("");
         setUrl(urlImage())
         imageReset(); // reset the image
-        setNotificationShow(false)
+        setNotificationShow(false);
+        setRating(0)
+
     }
 
     const guardarDenuncias = () => {
@@ -216,7 +270,7 @@ const NovaDenuncia = () => {
     const pesquisaCodigoFuncionario = () => {
 
         if (values.codigo !== "") {
-           
+
             FuncionarioService.getID(values.codigo).then(response => {
 
                 if (response.data.length === 0) {
@@ -232,10 +286,11 @@ const NovaDenuncia = () => {
                     setCidade("");
                     setPais("");
                     sendImageFromImageUpload("");
-                    return 
-                } 
+                    return
+                }
 
                 response.data.map(info => {
+
                     setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
                     sendImageFromImageUpload("https://s3.amazonaws.com/liralink.sigra/" + info.imageName);
 
@@ -259,12 +314,14 @@ const NovaDenuncia = () => {
                     values.funcionarioID = info.id;
                     values.sedeID = info.sedeFuncionario.id;
                     values.agenciaID = info.agenciaFuncionario.id;
+                    values.rating = 0;
+
 
                     TipoDenunciaGetAll(currentLanguageCode, values.sedeID);
 
 
                 })
-            
+
 
             })
                 .catch(e => {
@@ -291,6 +348,62 @@ const NovaDenuncia = () => {
         pesquisaCodigoFuncionario();
     }
 
+    const onclickFuncionarioPopup = () => {
+
+        setPpupTitle(t('lista_funcionario'));
+        setOpenPopup(true);
+    }
+
+    const ratingDescricaoGet = (sedeID1, rating1) => {
+        RatingServices.getAll(sedeID1, rating1).then(response => {
+            setRatingData(response.data);
+
+        }
+        )
+    }
+
+    const ratingMotivoGet = (sedeID1, rating1) => {
+        RatingMotivoService.getAll(sedeID1, rating1).then(response => {
+            setRatingMotivoData(response.data);
+        }
+        )
+    }
+
+    const ratingAvaliacaoDescricaoChange = (e) => {
+
+        let ratingIDLocal = e.target.value
+        handleInputChange(e);
+        ratingMotivoGet(sedeID, ratingIDLocal);
+
+        //ratingMotivoTable(values.sedeID, ratingIDLocal);
+
+    }
+
+    const ratingMotivoChange = (e) => {
+
+        let ratingIDLocal = e.target.value
+        handleInputChange(e);
+        //ratingMotivoTable(values.sedeID, ratingIDLocal);
+    }
+
+    const myTheme = createTheme({
+        // Set up your custom MUI theme here
+    })
+
+    const onEditorChange = (event) => {
+        const plainText = event.getCurrentContent().getPlainText()
+       // console.log(plainText);
+        values.queixa = plainText;
+        // const plainText = event.getCurrentContent().getPlainText() // for plain text
+        // const rteContent = convertToRaw(event.getCurrentContent()) // for rte content with text formating
+        // rteContent && setValue(JSON.stringify(rteContent)) // store your rteContent to state
+    }
+
+    const save = (data) => {
+        console.log(values.queixa);
+      };
+
+
     return (
         <>
             <div className="newUserMainContainer">
@@ -308,7 +421,7 @@ const NovaDenuncia = () => {
 
                         <div className="newUser">
 
-                            <div>
+                            <div style={{ marginTop: "-30px" }}>
                                 <label className="userLabel"># {t('funcionarios_menu')}</label>
                                 <Controls.Input
                                     name="codigo"
@@ -325,7 +438,8 @@ const NovaDenuncia = () => {
 
                                 />
                                 <Search style={{ marginTop: "10px", cursor: "pointer" }}
-                                    onClick={handleKeyPress}
+                                    // onClick={handleKeyPress}
+                                    onClick={onclickFuncionarioPopup}
                                 />
                             </div>
                             <div>
@@ -393,7 +507,7 @@ const NovaDenuncia = () => {
                                 />
                             </div>
 
-                            <div>
+                            {/* <div>
                                 <label className="userLabel">{t('endereco')}</label>
                                 <Controls.Input
                                     name="endereco"
@@ -422,7 +536,7 @@ const NovaDenuncia = () => {
                                     width="33%"
                                     type="text"
                                 />
-                            </div>
+                            </div> */}
 
                             <div style={{ marginTop: "10px" }}>
                                 <ImageUpLoad
@@ -430,24 +544,131 @@ const NovaDenuncia = () => {
                                     fotoTitulo={t('foto')}
                                     margnLeft="0px"
                                     uploadDisplay={false}
-                                />
-                            </div>
-                        </div>
+                                    primeironome={primeiroNome}
+                                    apelido={apelido}
+                                    agencia={agencia}
 
-                        <div className="newUser2">
-                            <div style={{ marginBottom: "15px" }}>
-                                <label className="userLabel">{t('denunciante')}</label>
-                                <Controls.Input
-                                    name="nome"
-                                    placeHolder={t('denunciante')}
-                                    value={values.nome}
-                                    onChange={handleInputChange}
-                                    width="65%" type="text"
-                                    error={errors.nome}
+
                                 />
                             </div>
+
+                            <hr style={{ borderStyle: "solid", marginTop: "5px", width: "450px" }} />
 
                             <div>
+                                <label className="userLabel" style={{ color: "red" }}>{t('rating')}</label>
+
+                                <Rating style={{ width: "200px", marginTop: "4px" }}
+                                    name="simple-controlled"
+                                    value={rating}
+                                    onChange={(event, newValue) => {
+                                        setRating(newValue);
+                                        if (newValue === null) {
+                                            values.rating = 0;
+                                            values.ratingID = '';
+                                            values.ratingMotivoID = '';
+                                            ratingDescricaoGet(sedeID, 0);
+                                        } else {
+                                            values.ratingID = '';
+                                            values.ratingMotivoID = '';
+                                            values.rating = newValue;
+                                            ratingDescricaoGet(sedeID, newValue)
+
+                                        }
+
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{ paddingTop: "5px" }}>
+                                <label className="userLabel" style={{ marginTop: "-5px" }}
+                                    htmlFor="classificacao">{t('descricao_avaliacao')}</label>
+                                <Controls.Select
+                                    name="ratingID"
+                                    label="ratingID"
+                                    value={values.ratingID}
+                                    onChange={ratingAvaliacaoDescricaoChange}
+                                    options={Ratingdata}
+                                    typeOfSelect={3}
+                                    //error={errors.role}
+                                    width="65%"
+                                    height="40px"
+                                />
+                            </div>
+
+                            <div style={{ marginTop: "5px" }}>
+                                <label className="userLabel" style={{ marginTop: "-5px" }}
+                                    htmlFor="classificacao">{t('motivo_avaliacao')}</label>
+                                <Controls.Select
+                                    name="ratingMotivoID"
+                                    label="ratingMotivoID"
+                                    value={values.ratingMotivoID}
+                                    onChange={handleInputChange}
+                                    options={RatingMotivodata}
+                                    typeOfSelect={4}
+                                    //error={errors.role}
+                                    width="65%"
+                                    height="40px"
+                                />
+                            </div>
+
+                        </div>
+
+                        <div className="newUser4">
+
+                            {/* <div>
+                                <label className="userLabel">{t('rating')}</label>
+
+                                <Rating style={{ width: "200px", marginTop: "4px" }}
+                                    name="simple-controlled"
+                                    value={rating}
+                                    onChange={(event, newValue) => {
+                                        setRating(newValue);
+                                        if (newValue === null) {
+                                            values.rating = 0;
+                                            ratingDescricaoGet(sedeID, 0);
+                                        } else {
+                                            values.rating = newValue;
+                                            ratingDescricaoGet(sedeID, newValue)
+
+                                        }
+
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{ paddingTop: "5px", }}>
+                                <label className="userLabel"
+                                    htmlFor="classificacao">{t('descrição Avaliação')}</label>
+                                <Controls.Select
+                                    name="ratingID"
+                                    label="ratingID"
+                                    value={values.ratingID}
+                                    onChange={ratingAvaliacaoDescricaoChange}
+                                    options={Ratingdata}
+                                    typeOfSelect={3}
+                                    //error={errors.role}
+                                    width="65%"
+                                    height="40px"
+                                />
+                            </div>
+
+                            <div style={{ marginTop: "5px" }}>
+                                <label className="userLabel"
+                                    htmlFor="classificacao">{t('Motivo')}</label>
+                                <Controls.Select
+                                    name="ratingMotivoID"
+                                    label="ratingMotivoID"
+                                    value={values.ratingMotivoID}
+                                    onChange={handleInputChange}
+                                    options={RatingMotivodata}
+                                    typeOfSelect={4}
+                                    //error={errors.role}
+                                    width="65%"
+                                    height="40px"
+                                />
+                            </div> */}
+
+                            {/* <div>
                                 <label className="inputLabel">{t('tipo_denuncia')}</label>
                                 <Controls.Select
                                     name="tipodenunciaID"
@@ -461,6 +682,18 @@ const NovaDenuncia = () => {
                                     error={errors.tipodenunciaID}
                                 />
 
+                            </div> */}
+
+                            <div style={{ marginTop: "-25px" }}>
+                                <label className="userLabel">{t('denunciante')}</label>
+                                <Controls.Input
+                                    name="nome"
+                                    placeHolder={t('denunciante')}
+                                    value={values.nome}
+                                    onChange={handleInputChange}
+                                    width="65%" type="text"
+                                    error={errors.nome}
+                                />
                             </div>
 
                             <div>
@@ -486,7 +719,26 @@ const NovaDenuncia = () => {
                                 />
                             </div>
 
-                            <div>
+                            <div style={{ width: "400px", height: "100px" }}>
+
+                                <ThemeProvider theme={myTheme} >
+                                    <MUIRichTextEditor
+                                        label={t('queixaPlaceOrder')}
+                                        controls={['numberList', 'bulletList', 'bold', 'italic', 'underline', 'strikethrough']}
+                                        value={values.queixa}
+                                        onSave={save}
+                                        onChange={onEditorChange}
+                                    />
+                                </ThemeProvider>
+                                {/* <ThemeProvider theme={myTheme} > 
+                                    <MUIRichTextEditor label={t('queixaPlaceOrder')}
+                                    inlineToolbar={true} 
+                                    defaultValue={values.queixa}
+                                    />
+                                </ThemeProvider> */}
+                            </div>
+
+                            {/* <div>
                                 <label className="userLabel">{t('queixa')}</label>
                                 <Controls.Input
                                     name="queixa"
@@ -496,18 +748,36 @@ const NovaDenuncia = () => {
                                     type="text"
                                     width="65%"
                                     multiline
-                                    rows={7}
-                                    height="140px"
+                                    rows={8}
+                                    height="100px"
                                     error={errors.queixa}
                                 />
+
+                            </div> */}
+
+                            <div className="buttonContainerDenuncias">
+                                <div >
+                                    <Controls.Buttons
+                                        type="button"
+                                        text={t('button_gravar')}
+                                        onClick={handleSubmit}
+                                    />
+                                    <Controls.Buttons
+                                        type="button"
+                                        text={t('button_limpar')}
+                                        color="secondary"
+                                        onClick={ResetForm} />
+                                </div>
+
                             </div>
+
 
                         </div>
                     </div>
 
-                    <div className="newUserContainer">
+                    {/* <div className="newUserContainer">
 
-                        <div className="buttonContainer1">
+                        <div className="buttonContainer">
                             <div >
                                 <Controls.Buttons
                                     type="button"
@@ -520,8 +790,9 @@ const NovaDenuncia = () => {
                                     color="secondary"
                                     onClick={ResetForm} />
                             </div>
+
                         </div>
-                    </div>
+                    </div> */}
 
                 </Form>
             </div>
@@ -534,6 +805,57 @@ const NovaDenuncia = () => {
                     />
                     : null
             }
+
+            <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                //pageHeader={PopupHeaderUniversity()}
+                buttonColor="secondary"
+                title={popupTitle}
+                width="550px"
+                height="650px"
+                marginTop="10px"
+            >
+
+                <FuncionarioSearchTable ref={childRefFuncionario}
+                    idDisplay={false}
+                    agenciaDisplay={false}
+                    codeDisplay={false}
+                    fotoDisplay={true}
+                    primeiroNomeDisplay={false}
+                    ultimonomeDisplay={false}
+                    emailDisplay={false}
+                    actionsButtonDisplaySelect={true}
+                    telefoneDislay={false}
+                    statusDisplay={true}
+                    actionsButtonDisplayEditDelete={false}
+                    backGroundColor="darkBlue"
+                    sedeID={sedeID}
+                    agenciaID={agenciaID}
+                    color="white"
+                    pageSize={9}
+                    rowPerPage={9}
+                    funcionariosData={(id, code, primeironome, ultimonome, telefone, agencia, agenciaID, email, endereco, imageName) => {
+                        values.codigo = code;
+                        setPrimeiroNome(primeironome);
+                        setApelido(ultimonome);
+                        setTelefone(telefone);
+                        setEmail(email);
+                        setTelefone(telefone);
+                        // setEndereco(endereco);
+                        setAgencia(agencia)
+                        values.agenciaID = agenciaID;
+                        values.rating = 0;
+                        values.funcionarioID = id;
+
+                        // setImageChangeFromOutSideURL("https://s3.amazonaws.com/liralink.sigra/" + imageName);
+                        sendImageFromImageUpload(imageName);
+
+                        setOpenPopup(false);
+                    }
+                    }
+                />
+            </Popup>
 
 
         </>

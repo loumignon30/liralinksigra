@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import "./userList.css";
 import '../../App.css'
@@ -97,6 +98,7 @@ const UserList = () => {
     }
 
     return (
+        <>
         <div className="utilisateurList">
             <h3 style={{ marginLeft: '15px' }}>{t('lista_usuarios')}</h3>
 
@@ -230,6 +232,7 @@ const UserList = () => {
             </Popup>
             </div>
         </div>
+        </>
     )
 }
 export default UserList;

@@ -42,6 +42,30 @@ export default function Select(props) {
                             </MenuItem>
                         )
                         ) :
+                        typeOfSelect === 3 ?
+                        options.map(item =>
+                        (
+                            <MenuItem key={item.id}
+                                value={item.id}>{item.descricao}
+                            </MenuItem>
+                        )
+                        ) :
+                        typeOfSelect === 4 ?
+                        options.map(item =>
+                        (
+                            <MenuItem key={item.id}
+                                value={item.id}>{item.motivo}
+                            </MenuItem>
+                        )
+                        ):
+                        typeOfSelect === 5 ?
+                        options.map(item =>
+                        (
+                            <MenuItem key={item.id}
+                                value={item.id}>{item.nome}
+                            </MenuItem>
+                        )
+                        ):
                         options.map(item =>
                         (<MenuItem key={item.id} value={item.title}>{item.title}</MenuItem>
                         )

@@ -99,7 +99,6 @@ const TipoDenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is us
             { field: 'abreviationLangue', headerName: t('lingua'), hide: { linguaAbreviacaoDisplay }, headerClassName: classes.paper },
 
 
-
         statusDisplay ?
             {
                 field: 'status', headerName: t('status'), width: 80, headerClassName: classes.paper,

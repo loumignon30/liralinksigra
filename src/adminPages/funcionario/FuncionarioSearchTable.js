@@ -1,4 +1,5 @@
-import { Delete, Done } from '@mui/icons-material';
+import "./funcionario.css";
+import { Delete, Done, Search } from '@mui/icons-material';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import UsableTable from '../../components/reusableComponents/UsableTable';
 import FuncionarioService from "../../services/admin/Funcionario.services";
@@ -6,9 +7,22 @@ import useStylesSearchTable from '../../components/reusableComponents/SearchTabl
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
-import semfoto from "../../assets/images/semfoto.png"
+import AgenciaService from "../../services/admin/Agencia.service";
 
 import { useTranslation } from "react-i18next";
+import Controls from '../../components/reusableComponents/Controls';
+
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Grid, InputAdornment } from "@mui/material";
 
 const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is used to update method from this file from ather files
 
@@ -38,14 +52,15 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
         actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete,
         pageSize, rowPerPage,
-        sedeID, agenciaID, agenciaDisplay } = props;
+        sedeID, agenciaID, agenciaDisplay, fotoDisplay } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
     const [firstNameSearch, setFirstNameSearch] = useState("");
     const [campoPesquisa, setCampoPesquisa] = useState("");
-
-    
+    const [agenciaData, setAgenciaData] = useState([]);
+    const [agenciaIDLocal, setAgenciaIDLocal] = useState("");  // backend image  URL
+    const [code, setCode] = useState("");
 
     const classes = useStyles();
 
@@ -59,8 +74,9 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
     const { t } = useTranslation();
 
     useEffect(() => {
-       // getGetAllData(sedeID, agenciaID);
+        // getGetAllData(sedeID, agenciaID);
         setUrl(urlImage());
+        agenciaGetData(sedeID)
 
     }, []);
 
@@ -69,11 +85,14 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
             getFirstnameSearch: getFirstnameSearch,
             getLasttnameSearch: getLasttnameSearch,
             getGetAllData: getGetAllData, // it's calling the method : unversityGetAll()
-            getGetAllDataFuncionarioAgencia : getGetAllDataFuncionarioAgencia       }
+            getGetAllDataFuncionarioAgencia: getGetAllDataFuncionarioAgencia
+        }
     ));
 
-    const getFuncionarioData = (id, code, agencia) => {
-        props.agenciaData(id, code, agencia);
+    const getFuncionarioData = (id, code, primeironome, ultimonome, telefone, agencia, agenciaID, email, endereco, imageName) => {
+        props.funcionariosData(id, code, primeironome, ultimonome,
+            telefone, agencia, agenciaID,
+            email, endereco, imageName);
         setOpenPopup(false);
     }
 
@@ -106,50 +125,108 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
         setFirstNameSearch(lastNameToSearch)
     }
 
+    const agenciaChange = (e) => {
+
+        let agenciaIDLocal = e.target.value;
+        setAgenciaIDLocal(agenciaIDLocal);
+
+        FuncionarioService.getAll(sedeID, agenciaIDLocal, "funcionariosComAgencia", "")
+            .then(response => {
+                setData(response.data)
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    const getGetAllDataPorCodigo = (sedeID, agenciaID, codigo) => {
+
+        FuncionarioService.getAll(sedeID, agenciaID, "codigoPesquisa", codigo)
+            .then(response => {
+                setData(response.data)
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    const agenciaGetData = (sedeID1) => {
+        AgenciaService.getAll(sedeID1).then(response => {
+            setAgenciaData(response.data)
+        })
+            .catch(e => {
+                console.log(e)
+            });
+
+    }
+
+    const handleCodeChange = (e) => {
+        setCode(e.target.value);
+    }
+    const CodeClick = (e) => {
+        getGetAllDataPorCodigo(sedeID, agenciaID, code);
+    }
     const columns = [
         idDisplay ?
 
             { field: 'id', headerName: 'ID', flex: 1, headerClassName: classes.paper } :
             { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
 
-            agenciaDisplay ?
-            {field: 'agencia', headerName: t('agencia'), flex: 1.5, headerClassName: classes.paper,
-            renderCell: (params) => {
-                return (
-                    <>
+        agenciaDisplay ?
+            {
+                field: 'agencia', headerName: t('agencia'), flex: 1.5, headerClassName: classes.paper,
+                renderCell: (params) => {
+                    return (
+                        <>
                             {params.row.agenciaFuncionario.nome}
-                    </>
-                )
+                        </>
+                    )
 
-                // C:\React app\world-university-backend\public\images
-            }
-        }: { field: 'agencia', headerName: t('agencia'), flex: 1, hide: { agenciaDisplay }, headerClassName: classes.gridHeader },,
+                    // C:\React app\world-university-backend\public\images
+                }
+            } : { field: 'agencia', headerName: t('agencia'), flex: 1, hide: { agenciaDisplay }, headerClassName: classes.gridHeader }, ,
 
         codeDisplay ?
             { field: 'code', headerName: t('code'), flex: 0.5, headerClassName: classes.paper } :
             { field: 'code', headerName: t('code'), hide: { codeDisplay }, flex: 1, headerClassName: classes.paper },
 
-        {
-            field: 'nomeCompleto', headerName: t('nome_completo'), flex: 3, headerClassName: classes.paper,
-            renderCell: (params) => {
-                return (
-                    <>
-                        <div className="UtilisateurListPlusPhoto">
-                            <img className="UtilisateurListImage"
-                                src={params.row.imageName !== "" ? "https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
-                                // src={params.row.imageName !== "" ? url + "/images/" + params.row.imageName : url + "/images/" + "semfoto.png"}
-                                //src="http://localhost:5001/api/images/Captura%20de%20Ecr%C3%A3%20(379).png"
+        fotoDisplay ?
+            {
+                field: 'nomeCompleto', headerName: t('nome_completo'), flex: 3, headerClassName: classes.paper,
+                renderCell: (params) => {
+                    return (
+                        <>
+                            <div className="UtilisateurListPlusPhoto">
+                                <img className="fotoFuncionarioFormatoGrande"
+                                    src={params.row.imageName !== "" ? "https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
+                                    alt="" />
+                                {/* {params.row.primeironome + " " + params.row.ultimonome} */}
+                            </div>
+                        </>
+                    )
 
-                                //src={params.row.imageName}
-                                alt="" />
-                            {params.row.primeironome + " " + params.row.ultimonome}
-                        </div>
-                    </>
-                )
+                    // C:\React app\world-university-backend\public\images
+                }
+            } :  //{ field: 'nomeCompleto', headerName: t('nomeCompleto'), hide: { fotoDisplay }, flex: 1, headerClassName: classes.paper },
 
-                // C:\React app\world-university-backend\public\images
-            }
-        },
+            // !fotoDisplay ?
+            {
+                field: 'nomeCompleto', headerName: t('nome_completo'), flex: 3, headerClassName: classes.paper,
+                renderCell: (params) => {
+                    return (
+                        <>
+                            <div className="UtilisateurListPlusPhoto">
+                                <img className="UtilisateurListImage"
+                                    src={params.row.imageName !== "" ? "https://s3.amazonaws.com/liralink.sigra/" + params.row.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
+                                    alt="" />
+                                {params.row.primeironome + " " + params.row.ultimonome}
+                            </div>
+                        </>
+                    )
+
+                }
+            },
+
         primeiroNomeDisplay ?
             { field: 'primeironome', headerName: t('nome'), flex: 1, headerClassName: classes.paper } :
             { field: 'primeironome', headerName: t('apelido'), hide: { primeiroNomeDisplay }, headerClassName: classes.paper },
@@ -199,7 +276,9 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
                         <>
                             <Done className={classes.searchButton}
                                 onClick={() => {
-                                    getFuncionarioData(params.row.id, params.row.code, params.row.primeironome)
+                                    getFuncionarioData(params.row.id, params.row.code, params.row.primeironome,
+                                        params.row.ultimonome, params.row.telefone,
+                                        params.row.agenciaFuncionario.nome, params.row.agenciaFuncionario.id)
                                 }
                                 }
                             />
@@ -247,14 +326,118 @@ const FuncionarioSearchTable = forwardRef((props, ref) => { // forwardRef is use
     ];
     return (
         <>
-            <UsableTable
-                records={data}
-                columns={columns}
-                pageSize={pageSize}
-                rowPerPage={rowPerPage}
-                firstNameSearch={firstNameSearch}
-                campoPesquisa={campoPesquisa}
-            />
+            {fotoDisplay ?
+
+                <div style={{ paddingTop: "5px", marginBottom: "10px" }}>
+                    <label className="userLabel"
+                        htmlFor="classificacao">{t('agencia')}</label>
+                    <Controls.Select
+                        name="agenciaLocal"
+                        label="agenciaLocal"
+                        value={agenciaIDLocal}
+                        onChange={agenciaChange}
+                        options={agenciaData}
+                        typeOfSelect={5}
+                        //error={errors.role}
+                        width="65%"
+                        height="40px"
+                    />
+
+                    <div>
+                        <label className="userLabel">{t('pesquisar')}</label>
+                        <Controls.Input
+                            name="code"
+                            placeHolder={t('pesquisar')}
+                            value={code}
+                            onChange={handleCodeChange}
+                            width="49%"
+                            type="text"
+                            InputProps={{
+                                startAdornment: (<InputAdornment position='start'>
+                                    <Search />
+                                </InputAdornment>)
+                            }}
+                        />
+
+
+                        <Controls.Buttons
+                            type="button"
+                            text={t('pesquisar')}
+                            //  className="button"
+                            size="small"
+                            onClick={CodeClick}
+                        />
+
+
+                    </div>
+                </div> : null
+            }
+
+            {!fotoDisplay ?
+                <UsableTable
+                    records={data}
+                    columns={columns}
+                    pageSize={pageSize}
+                    rowPerPage={rowPerPage}
+                    firstNameSearch={firstNameSearch}
+                    campoPesquisa={campoPesquisa}
+                /> :
+
+                data.map((item, index) => (
+
+                    <li style={{listStyle:"none"}} key={index} >
+
+                    <div style={{ margin: "10px" }}>
+
+                        <Card sx={{ maxWidth: 475 }}   >
+                            <CardHeader style={{ border: "solid", borderWidth: "2px" }}
+                                avatar={
+                                    <Avatar sx={{ bgcolor: red[500], height: '70px', width: '70px'  }} aria-label="recipe"
+                                    >
+                                        {item.code}
+                                    </Avatar>
+                                }
+                                action={
+                                    <IconButton aria-label="settings">
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                }
+                                title={item.primeironome + " " + item.ultimonome}
+                                subheader={"Função: " + item.funcaoFuncionario.funcao + " " + " Departamento: " + item.departamentoFuncionario.departamento}
+
+                            />
+                            <CardMedia 
+                                component="img"
+                                // height="300"
+                                className="fotoFuncionarioFormatoGrande"
+                                image={item.imageName !== "" ? "https://s3.amazonaws.com/liralink.sigra/" + item.imageName : "https://s3.amazonaws.com/liralink.sigra/" + "semfoto.png"}
+                                //"/static/images/cards/paella.jpg"
+                                alt={item.primeironome + " " + item.ultimonome}
+                                onClick={() => {
+
+                                    getFuncionarioData(item.id, item.code, item.primeironome,
+                                        item.ultimonome, item.telefone,
+                                        item.agenciaFuncionario.nome, item.agenciaFuncionario.id,
+                                        item.email, item.endereco, item.imageName);
+                                }}
+                            />
+                            {/* <CardContent>
+                            <Typography variant="body2" color="text.secondary">
+                                                    
+                            This impressive paella is a perfect party dish and a fun meal to cook
+                            together with your guests. Add 1 cup of frozen peas along with the mussels,
+                            if you like.
+                        </Typography>
+                    </CardContent> */}
+                        </Card>
+                    </div>
+                    </li>
+
+                )
+
+                )
+
+            }
         </>
     )
 });

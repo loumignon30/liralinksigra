@@ -185,6 +185,12 @@
     "estatistica_sub_header": "Annual Statistics",
     "grafique_plaine_sidebar_menu": "Complaints Chart",
 
+    "rating": "Rating",
+
+    "nome_trabalador": "Employee Name",
+    "descricao_avaliacao": "Rating Description",
+    "descrição": "Description",
+    "motivo_avaliacao": "Reason of Notation",
 
     "janeiro": "January",
     "fevereiro": "February",

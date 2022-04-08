@@ -518,6 +518,7 @@ const NovoFuncionario = () => {
                                     sedeID={sedeID}
                                     agenciaID={agenciaID}
                                     color={color}
+                                    fotoDisplay={false}
                                     pageSize={5}
                                     rowPerPage={5}
                                 />
@@ -701,6 +702,7 @@ const NovoFuncionario = () => {
                                 setDepartamento(departamento);
                                 values.departamentoID = id;
                                 setOpenPopup(false);
+                                
                             }
                             }
                         />

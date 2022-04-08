@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "./sede.css";
 import '../../App.css'
 import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog"

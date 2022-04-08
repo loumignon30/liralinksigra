@@ -1,6 +1,6 @@
 import "./homeDashboard.css"
 import { ArrowUpward } from '@mui/icons-material';
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function CaracteristiquesInfo() {

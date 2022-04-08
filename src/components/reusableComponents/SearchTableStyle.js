@@ -162,8 +162,35 @@ const useStyles = makeStyles(props => ({
         color: "white",
         fontWeight: 600,
         textDecoration: "line-through"
-
-    }
+    },
+    tipoMovimentoReclamacoesLandingPage: {
+        color: "black",
+        background: "yellow",
+        fontSize: "10px",
+        fontFamily: "Times New Roman', Times, serif",
+        textAlign: "center",
+         width: "200%",
+        height: "85%"
+        
+    },
+    tipoMovimentoAvaliacoesLandingPage: {
+        color: "black",
+        background: "lightblue",
+        fontSize: "10px",
+        fontFamily: "Times New Roman', Times, serif",
+        textAlign: "center",
+         width: "200%",
+        height: "85%"
+    },
+    tipoMovimentoSugestoesLandingPage: {
+        color: "black",
+        background: "lightcyan",
+        fontSize: "10px",
+        fontFamily: "Times New Roman', Times, serif",
+        textAlign: "center",
+         width: "200%",
+        height: "85%"
+    },
 }));
 
 

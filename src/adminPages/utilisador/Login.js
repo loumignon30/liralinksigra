@@ -56,7 +56,7 @@ const Login = () => {
     //         });
     // }
 
-    let testData = 0;
+    let testData = [];
     let nivelAcessoTest = 0;
 
     useEffect(() => {
@@ -65,30 +65,34 @@ const Login = () => {
 
     const userGetEmail = async () => {
         UserLoginService.getUserEmail(values.email, values.password)
-            .then(response1 => {
-                testData = (response1.data.length)
+            .then(response => {
+                testData = (response.data);
+
+                if(testData.error) {
+                    setUserSavedValue(false);
+                    setMessage("Usuario é senha incorrectos1!");
+                    return;
+                } 
+
                 // test data *************************************************
-                if (testData > 0) {
-                    UserLoginService.getUserEmail(values.email, values.password)
-                        .then(response => {
-                            response.data.map(info => {
-                                nivelAcessoTest = info.status;
+                if (testData.user.id > 0) {
+                    localStorage.setItem('token', testData.token);
                                 setUserSavedValue([
                                     {
-                                        id: info.id,
-                                        firstname: info.firstname,
-                                        lastname: info.lastname,
-                                        sexo: info.gender,
-                                        photofilename: info.photofilename,
-                                        nivelAcesso: info.role,
-                                        status: info.status,
-                                        sedeID: info.sedeID,
-                                        sede: info.userSede.sede,
-                                        email: info.email,
-                                        contacto: info.telephone,
-                                        endereco: info.address,
-                                        cidade: info.city,
-                                        pais: info.country,
+                                        id: testData.user.id,
+                                        firstname: testData.user.firstname,
+                                        lastname: testData.user.lastname,
+                                        sexo: testData.user.gender,
+                                        photofilename: testData.user.photofilename,
+                                        nivelAcesso: testData.user.role,
+                                        status: testData.user.status,
+                                        sedeID: testData.user.sedeID,
+                                        sede: testData.user.sede,
+                                        email: testData.user.email,
+                                        contacto: testData.user.telephone,
+                                        endereco: testData.user.address,
+                                        cidade: testData.user.city,
+                                        pais: testData.user.country,
                                         sedeID_pesquisas: "",
                                         sede_pesquisa: "",
                                         agenciaID_pesquisa: "",
@@ -96,21 +100,25 @@ const Login = () => {
                                         provenienciaFormulario: ""
                                     }
                                 ])
-                            })
+                            // })
 
                             navigate('/Home');
 
-                        })
-                        .catch(e => {
-                            console.log(e);
-                        });
+                        // })
+                        // .catch(e => {
+                        //     console.log(e);
+                        // });
 
-                } else {
-                    setUserSavedValue(false);
-                    setMessage("User Name or Password Incorrect!!!")
-                }
+                } 
+                // else {
+                //     setUserSavedValue(false);
+                //     setMessage("Usuario é senha incorrectos1!")
+                // }
                 // end test data *********************************************
-            });
+            })
+            //.then(data => {console.log("User Name or Password Incorrect1!!!")})
+           // .then(response  => {console.log("User Name or Password Incorrect2!!!")})
+          //  .catch(error => (console.log("Usuario é senha incorrectos2!"))) //setMessage( error.response.data.message));
 
     }
     const handleSubmit = (e) => {

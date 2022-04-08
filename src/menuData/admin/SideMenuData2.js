@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Icons } from "../../components/reusableComponents/Icons";
 import { useTranslation } from "react-i18next";
 

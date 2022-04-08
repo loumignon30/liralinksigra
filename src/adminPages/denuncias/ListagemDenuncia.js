@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+
 import "./denuncia.css";
 import '../../App.css'
 import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog"
@@ -115,6 +116,7 @@ const onclickAgenciaPopup = () => {
      }
 
     return (
+        <>
         <div className="utilisateurList">
             {/* <h3 style={{ marginLeft: '15px' }}>{t('lista_denuncia')}</h3> */}
 
@@ -128,8 +130,11 @@ const onclickAgenciaPopup = () => {
                 </PageHeader>
             </div>
 
-            <div style={{ marginLeft: "5px", marginBottom: "5px", marginTop: "-15px" }}>
-                <label className="inputLabel">{t('sede')}</label>
+
+            <div className="universityContainer">
+
+             <div style={{ marginLeft: "5px", marginBottom: "5px", marginTop: "-15px" }}> 
+                 <label className="inputLabel">{t('sede')}</label>
                 <Controls.Input
                     name="sede"
                     placeHolder={t('sede')}
@@ -140,10 +145,12 @@ const onclickAgenciaPopup = () => {
                 />
                 <Search style={{ marginTop: "10px", cursor: "pointer" }}
                     onClick={onclickSedePopup}
-                />
-            </div>
+                /> 
+           </div>
 
-            <div style={{ marginLeft: "5px", marginBottom: "5px", marginTop: "-5px" }}>
+            
+
+            <div style={{ marginLeft: "5px", marginBottom: "20px", marginTop: "-5px" }}>
                 <label className="inputLabel">{t('agencia')}</label>
                 <Controls.Input
                     name="agencia"
@@ -156,8 +163,15 @@ const onclickAgenciaPopup = () => {
                     onClick={onclickAgenciaPopup}
                 />
             </div>
+            </div>
 
-            <div style={{ height: 400, width: '100%' }}>
+            <div className="universityContainer">
+
+                
+            </div>
+
+
+            <div style={{ height: 400, width: '100%'}}>
                 <DenunciaSearchTable ref={childRef}
                     idDisplay={false}
                     nomeDisplay={true}
@@ -165,11 +179,10 @@ const onclickAgenciaPopup = () => {
                     linguaQueixa={true}
                     dataDisplay={true}
                     horaDisplay={true}
-                    dataDisplay={true}
                     emailDisplay={false}
                     telefoneDislay={false}
                     statusDisplay={true}
-                    queixaDisplay={true}
+                    queixaDisplay={false}
                     actionsButtonDisplaySelect={false}
                     actionsButtonDisplayEditDelete={false}
                     backGroundColor="darkBlue"
@@ -177,10 +190,13 @@ const onclickAgenciaPopup = () => {
                     abreviationLangue={currentLanguageCode}
                     sedeID={sedeID}
                     agenciaID={agenciaID}
-                    pageSize={9}
-                    rowPerPage={9}
+                    pageSize={10}
+                    rowPerPage={10}
                 />
             </div>
+            </div>
+
+
             {
                 count === 1 ?
                     <Popup
@@ -199,8 +215,8 @@ const onclickAgenciaPopup = () => {
                             statusDisplay={true}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={10}
+                            rowPerPage={10}
                             backGroundColor="darkBlue"
                             color="white"
                             sedeID={sedeID}
@@ -210,7 +226,7 @@ const onclickAgenciaPopup = () => {
                                 setSedeID(id);
                                 setOpenPopup(false);
                                 setAgencia("");
-                                //tableAgenciaUpdateData1(id);
+                                tableDenunciaLinguaUpdateData(sedeID, 0)
                             }
                             }
                         />
@@ -237,8 +253,8 @@ const onclickAgenciaPopup = () => {
                             actionsButtonDisplayEditDelete={false}
                             backGroundColor="darkBlue"
                             color="white"
-                            pageSize={7}
-                            rowPerPage={7}
+                            pageSize={10}
+                            rowPerPage={10}
                             sedeID={sedeID}
                             userID={userID}
                             agenciaData={(id, code, agencia) => {
@@ -269,8 +285,8 @@ const onclickAgenciaPopup = () => {
                             statusDisplay={true}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={7}
-                            rowPerPage={7}
+                            pageSize={10}
+                            rowPerPage={10}
                             backGroundColor="darkBlue"
                             color="white"
                             sedeData={(id, code, sede) => {
@@ -278,7 +294,7 @@ const onclickAgenciaPopup = () => {
                                 setSedeID(id)
                                 setOpenPopup(false);
                                 setAgencia("");
-                               // tableAgenciaUpdateData1(id);
+                                tableDenunciaLinguaUpdateData(sedeID, 0)
                             }
                             }
                         />
@@ -307,8 +323,8 @@ const onclickAgenciaPopup = () => {
                             userID={userID}
                             backGroundColor="darkBlue"
                             color="white"
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={10}
+                            rowPerPage={10}
                             agenciaData={(id, code, agencia) => {
                                 setAgencia(agencia);
                                 setAgenciaID(id)
@@ -320,7 +336,7 @@ const onclickAgenciaPopup = () => {
                     </Popup> : null
             }
 
-        </div>
+</>
     )
 }
 export default ListagemDenuncia;

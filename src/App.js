@@ -27,7 +27,7 @@ import ListagemTipoDenuncia from './adminPages/denuncias/ListagemTipoDenuncia';
 import AfetacaoSedeAgencia from "./adminPages/utilisador/AfetacaoSedeAgencia";
 import EstisticaPorSede from "./adminPages/gestaoDenuncia/EstisticaPorSede"
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Login from './adminPages/utilisador/Login';
 import Popup from './components/reusableComponents/Popup';
 
@@ -47,7 +47,7 @@ const App = () => {
             title=""
             closeButtonDisplay={false}
             width="920px"
-            height="450px"
+            height="650px"
             marginTop = "-10px"
           >
             <div style={{marginTop:"-25px"}}>
@@ -64,12 +64,18 @@ const App = () => {
   )
   return (
     <Router>
+
+          {/* <Routes >
+              <Route exact path="/denuncias" element={<NovaDenuncia />} />
+          </Routes> */}
+
     <div>
       <UserLoggedContext.Provider value={{ userSavedValue, setUserSavedValue }}>
         {!userSavedValue.length > 0 ?
           <Routes >
             <Route exact path="/" element={<Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
+
           </Routes>
           :
           <div>
@@ -99,8 +105,11 @@ const App = () => {
             <Route path="/denuncia" element={<NovaDenuncia />} />
             <Route path="/listagemDenuncia" element={<ListagemDenuncia />} />
             <Route path="/listagemTipoDenuncia" element={<ListagemTipoDenuncia />} />
-            <Route path="/tipoDenunciaConfig" element={<TipoDeDenuncias />} />
-            <Route exact path="/tipoDenuncia/*" element={<TipoDenunciaComponent />} />
+           
+            {/* <Route path="/tipoDenunciaConfig" element={<TipoDeDenuncias />} /> */}
+            {/* <Route exact path="/tipoDenuncia/*" element={<TipoDenunciaComponent />} /> */}
+            <Route exact path="/tipoDenuncia" element={<TipoDeDenuncias />} />
+
             <Route path="/listaAgencias" element={<ListagemAgencias />} />
             <Route path="/afetacaoSedeAgencia/:id" element={<AfetacaoSedeAgencia />} />   
 

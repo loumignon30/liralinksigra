@@ -6,6 +6,7 @@ import useStylesSearchTable from '../../components/reusableComponents/SearchTabl
 import urlImage from '../../http-common-images';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import { Rating, SvgIcon } from '@mui/material';
 
 import { useTranslation } from "react-i18next";
 
@@ -109,35 +110,6 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
             { field: 'nome', headerName: t('denunciante'), flex: 2, headerClassName: classes.paper } :
             { field: 'nome', headerName: t('denunciante'), hide: { nomeDisplay }, headerClassName: classes.paper },
 
-
-        tipoDenunciaDisplay ?
-            {
-                field: 'tipodenuncia', headerName: t('tipo_denuncia'), flex: 1.5, headerClassName: classes.paper,
-                renderCell: (type) => {
-                    return (
-                        <>
-                            {type.row.denunciaTipodenuncia.tipoDenuncia}
-                        </>
-                    )
-                }
-            } :
-            { field: 'tipodenuncia', headerName: t('tipo_denuncia'), hide: { tipoDenunciaDisplay }, headerClassName: classes.paper },
-
-        linguaQueixa ?
-            {
-                field: 'linguaqueixa', headerName: t('language'), flex: 1, headerClassName: classes.paper,
-                renderCell: (type) => {
-                    return (
-                        <>
-                            {type.row.denunciaTipodenuncia.lingua}
-                        </>
-                    )
-                }
-            } :
-
-            { field: 'linguaqueixa', headerName: t('tipo_denuncia'), hide: { linguaQueixa }, headerClassName: classes.paper },
-
-
         emailDisplay ?
             { field: 'email', headerName: t('email'), flex: 1, headerClassName: classes.paper } :
             { field: 'email', headerName: t('email'), hide: { emailDisplay }, headerClassName: classes.paper },
@@ -150,9 +122,111 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
             { field: 'queixa', headerName: t('queixa'), flex: 2, headerClassName: classes.paper } :
             { field: 'queixa', headerName: t('queixa'), hide: { queixaDisplay }, headerClassName: classes.paper },
 
+        {
+            field: 'rating', headerName: t('rating'), flex: 1.2, headerClassName: classes.paper,
+            renderCell: (type) => {
+                return (
+                    <>
+                        <span style={{ fontSize: "11px" }}>
+                            <Rating style={{ width: "80px", marginTop: "4px" }}
+                                value={type.row.ratingDenuncia.rating}
+                                readOnly={true}
+                            // fullsymbol={<SVGIcon href="#icon-star-full" className="icon" />}
+                            />
+                        </span>
+                    </>
+                )
+            }
+        },
+        {
+            field: 'ratingDescricao', headerName: t('descricao_avaliacao'), flex: 1.3, headerClassName: classes.paper,
+            renderCell: (type) => {
+                return (
+                    <>
+
+                    {Number(type.row.tipoMovimento) == 1 ?   
+                        <span className={classes2.tipoMovimentoReclamacoesLandingPage}>
+                            {type.row.ratingDenuncia.descricao}
+                        </span> :  
+                         Number(type.row.tipoMovimento) == 2 ?   
+                            <span className={classes2.tipoMovimentoAvaliacoesLandingPage}>
+                               {type.row.ratingDenuncia.descricao}
+                            </span> :  
+                             Number(type.row.tipoMovimento) == 3 ?   
+                             <span className={classes2.tipoMovimentoSugestoesLandingPage}>
+                                {type.row.ratingDenuncia.descricao}
+                             </span> :null
+            }
+
+                     
+                    </>
+                )
+            }
+        },
+        {
+            field: 'ratingMotivo', headerName: t('motivo_avaliacao'), flex: 1.3, headerClassName: classes.paper,
+            renderCell: (type) => {
+                return (
+                    <>
+
+{/* {type.row.ratingMotivoTipodenuncia.tipoMotivo}
+ */}
+                    {Number(type.row.tipoMovimento) == 1 ?   
+                        <span className={classes2.tipoMovimentoReclamacoesLandingPage}>
+                            {type.row.ratingMotivoTipodenuncia.motivo}
+                        </span> :  
+                         Number(type.row.tipoMovimento) == 2 ?   
+                            <span className={classes2.tipoMovimentoAvaliacoesLandingPage}>
+                                {type.row.ratingMotivoTipodenuncia.motivo}
+                            </span> :  
+                             Number(type.row.tipoMovimento) == 3 ?   
+                             <span className={classes2.tipoMovimentoSugestoesLandingPage}>
+                                 {type.row.ratingMotivoTipodenuncia.motivo}
+                             </span> :null
+
+                        // <span style={{ fontSize: "11px" }}>
+                        //      {type.row.ratingMotivoTipodenuncia.motivo}
+                        // </span>
+
+                    }
+
+                    </>
+                )
+            }
+        },
+        {
+            field: 'trabalhador', headerName: t('Reclamação Contra'), flex: 2, headerClassName: classes.paper,
+            renderCell: (type) => {
+                return (
+                    <>
+                     {Number(type.row.tipoMovimento) == 1 ?   
+                        <span className={classes2.tipoMovimentoReclamacoesLandingPage}> 
+
+                            {type.row.tipoReclamacao ==1 ? 
+                                type.row.funcaionarioDenuncia.primeironome + ' ' + type.row.funcaionarioDenuncia.ultimonome
+                                :type.row.agenciaReclamacao.nome
+                            }
+
+                        </span> :  
+                         Number(type.row.tipoMovimento) == 2 ?   
+                            <span className={classes2.tipoMovimentoAvaliacoesLandingPage}>
+                                {type.row.tipoReclamacao ==1 ? 
+                                type.row.funcaionarioDenuncia.primeironome + ' ' + type.row.funcaionarioDenuncia.ultimonome
+                                :type.row.agenciaReclamacao.nome
+                            }
+                            </span> :  
+                             Number(type.row.tipoMovimento) == 3 ?   
+                             <span className={classes2.tipoMovimentoSugestoesLandingPage}>
+                                {type.row.funcaionarioDenuncia.primeironome + ' ' + type.row.funcaionarioDenuncia.ultimonome}
+                             </span> :null}
+                        
+                    </>
+                )
+            }
+        },
         statusDisplay ?
             {
-                field: 'status', headerName: t('status'), flex:1, headerClassName: classes.paper,
+                field: 'status', headerName: t('status'), flex: 1, headerClassName: classes.paper,
                 renderCell: (type) => {
                     return (
                         <>

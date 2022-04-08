@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import "./funcionario.css";
 import '../../App.css'
 import ConfirmDialog from "../../components/reusableComponents/ConfirmDialog"
@@ -246,7 +246,6 @@ return (
                     ultimonomeDisplay={false}
                     emailDisplay={true}
                     actionsButtonDisplaySelect={false}
-                    emailDisplay={true}
                     telefoneDislay={true}
                     statusDisplay={true}
                     actionsButtonDisplayEditDelete={true}

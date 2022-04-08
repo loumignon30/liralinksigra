@@ -35,7 +35,7 @@ i18n
     <Suspense fallback={loadingMarkup}>
       <React.StrictMode>
         <App />
-      </React.StrictMode>,
+      </React.StrictMode>
     </Suspense>,
   document.getElementById('root')
 );

@@ -23,7 +23,7 @@ export default function WidgetGd() {
 
             <tr className="widgetLgTr">
                 <td className="widgetLgClient">
-                    <img className="widgetLgImg" src="https://media.istockphoto.com/photos/smiling-indian-man-looking-at-camera-picture-id1270067126?k=20&m=1270067126&s=612x612&w=0&h=ZMo10u07vCX6EWJbVp27c7jnnXM2z-VXLd-4maGePqc=" 
+                    <img className="widgetLgImg" src="#" 
                     alt="" />
                 </td>
                 <td className="widgetLgDate">charles@gmail.com</td>
@@ -34,7 +34,7 @@ export default function WidgetGd() {
 
             <tr className="widgetLgTr">
                 <td className="widgetLgMv">
-                    <img className="widgetLgImg" src="https://i0.wp.com/post.healthline.com/wp-content/uploads/2019/08/Young-blind-woman-smiling-with-her-can-1296x728-header-1296x728.jpg?w=1155&h=1528" 
+                    <img className="widgetLgImg" src="#" 
                     alt="" />
                 </td>
                 <td className="widgetLgDate">Bruce5@hotmail.com</td>
@@ -46,7 +46,7 @@ export default function WidgetGd() {
 
             <tr className="widgetLgTr">
                 <td className="widgetLgMv">
-                    <img className="widgetLgImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx55ptj9NcVc8BnuBrWujEy3vM3NuD_3aZbQ&usqp=CAU" 
+                    <img className="widgetLgImg" src="#" 
                     alt="" />
                 </td>
                 <td className="widgetLgDate">mary10@aol.com</td>
@@ -58,7 +58,7 @@ export default function WidgetGd() {
 
             <tr className="widgetLgTr">
                 <td className="widgetLgMv">
-                    <img className="widgetLgImg" src="https://www.bigstockphoto.com/images/homepage/collections2020/module-4.jpg" 
+                    <img className="widgetLgImg" src="#" 
                     alt="" />
                 </td>
                 <td className="widgetLgDate">Johnt@yahoo.com</td>
@@ -70,7 +70,7 @@ export default function WidgetGd() {
 
             <tr className="widgetLgTr">
                 <td className="widgetLgMv">
-                    <img className="widgetLgImg" src="https://2.gravatar.com/avatar/8be4188bccd6238472ec92169ced6479?s=400&d=mm&r=g" 
+                    <img className="#" 
                     alt="" />
                 </td>
                 <td className="widgetLgDate">Yuhi@gmail.com</td>

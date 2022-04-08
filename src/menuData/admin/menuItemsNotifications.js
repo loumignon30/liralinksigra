@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { NotificationsNone, Language, Settings, Menu, House,
     List, Collections, Speed, FaceOutlined, Close, Message, 
     SettingsApplications, PowerOffOutlined, TrackChanges, 
