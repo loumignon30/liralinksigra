@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class SedeService {
 
-    getAll(){
-        return http.get("/sedes");
+    getAll(tipoPesquisa, dadosPesquisa){
+        return http.get(`/sedes?tipoPesquisa=${tipoPesquisa}&dadosPesquisa=${dadosPesquisa}`);
     }
 
     create(data){

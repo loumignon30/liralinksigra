@@ -182,7 +182,7 @@ return (
                 onClick={onclickAgenciaPopup}
             />
         </div>
-        <div style={{ marginBottom: "10px", marginLeft: "5px" }}>
+        <div style={{ marginBottom: "20px", marginLeft: "5px" }}>
             <label className="userLabel">{t('Recherche')}</label>
             <Controls.Input
                 name="searchNome"
@@ -265,8 +265,8 @@ return (
                     setOpenPopup={setOpenPopup}
                     //pageHeader={PopupHeaderUniversity()}
                     buttonColor="secondary"
-                    width="550px"
-                    height="520px"
+                    width="800px"
+                    height="580px"
                     marginTop="10px"
                     title={popupTitle}>
                     <SedeUtilizadorSearchTable
@@ -275,8 +275,8 @@ return (
                         statusDisplay={true}
                         actionsButtonSelectDisplay={true} // monstrar o campo = true
                         actionsButtonDisplayEditDelete={false}
-                        pageSize={5}
-                        rowPerPage={5}
+                        pageSize={10}
+                        rowPerPage={10}
                         backGroundColor="darkBlue"
                         color="white"
                         userID={userID}
@@ -302,7 +302,7 @@ return (
                     setOpenPopup={setOpenPopup}
                     buttonColor="secondary"
                     title={popupTitle}
-                    width="770px"
+                    width="800px"
                     height="580px"
                     marginTop="10px"
                 >
@@ -317,8 +317,8 @@ return (
                         color="white"
                         sedeID={sedeID}
                         userID={userID}
-                        pageSize={5}
-                        rowPerPage={5}
+                        pageSize={10}
+                        rowPerPage={10}
                         agenciaData={(id, code, agencia) => {
                             setAgencia(agencia);
                             setAgenciaID(id)
@@ -335,8 +335,8 @@ return (
                     setOpenPopup={setOpenPopup}
                     buttonColor="secondary"
                     title={popupTitle}
-                    width="600px"
-                    height="480px"
+                    width="800px"
+                    height="580px"
                     marginTop="10px"
                 >
                     <SedeSearchTable
@@ -345,8 +345,8 @@ return (
                         statusDisplay={true}
                         actionsButtonSelectDisplay={true}
                         actionsButtonDisplayEditDelete={false}
-                        pageSize={7}
-                        rowPerPage={7}
+                        pageSize={10}
+                        rowPerPage={10}
                         backGroundColor="darkBlue"
                         color="white"
                         // userID={userID2}
@@ -371,8 +371,8 @@ return (
                     setOpenPopup={setOpenPopup}
                     buttonColor="secondary"
                     title={popupTitle}
-                    width="770px"
-                    height="550px"
+                    width="800px"
+                    height="580px"
                     marginTop="10px"
                 >
                     <AgenciaSearchTable ref={childRefAgence}

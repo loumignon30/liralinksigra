@@ -207,7 +207,7 @@ export default function Topbar() {
                         </div>
                         <div className="topbarIconContainer">
                             <Settings size={25}
-                                onClick={clickSettings}
+                                //onClick={clickSettings}
                                 ref={componentRefSettings} />
                             {/* {showSettings ?
                                 <div className="index-front">
@@ -216,6 +216,7 @@ export default function Topbar() {
                         </div>
 
                         <img alt="" src={imageChangeFromOutSideURL}
+                        onClick={clickSettings}
                             className="topAvatar" />
 
                         < Icons.fa.FaWindowClose size={25} style={{ cursor: 'pointer', color: 'red', marginLeft: "10px" }}

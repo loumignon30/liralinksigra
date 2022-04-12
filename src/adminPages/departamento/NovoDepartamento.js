@@ -90,8 +90,8 @@ const NovoDepartamento = () => {
         if ('departamento' in fieldValues)
             validationErrorM.departamento = fieldValues.departamento ? "" : " "   // This field is Required
 
-        if ('sede')
-            validationErrorM.sede = sede ? "" : " "
+            if ("sede")
+            validationErrorM.sede = sede ? "" : " "; // This field is Required
 
         if ('agencia')
             validationErrorM.agencia = agencia ? "" : " "
@@ -291,7 +291,6 @@ const NovoDepartamento = () => {
                                 value={sede}
                                 onChange={handleInputChange}
                                 type="text"
-                                disabled="true"
                                 error={errors.sede}
                             />
                             <Search style={{ marginTop: "10px", cursor: "pointer" }}

@@ -12,7 +12,7 @@ export default function Select(props) {
     const classes = useStylesSearchTable(propsSelect);
 
     const { name, label, value, onChange, options, typeOfSelect,
-        variant, width, height } = props;
+        variant, width, height, error = null } = props;
 
     return (
 
@@ -20,15 +20,17 @@ export default function Select(props) {
             variant={variant || "outlined"}
             size="small"
             className={classes.selectStyle}
+            // inputRef={register({ required: true })}
         >
             <MuiSelect
                 // label={label || null }
                 name={name}
                 value={value}
                 onChange={onChange}
+                {...(error && { error: true })}
 
             >
-                <MenuItem value=""></MenuItem>  {/* {t('sexo_none')}*/}
+                <MenuItem value=""></MenuItem>  
                 {typeOfSelect === 1 ?
                     options.map(item =>
                     (<MenuItem key={item.id} value={item.id}>{item.title}</MenuItem>
@@ -63,6 +65,30 @@ export default function Select(props) {
                         (
                             <MenuItem key={item.id}
                                 value={item.id}>{item.nome}
+                            </MenuItem>
+                        )
+                        ):
+                        typeOfSelect === 6 ?
+                        options.map(item =>
+                        (
+                            <MenuItem key={item.id}
+                                value={item.id}>{item.pais}
+                            </MenuItem>
+                        )
+                        ):
+                        typeOfSelect === 7 ?
+                        options.map(item =>
+                        (
+                            <MenuItem key={item.id}
+                                value={item.id}>{item.cidade}
+                            </MenuItem>
+                        )
+                        ):
+                        typeOfSelect === 8 ?
+                        options.map(item =>
+                        (
+                            <MenuItem key={item.id}
+                                value={item.pais}>{item.pais}
                             </MenuItem>
                         )
                         ):

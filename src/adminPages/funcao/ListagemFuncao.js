@@ -108,6 +108,7 @@ const ListagemFuncao = () => {
 
     return (
         <div className="utilisateurList">
+            <div>
             <h3 style={{ marginLeft: '15px', textTransform: "uppercase" }}>{t('listagem_funcao_menu')}</h3>
 
             <div style={{ marginBottom: "-5px" }}>
@@ -125,7 +126,7 @@ const ListagemFuncao = () => {
                 />
             </div>
 
-            <div style={{ marginBottom: "5px" }}>
+            <div style={{ marginBottom: "20px" }}>
                 <label className="inputLabel">{t('nome_Agencia')}</label>
                 <Controls.Input
                     name="agencia"
@@ -137,6 +138,9 @@ const ListagemFuncao = () => {
                 <Search style={{ marginTop: "10px", cursor: "pointer" }}
                     onClick={onclickAgenciaPopup}
                 />
+            </div>
+
+            
             </div>
 
             <div style={{ height: 400, width: '100%' }}>
@@ -160,8 +164,8 @@ const ListagemFuncao = () => {
                         setOpenPopup={setOpenPopup}
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
-                        width="650px"
-                        height="520px"
+                        width="800px"
+                        height="580px"
                         marginTop="10px"
                         title={popupTitle}>
                         <SedeUtilizadorSearchTable
@@ -170,8 +174,8 @@ const ListagemFuncao = () => {
                             statusDisplay={true}
                             actionsButtonSelectDisplay={true} // monstrar o campo = true
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={9}
+                            rowPerPage={9}
                             backGroundColor="darkBlue"
                             color="white"
                             userID={userID}
@@ -200,7 +204,7 @@ const ListagemFuncao = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="770px"
+                        width="800px"
                         height="580px"
                         marginTop="10px"
                     >
@@ -215,8 +219,8 @@ const ListagemFuncao = () => {
                             color="white"
                             sedeID={sedeID}
                             userID={userID}
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={9}
+                            rowPerPage={9}
                             agenciaData={(id, code, agencia) => {
                                 setAgencia(agencia);
                                 setAgenciaID(id)
@@ -233,8 +237,8 @@ const ListagemFuncao = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="600px"
-                        height="480px"
+                        width="800px"
+                        height="580px"
                         marginTop="10px"
                     >
                         <SedeSearchTable
@@ -243,8 +247,8 @@ const ListagemFuncao = () => {
                             statusDisplay={true}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={7}
-                            rowPerPage={7}
+                            pageSize={9}
+                            rowPerPage={9}
                             backGroundColor="darkBlue"
                             color="white"
                             // userID={userID2}
@@ -269,8 +273,8 @@ const ListagemFuncao = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="770px"
-                        height="550px"
+                        width="800px"
+                        height="580px"
                         marginTop="10px"
                     >
                         <AgenciaSearchTable ref={childRefAgence}
@@ -284,8 +288,8 @@ const ListagemFuncao = () => {
                             idSede={sedeID}
                             userID={userID}
                             color="white"
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={9}
+                            rowPerPage={9}
                             agenciaData={(id, code, agencia) => {
                                 setAgencia(agencia);
                                 setAgenciaID(id)

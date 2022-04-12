@@ -1,0 +1,27 @@
+
+.newPaisContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 4px;
+    margin-top: -10px;
+}
+.paisCadrado {
+    flex: 2.5;
+
+    padding: 5px 0 0 10px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+    /* width: 100%; */
+    height: 100px;
+  }
+
+  .paisCadradoButton {
+    flex: 1.5;
+    padding: 5px 0 0 10px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
+    box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);
+    /* width: 100%; */
+    height: 100px;
+  }

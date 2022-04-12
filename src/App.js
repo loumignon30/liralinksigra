@@ -31,6 +31,10 @@ import React, { useState } from 'react';
 import Login from './adminPages/utilisador/Login';
 import Popup from './components/reusableComponents/Popup';
 
+import ListagemAvaliacoes from './adminPages/denuncias/ListagemAvaliacoes';
+import ListagemSugestoes from './adminPages/denuncias/ListagemSugestoes';
+
+
 const App = () => {
   const [userSavedValue, setUserSavedValue] = useState({});
   const [openPopup, setOpenPopup] = useState(true);
@@ -104,6 +108,10 @@ const App = () => {
             <Route path="/userEdit/:userID" element={<USerEdit />} />
             <Route path="/denuncia" element={<NovaDenuncia />} />
             <Route path="/listagemDenuncia" element={<ListagemDenuncia />} />
+
+            <Route path="/listagemAvaliacoes" element={<ListagemAvaliacoes />} />
+            <Route path="/ListagemSugestoes" element={<ListagemSugestoes />} />
+
             <Route path="/listagemTipoDenuncia" element={<ListagemTipoDenuncia />} />
            
             {/* <Route path="/tipoDenunciaConfig" element={<TipoDeDenuncias />} /> */}

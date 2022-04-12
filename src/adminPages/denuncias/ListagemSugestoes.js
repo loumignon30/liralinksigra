@@ -22,7 +22,7 @@ import AgenciaSearchTable from '../agencias/AgenciaSeachTable';
 const initialFValues = {
     lingua: ''
 }
-const ListagemDenuncia = () => {
+const ListagemSugestoes = () => {
 
     const { t } = useTranslation();
 
@@ -86,7 +86,7 @@ const ListagemDenuncia = () => {
 
     const tableDenunciaLinguaUpdateData = (sedeID1, agenciaID1) => {
         setLingua(currentLanguageCode)
-        childRef.current.getGetAllData(currentLanguageCode, sedeID1, agenciaID1, 1);  // saveImage() = method called
+        childRef.current.getGetAllData(currentLanguageCode, sedeID1, agenciaID1, 3);  // saveImage() = method called
     }
     
     const onclickSedePopup = () => {
@@ -122,10 +122,10 @@ const onclickAgenciaPopup = () => {
 
             <div className="universityContainer">
                 <PageHeader
-                    title={t('lista_denuncia')}
-                    subTitle={t('header_subTitle_Listagem_denuncia')}
-                    backGroundColor="darkBlue"
-                    color="white"
+                    title={t('LISTAGEM DE SUGESTÕES')}
+                    subTitle={t('Formuário de Listagem de Sugestões')}
+                    backGroundColor="#21b6a8"
+                    color="black"
                     icon={<House />}>
                 </PageHeader>
             </div>
@@ -185,12 +185,12 @@ const onclickAgenciaPopup = () => {
                     queixaDisplay={false}
                     actionsButtonDisplaySelect={false}
                     actionsButtonDisplayEditDelete={false}
-                    backGroundColor="darkBlue"
-                    color="white"
+                    backGroundColor="#21b6a8"
+                    color="black"
                     abreviationLangue={currentLanguageCode}
                     sedeID={sedeID}
-                    tipoMovimento={1}
                     agenciaID={agenciaID}
+                    tipoMovimento={3}
                     pageSize={10}
                     rowPerPage={10}
                 />
@@ -206,8 +206,8 @@ const onclickAgenciaPopup = () => {
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="650px"
-                        height="520px"
+                        width="800px"
+                        height="550px"
                         marginTop="10px"
                     >
                         <SedeUtilizadorSearchTable
@@ -218,8 +218,8 @@ const onclickAgenciaPopup = () => {
                             actionsButtonDisplayEditDelete={false}
                             pageSize={10}
                             rowPerPage={10}
-                            backGroundColor="darkBlue"
-                            color="white"
+                            backGroundColor="#21b6a8"
+                            color="black"
                             sedeID={sedeID}
                             userID={userID}
                             sedeData={(id, code, sede) => {
@@ -242,7 +242,7 @@ const onclickAgenciaPopup = () => {
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="640px"
+                        width="800px"
                         height="550px"
                         marginTop="10px"
                     >
@@ -252,8 +252,8 @@ const onclickAgenciaPopup = () => {
                             statusDisplay={true}
                             actionsButtonDisplaySelect={true}
                             actionsButtonDisplayEditDelete={false}
-                            backGroundColor="darkBlue"
-                            color="white"
+                            backGroundColor="#21b6a8"
+                            color="black"
                             pageSize={10}
                             rowPerPage={10}
                             sedeID={sedeID}
@@ -276,8 +276,8 @@ const onclickAgenciaPopup = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="600px"
-                        height="480px"
+                        width="800px"
+                        height="550px"
                         marginTop="10px"
                     >
                         <SedeSearchTable
@@ -288,8 +288,8 @@ const onclickAgenciaPopup = () => {
                             actionsButtonDisplayEditDelete={false}
                             pageSize={10}
                             rowPerPage={10}
-                            backGroundColor="darkBlue"
-                            color="white"
+                            backGroundColor="#21b6a8"
+                            color="black"
                             sedeData={(id, code, sede) => {
                                 setSede(sede);
                                 setSedeID(id)
@@ -309,7 +309,7 @@ const onclickAgenciaPopup = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="770px"
+                        width="800px"
                         height="550px"
                         marginTop="10px"
                     >
@@ -322,8 +322,8 @@ const onclickAgenciaPopup = () => {
                             actionsButtonDisplayEditDelete={false}
                             idSede={sedeID}
                             userID={userID}
-                            backGroundColor="darkBlue"
-                            color="white"
+                            backGroundColor="#21b6a8"
+                            color="black"
                             pageSize={10}
                             rowPerPage={10}
                             agenciaData={(id, code, agencia) => {
@@ -340,4 +340,4 @@ const onclickAgenciaPopup = () => {
 </>
     )
 }
-export default ListagemDenuncia;
+export default ListagemSugestoes;

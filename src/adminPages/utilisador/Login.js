@@ -60,10 +60,13 @@ const Login = () => {
     let nivelAcessoTest = 0;
 
     useEffect(() => {
-        // getGetAllData();
+
     }, []);
 
     const userGetEmail = async () => {
+
+        localStorage.removeItem('token');   // Remover  o Token (token) no armazenamento local
+
         UserLoginService.getUserEmail(values.email, values.password)
             .then(response => {
                 testData = (response.data);
@@ -76,7 +79,8 @@ const Login = () => {
 
                 // test data *************************************************
                 if (testData.user.id > 0) {
-                    localStorage.setItem('token', testData.token);
+
+                    localStorage.setItem('token', testData.token);   // guardar o Token (token) no armazenamento local
                                 setUserSavedValue([
                                     {
                                         id: testData.user.id,
@@ -84,7 +88,7 @@ const Login = () => {
                                         lastname: testData.user.lastname,
                                         sexo: testData.user.gender,
                                         photofilename: testData.user.photofilename,
-                                        nivelAcesso: testData.user.role,
+                                        nivelAcesso: testData.user.nivelAcesso,
                                         status: testData.user.status,
                                         sedeID: testData.user.sedeID,
                                         sede: testData.user.sede,

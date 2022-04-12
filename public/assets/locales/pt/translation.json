@@ -190,6 +190,12 @@
     "descrição": "Descrição",
     "motivo_avaliacao": "Motivo Avaliação",
 
+    "header_title_pais": "Cadastrar País",
+    "header_title_pais_subTile": "Formulário de Cadastramento de País",
+
+    "header_title_cidade": "Cadastrar Cidades",
+    "header_title_cidade_subTile": "Formulário de Cadastramento de Cidades",
+
 
     "janeiro": "janeiro",
     "fevereiro": "fevereiro",

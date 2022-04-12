@@ -104,7 +104,7 @@ const ListagemAgencias = () => {
                     emailDisplay={false}
                     telefoneDislay={true}
                     cidadeDisplay={true}
-                    paisDisplay={false}
+                    paisDisplay={true}
                     statusDisplay={true}
                     backGroundColor="darkBlue"
                     color="white"

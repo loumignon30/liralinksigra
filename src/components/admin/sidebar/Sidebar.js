@@ -15,10 +15,17 @@ import { IconContext } from 'react-icons'
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link, useNavigate } from 'react-router-dom';
+import Popup from '../../reusableComponents/Popup';
+
+import USerEdit from '../../../adminPages/utilisador/USerEdit'
+
 
 const Sidebar = (props) => {
 
     const { t } = useTranslation();
+    const [popupTitle, setPpupTitle] = useState("");
+    const [openPopup, setOpenPopup] = useState(false);
+    const [count, setCount] = useState(0);
 
     const sideMenuItems = [
         {
@@ -169,15 +176,27 @@ const Sidebar = (props) => {
                     icon: <Icons.md.MdOutlineEditCalendar className="a-menuItem-icon" />,
                     id_subMenu: 0,
                 },
-                {
-                    name: t('nova_denuncia_menu'),
-                    to: "/denuncia",
-                    icon: <Icons.md.MdOutlineEditCalendar className="a-menuItem-icon" />,
-                    id_subMenu: 0,
-                },
+                // {
+                //     name: t('nova_denuncia_menu'),
+                //     to: "/denuncia",
+                //     icon: <Icons.md.MdOutlineEditCalendar className="a-menuItem-icon" />,
+                //     id_subMenu: 0,
+                // },
                 {
                     name: t('listagem_denuncia_menu'),
                     to: "/listagemDenuncia",
+                    icon: <Icons.go.GoCalendar className="a-menuItem-icon" />,
+                    id_subMenu: 0,
+                },
+                {
+                    name: t('Listagem Avaliações'),
+                    to: "/listagemAvaliacoes",
+                    icon: <Icons.go.GoCalendar className="a-menuItem-icon" />,
+                    id_subMenu: 0,
+                },
+                {
+                    name: t('Listagem Sugestões'),
+                    to: "/ListagemSugestoes",
                     icon: <Icons.go.GoCalendar className="a-menuItem-icon" />,
                     id_subMenu: 0,
                 },
@@ -347,6 +366,13 @@ const Sidebar = (props) => {
     const useContextMethod = () => {
 
     }
+
+    const clickSettings = () => {
+        // setShowSetting(!showSettings);
+        setCount(1);
+        setPpupTitle(t('lista_sede'));
+        setOpenPopup(true);
+    }
     return (
         <>
             <IconContext.Provider value={{ color: "red" }}>
@@ -377,7 +403,9 @@ const Sidebar = (props) => {
                                 <div>
                                     <div style={{ marginLeft: "50px", backgroundOrigin: "white" }}>
                                         <img alt="" src={imageChangeFromOutSideURL}
-                                            className="topAvatarSideBar" />
+                                            className="topAvatarSideBar"
+                                            onClick={clickSettings}
+                                            />
                                         <div className='userTextSideBar'>
                                             <span>{firstName} </span>
                                             <span>{lastName}</span>
@@ -419,6 +447,28 @@ const Sidebar = (props) => {
 
                 </div>
             </IconContext.Provider>
+
+            {
+                count === 1 ?
+                    <Popup
+                        openPopup={openPopup}
+                        setOpenPopup={setOpenPopup}
+                        buttonColor="secondary"
+                        closeButtonDisplay={false}
+                        marginTop="-35px"
+                        // title={popupTitle}
+                        width="900px"
+                        height="600px"
+                    >
+                        <USerEdit topbar="topbar"
+                            closeUSer={() => {
+                                setOpenPopup(false);
+                            }
+                            }
+                        />
+
+                    </Popup> : ""
+            }
 
         </>
 

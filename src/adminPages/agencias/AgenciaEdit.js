@@ -11,6 +11,7 @@ import Controls from '../../components/reusableComponents/Controls';
 import * as statusData from "../../services/admin/StatusData";
 import SedeService from '../../services/admin/Sede.services';
 import Notifications from '../../components/reusableComponents/Notifications';
+import StatusDataInfo from "../../services/admin/StatusData";
 
 import { useTranslation } from "react-i18next";
 
@@ -236,6 +237,18 @@ const AgenciaEdit = (props) =>{
                             </div>
 
                             <div>
+                                <label className="inputLabel">País</label>
+                                <Controls.Input
+                                    name="pais"
+                                    placeHolder="País"
+                                    value={values.pais}
+                                    onChange={handleInputChange}
+                                    type="text"
+                                    className={'textField-TextLarge-2'}
+                                />
+                            </div>
+
+                            <div>
                                 <label className="inputLabel">Cidade</label>
                                 <Controls.Input
                                     name="cidade"
@@ -247,18 +260,6 @@ const AgenciaEdit = (props) =>{
                                 />
                             </div>
 
-                            <div>
-                                <label className="inputLabel">País</label>
-                                <Controls.Input
-                                    name="pais"
-                                    placeHolder="País"
-                                    value={values.pais}
-                                    onChange={handleInputChange}
-                                    type="text"
-                                    className={'textField-TextLarge-2'}
-                                />
-                            </div>
-                            
                             <div style={{ marginTop: "5px" }}>
                                 <label className="userLabel" htmlFor="status">Estato</label>
                                 <Controls.Select
@@ -266,7 +267,7 @@ const AgenciaEdit = (props) =>{
                                     label="status"
                                     value={values.status}
                                     onChange={handleInputChange}
-                                    options={statusData.getStatus()}
+                                    options={StatusDataInfo()}
                                     className={"select-buttonLarge2"}
                                     typeOfSelect={2}
                                 />

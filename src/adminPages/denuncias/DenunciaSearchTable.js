@@ -39,7 +39,7 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
         actionsButtonDisplaySelect,
         actionsButtonDisplayEditDelete, linguaQueixa,
         pageSize, rowPerPage,
-        abreviationLangue, sedeID } = props;
+        abreviationLangue, sedeID, tipoMovimento } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
@@ -71,9 +71,9 @@ const DenunciaSearchTable = forwardRef((props, ref) => { // forwardRef is used t
         setOpenPopup(false);
     }
 
-    const getGetAllData = (abreviationLangue, sedeID1, agenciaID1) => {
+    const getGetAllData = (abreviationLangue, sedeID1, agenciaID1, tipoMovimento1) => {
 
-        DenunciaService.getAll(abreviationLangue, "normal", sedeID1, agenciaID1)
+        DenunciaService.getAll(abreviationLangue, "normal", sedeID1, agenciaID1, tipoMovimento1)
             .then(response => {
                 setData(response.data)
             })

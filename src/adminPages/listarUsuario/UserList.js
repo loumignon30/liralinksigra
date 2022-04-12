@@ -154,14 +154,16 @@ const UserList = () => {
             <div style={{ height: 400, width: '100%' }}>
                 <UserSearchTable ref={childRef}
                     idDisplay={true}
+                    userNameDisplay={true}
                     firstnameDisplay={true}
                     lastnameDisplay={true}
-                    userNameDisplay={true}
                     emailDisplay={false}
                     roleDisplay={true}
                     statusDisplay={true}
                     affectacaoDisplay={true}
                     sexoDisplay={false}
+                    paisDisplay={true} 
+                    cidadeDisplay={true}
                     actionsButtonDisplaySelect={false}
                     actionsButtonDisplayEditDelete={true}
                     backGroundColor="blue"
