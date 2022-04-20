@@ -371,3 +371,41 @@ cursor: pointer;
   font-weight: 300;
 }
 
+.ButtonStatutDataGrid._1 {
+  background-color: lightblue;
+  font-weight: 600;
+}
+.ButtonStatutDataGrid._2 {
+  background-color: rgb(250, 188, 188);
+  font-weight: 300;
+}
+.ButtonStatutDataGrid._3 {
+  background-color: rgb(152, 138, 236);
+  font-weight: 300;
+}
+.ButtonStatutDataGrid._4 {
+  background-color: black;
+  color: white;
+  font-weight: 300;
+  text-decoration: line-through;
+}
+
+.ButtonStatutDataGrid._1Denuncia {
+  background-color: #f8d210;
+  font-weight: 600;
+}
+.ButtonStatutDataGrid._2Denuncia {
+  background-color: #BACC81;
+  font-weight: 600;
+}
+.ButtonStatutDataGrid._3Denuncia {
+  background-color: #32CD30;
+  font-weight: 600;
+}
+.ButtonStatutDataGrid._4Denuncia {
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  text-decoration: line-through;
+}
+

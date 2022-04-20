@@ -7,6 +7,8 @@ import languagedetector from 'i18next-browser-languagedetector';
 import HttpApi from "i18next-http-backend";
 
 import App from './App';
+import {Provider} from 'react-redux';
+import store from "./reducFeatures/store";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -34,7 +36,11 @@ i18n
   ReactDOM.render(
     <Suspense fallback={loadingMarkup}>
       <React.StrictMode>
+
+      <Provider store={store}>
         <App />
+        </Provider>,
+
       </React.StrictMode>
     </Suspense>,
   document.getElementById('root')

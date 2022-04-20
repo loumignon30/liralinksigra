@@ -16,6 +16,25 @@
  /* style={{marginTop:"-9px", fontSize: "30px" , height:"10%"}} */
 
 }
+.buttonPopupGridFuncionarioSearhTable{
+    height: 30px;
+    width: 35px ;
+    margin-top: 0px !important;
+    font-size: 20px !important;
+    border-style: none;
+    background-color: white;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    object-fit: cover;
+    background-color: red;
+    align-content: center;
+    padding-right: 0px;
+    cursor: pointer;
+
+ /* style={{marginTop:"-9px", fontSize: "30px" , height:"10%"}} */
+
+}
 
 .dialogTitleMain {
     display: flex;

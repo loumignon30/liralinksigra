@@ -61,6 +61,8 @@ const useStyles = makeStyles(props => ({
         fontWeight: "bold",
         marginTop: "4px",
         marginLeft: ({ marginLeft }) => marginLeft || "0px",
+
+       
     },
     textAreaStyle: {
         // background: props.backGroundColor || "white",
@@ -165,7 +167,7 @@ const useStyles = makeStyles(props => ({
     },
     tipoMovimentoReclamacoesLandingPage: {
         color: "black",
-        background: "yellow",
+        background: "darkgrey",
         fontSize: "10px",
         fontFamily: "Times New Roman', Times, serif",
         textAlign: "center",

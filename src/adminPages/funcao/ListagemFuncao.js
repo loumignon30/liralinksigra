@@ -126,8 +126,8 @@ const ListagemFuncao = () => {
                 />
             </div>
 
-            <div style={{ marginBottom: "20px" }}>
-                <label className="inputLabel">{t('nome_Agencia')}</label>
+            <div style={{marginTop: "5px"}}>
+                <label style={{marginTop: "0px", fontSize: "12px"}} className="inputLabel">{t('nome_Agencia')}</label>
                 <Controls.Input
                     name="agencia"
                     placeHolder={t('nome_Agencia')}
@@ -143,7 +143,7 @@ const ListagemFuncao = () => {
             
             </div>
 
-            <div style={{ height: 400, width: '100%' }}>
+            <div style={{ height: 400, width: '100%' , marginTop:"10px" }}>
                 <FuncaoSearchTable ref={childRef}
                     idDisplay={true}
                     codeDisplay={true}

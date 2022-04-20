@@ -25,6 +25,7 @@ import Cidade from "../cidade/cidade";
 import swal from "sweetalert";
 
 import CodigoMensagemErro from "../../services/erroMessages/CodigoMensagemErro";
+import { Grid, Paper } from "@mui/material";
 
 const Sede = (props) => {
   const initialFValues = {
@@ -109,8 +110,9 @@ const Sede = (props) => {
 
     if (values.id > 0) {
       imaSedeDisplay(imageDisplay);
+      
     }
-  }, [id]);
+  }, [id, deviceWidth]);
 
   // function for validating form
   const validate = (fieldValues = values) => {
@@ -129,10 +131,10 @@ const Sede = (props) => {
         : " ";
 
     if ("paisID" in fieldValues)
-      validationErrorM.paisID = fieldValues.paisID ? '' : " ";
+      validationErrorM.paisID = fieldValues.paisID ? "" : " ";
 
     if ("cidadeID" in fieldValues)
-      validationErrorM.cidadeID = fieldValues.cidadeID ? '' : " ";
+      validationErrorM.cidadeID = fieldValues.cidadeID ? "" : " ";
 
     if ("contacto" in fieldValues)
       validationErrorM.contacto =
@@ -148,11 +150,14 @@ const Sede = (props) => {
     return Object.values(validationErrorM).every((x) => x === ""); // it will return true if x==""
   };
 
-  const { values, setValues, errors, setErrors, handleInputChange, register } = useForm(
-    initialFValues,
-    true,
-    validate
-  ); // useForm = useForm.js. We defined - validateOnChange=false
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange,
+    register,
+  } = useForm(initialFValues, true, validate); // useForm = useForm.js. We defined - validateOnChange=false
 
   const saveImageFromImageUpload = () => {
     setImageFileName(childRef.current.fileName);
@@ -333,123 +338,140 @@ const Sede = (props) => {
     handleInputChange(e);
     getCidade(e.target.value);
   };
- 
+
   return (
-    <div className="universityContainer">
-      <PageHeader
-        title={t("header_title_sede")}
-        subTitle={t("header_subTitle_sede")}
-        backGroundColor="darkBlue"
-        color="white"
-        icon={<House />}
-      ></PageHeader>
+    <>
+      <Grid constainer spacing={1}
+      container
+      direction="column"
+      justifyContent="space-between"
+      // style={{ height: "100%" }}
+      >
+        <div className="universityContainer">
+        {/* <Grid item xs={12} sm={12} md={12} lg={6} xl={4}> */}
 
-      {/* <button onClick={MenuDataDisplay}>Test Menu Data</button> */}
-
-      {/* <button onClick={buttonclick}> Button</button> */}
-
-      <Form onSubmit={handleSubmit} autoComplete="off">
-        <div className="unversityItemContainer">
-          <div className="newUniversity">
-            <div style={{ marginTop: "-20px" }}>
-              <label className="inputLabel">{t("code")}</label>
-              <Controls.Input
-                name="code"
-                placeHolder={t("code")}
-                value={values.code}
-                onChange={handleInputChange}
-                type="text"
-                error={errors.code}
-              />
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          {/* <Paper> */}
+          <div style={{margnLeft: "10px", marginTop:"10px"}}>
+            <PageHeader 
+              title={t("header_title_sede")}
+              subTitle={t("header_subTitle_sede")}
+              backGroundColor="darkBlue"
+              color="white"
+              icon={<House />}
+            ></PageHeader>
             </div>
+            {/* </Paper> */}
+          </Grid>
 
-            <div>
-              <label className="inputLabel">{t("sede")}</label>
-              <Controls.Input
-                name="sede"
-                placeHolder={t("sede")}
-                value={values.sede}
-                onChange={handleInputChange}
-                type="text"
-                error={errors.sede}
-              />
-            </div>
+          {/* <button onClick={MenuDataDisplay}>Test Menu Data</button> */}
 
-            <div>
-              <label className="inputLabel">{t("email")}</label>
-              <Controls.Input
-                name="email"
-                placeHolder={t("email")}
-                value={values.email}
-                onChange={handleInputChange}
-                type="text"
-                error={errors.email}
-              />
-            </div>
+          {/* <button onClick={buttonclick}> Button</button> */}
 
-            <div>
-              <label className="inputLabel">{t("contacto")}</label>
-              <Controls.Input
-                name="contacto"
-                placeHolder={t("contacto")}
-                value={values.contacto}
-                onChange={handleInputChange}
-                type="text"
-                error={errors.contacto}
-              />
-            </div>
+          <Form onSubmit={handleSubmit} autoComplete="off">
+            <div className="unversityItemContainer">
+            <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+              {/* <Paper> */}
+                <div className="newUniversity">
+                  <div style={{ marginTop: "-20px" }}>
+                    <label className="inputLabel">{t("code")}</label>
+                    <Controls.Input
+                      name="code"
+                      placeHolder={t("code")}
+                      value={values.code}
+                      onChange={handleInputChange}
+                      type="text"
+                      error={errors.code}
+                    />
+                  </div>
 
-            <div>
-              <label className="inputLabel">{t("endereco")}</label>
-              <Controls.Input
-                name="endereco"
-                placeHolder={t("endereco")}
-                value={values.endereco}
-                onChange={handleInputChange}
-                type="text"
-                error={errors.endereco}
-              />
-            </div>
+                  <div>
+                    <label className="inputLabel">{t("sede")}</label>
+                    <Controls.Input
+                      name="sede"
+                      placeHolder={t("sede")}
+                      value={values.sede}
+                      onChange={handleInputChange}
+                      type="text"
+                      error={errors.sede}
+                    />
+                  </div>
 
-            <div style={{ marginBottom: "0px", marginTop: "5px" }}>
-              <label className="inputLabel">{t("pais")}</label>
-              <Controls.Select
-                name="paisID"
-                label="paisID"
-                value={values.paisID}
-                onChange={paisHandleChange}
-                options={paisesTable}
-                typeOfSelect={6}
-                error={errors.paisID}
-                width="65%"
-                height="40px"
-              />
-              <AddBox
-                style={{ marginTop: "10px", cursor: "pointer" }}
-                onClick={novoPaisclickPopup}
-              />
-            </div>
+                  <div>
+                    <label className="inputLabel">{t("email")}</label>
+                    <Controls.Input
+                      name="email"
+                      placeHolder={t("email")}
+                      value={values.email}
+                      onChange={handleInputChange}
+                      type="text"
+                      error={errors.email}
+                    />
+                  </div>
 
-            <div style={{ marginTop: "3px", marginBottom: "20px" }}>
-              <label className="inputLabel">{t("cidade")}</label>
+                  <div>
+                    <label className="inputLabel">{t("contacto")}</label>
+                    <Controls.Input
+                      name="contacto"
+                      placeHolder={t("contacto")}
+                      value={values.contacto}
+                      onChange={handleInputChange}
+                      type="text"
+                      error={errors.contacto}
+                    />
+                  </div>
 
-              <Controls.Select
-                name="cidadeID"
-                label="cidadeID"
-                value={values.cidadeID}
-                onChange={handleInputChange}
-                options={cidadeTable}
-                typeOfSelect={7}
-                error={errors.cidadeID}
-                width="65%"
-                height="40px"
-              />
-              <AddBox
-                style={{ marginTop: "10px", cursor: "pointer" }}
-                onClick={novaCidadeclickPopup}
-              />
+                  <div>
+                    <label className="inputLabel">{t("endereco")}</label>
+                    <Controls.Input
+                      name="endereco"
+                      placeHolder={t("endereco")}
+                      value={values.endereco}
+                      onChange={handleInputChange}
+                      type="text"
+                      error={errors.endereco}
+                    />
+                  </div>
 
-              {/* <Controls.Input
+                  <div style={{ marginBottom: "0px", marginTop: "5px" }}>
+                    <label className="inputLabel">{t("pais")}</label>
+                    <Controls.Select
+                      name="paisID"
+                      label="paisID"
+                      value={values.paisID}
+                      onChange={paisHandleChange}
+                      options={paisesTable}
+                      typeOfSelect={6}
+                      error={errors.paisID}
+                      width="65%"
+                      height="40px"
+                    />
+                    <AddBox
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={novoPaisclickPopup}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "3px", marginBottom: "10px" }}>
+                    <label className="inputLabel">{t("cidade")}</label>
+
+                    <Controls.Select
+                      name="cidadeID"
+                      label="cidadeID"
+                      value={values.cidadeID}
+                      onChange={handleInputChange}
+                      options={cidadeTable}
+                      typeOfSelect={7}
+                      error={errors.cidadeID}
+                      width="65%"
+                      height="40px"
+                    />
+                    <AddBox
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={novaCidadeclickPopup}
+                    />
+
+                    {/* <Controls.Input
                 name="cidade"
                 placeHolder={t("cidade")}
                 value={values.cidade}
@@ -457,124 +479,138 @@ const Sede = (props) => {
                 type="text"
                 error={errors.cidade}
               /> */}
-            </div>
-          </div>
+                  </div>
+                </div>
+                {/* </Paper> */}
+              </Grid>
 
-          {deviceWidth > 820 ? (
-            <div className="newUniversity">
-              <div>
-                <SedeSearchTable
-                  ref={childRef2}
-                  idDisplay={true}
-                  codeDisplay={false}
-                  actionsButtonSelectDisplay={false} // monstrar o campo = true
-                  actionsButtonDisplayEditDelete={true}
-                  pageSize={4}
-                  rowPerPage={4}
-                />
+               {deviceWidth > 800 ? ( 
+          <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+          {/* <Paper> */}
+                <div className="newUniversity">
+                  <div style={{marginTop: "-20px"}}>
+                    <SedeSearchTable
+                      ref={childRef2}
+                      idDisplay={true}
+                      codeDisplay={false}
+                      actionsButtonSelectDisplay={false} // monstrar o campo = true
+                      actionsButtonDisplayEditDelete={true}
+                      pageSize={5}
+                      rowPerPage={5}
+                    />
+                  </div>
+                </div>
+                {/* </Paper> */}
+              </Grid>
+               ) : null} 
+            </div>
+
+            <div className="unversityItemContainer">
+              <div className="newUniversity">
+              <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+                {/* <Paper> */}
+                  <ImageUpLoad
+                    ref={childRef}
+                    margnLeft="5px"
+                    fotoTitulo="Logo"
+                    uploadDisplay={true}
+                  />
+                  {/* </Paper> */}
+                </Grid>
+              </div>
+
+              <div className="newUniversity">
+              <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+                {/* <Paper> */}
+                  <Controls.Buttons
+                    type="submit"
+                    text={t("button_gravar")}
+                     className="button"
+                  />
+                  <Controls.Buttons
+                    type="button"
+                    text={t("button_limpar")}
+                    color="secondary"
+                     className="button"
+                    onClick={ResetForm}
+                    // onClick={close}
+                  />
+                  {/* </Paper> */}
+                </Grid>
               </div>
             </div>
+          </Form>
+
+          {notificatinoShow ? (
+            <Notifications notify={notify} setNotify={setNotify} />
           ) : null}
-        </div>
 
-        <div className="unversityItemContainer">
-          <div className="newUniversity">
-            <ImageUpLoad
-              ref={childRef}
-              margnLeft="0px"
-              fotoTitulo="Logo"
-              uploadDisplay={true}
-            />
-          </div>
-
-          <div className="newUniversity">
-            <div>
-              <Controls.Buttons
-                type="submit"
-                text={t("button_gravar")}
-                className="button"
-              />
-              <Controls.Buttons
-                type="button"
-                text={t("button_limpar")}
-                color="secondary"
-                className="button"
-                onClick={ResetForm}
-                // onClick={close}
-              />
-            </div>
-          </div>
-        </div>
-      </Form>
-
-      {notificatinoShow ? (
-        <Notifications notify={notify} setNotify={setNotify} />
-      ) : null}
-
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
-
-      <SideMenuData2 ref={childRefMenu} />
-
-      <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-        buttonColor="secondary"
-        width="850px"
-        height="700px"
-        closeButtonDisplay={false}
-        marginTop="-10px"
-        // title={popupTitle}
-      >
-        {count === 1 ? (
-          <Pais
-            //ref={childRePais}
-            // idDisplay={true}
-            // codeDisplay={false}
-            // statusDisplay={true}
-            // actionsButtonSelectDisplay={true} // monstrar o campo = true
-            // actionsButtonDisplayEditDelete={false}
-            // pageSize={7}
-            // rowPerPage={7}
-            backGroundColor="darkBlue"
-            color="white"
-            paisData={(id, code, sede) => {
-              // setSede(sede);
-              // setSedeID(id);
-              // values.sedeID = id
-              setOpenPopup(false);
-              getPaises();
-              // tableAgenciaUpdateData(id);
-              // setSedePesquisa("")
-            }}
+          <ConfirmDialog
+            confirmDialog={confirmDialog}
+            setConfirmDialog={setConfirmDialog}
           />
-        ) : count === 2 ? (
-          <Cidade
-            //ref={childRePais}
-            // idDisplay={true}
-            // codeDisplay={false}
-            // statusDisplay={true}
-            // actionsButtonSelectDisplay={true} // monstrar o campo = true
-            // actionsButtonDisplayEditDelete={false}
-            // pageSize={7}
-            // rowPerPage={7}
-            backGroundColor="darkBlue"
-            color="white"
-            cidadeData={(id, code, sede) => {
-              // setSede(sede);
-              // setSedeID(id);
-              // values.sedeID = id
-              setOpenPopup(false);
-              getCidade(values.paisID);
-              // tableAgenciaUpdateData(id);
-              // setSedePesquisa("")
-            }}
-          />
-        ) : null}
-      </Popup>
-    </div>
+
+          <SideMenuData2 ref={childRefMenu} />
+
+          <Popup
+            openPopup={openPopup}
+            setOpenPopup={setOpenPopup}
+            buttonColor="secondary"
+            width="850px"
+            height="700px"
+            closeButtonDisplay={false}
+            marginTop="-10px"
+            // title={popupTitle}
+          >
+            {count === 1 ? (
+              <Pais
+                //ref={childRePais}
+                // idDisplay={true}
+                // codeDisplay={false}
+                // statusDisplay={true}
+                // actionsButtonSelectDisplay={true} // monstrar o campo = true
+                // actionsButtonDisplayEditDelete={false}
+                // pageSize={7}
+                // rowPerPage={7}
+                backGroundColor="darkBlue"
+                color="white"
+                paisData={(id, code, sede) => {
+                  // setSede(sede);
+                  // setSedeID(id);
+                  // values.sedeID = id
+                  setOpenPopup(false);
+                  getPaises();
+                  // tableAgenciaUpdateData(id);
+                  // setSedePesquisa("")
+                }}
+              />
+            ) : count === 2 ? (
+              <Cidade
+                //ref={childRePais}
+                // idDisplay={true}
+                // codeDisplay={false}
+                // statusDisplay={true}
+                // actionsButtonSelectDisplay={true} // monstrar o campo = true
+                // actionsButtonDisplayEditDelete={false}
+                // pageSize={7}
+                // rowPerPage={7}
+                backGroundColor="darkBlue"
+                color="white"
+                cidadeData={(id, code, sede) => {
+                  // setSede(sede);
+                  // setSedeID(id);
+                  // values.sedeID = id
+                  setOpenPopup(false);
+                  getCidade(values.paisID);
+                  // tableAgenciaUpdateData(id);
+                  // setSedePesquisa("")
+                }}
+              />
+            ) : null}
+          </Popup>
+        </div>
+      </Grid>
+    </>
   );
 };
 export default Sede;

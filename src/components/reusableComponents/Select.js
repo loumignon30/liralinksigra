@@ -27,7 +27,16 @@ export default function Select(props) {
                 name={name}
                 value={value}
                 onChange={onChange}
+                
                 {...(error && { error: true })}
+                
+                inputProps={{
+                    style: {
+                        fontSize: '12px', marginBottom: '0px',
+                        paddingBottom: '10px',
+                        shrink: true
+                    }
+                }}
 
             >
                 <MenuItem value=""></MenuItem>  

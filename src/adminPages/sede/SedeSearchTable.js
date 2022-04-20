@@ -122,7 +122,7 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
 
     const columns = [
         idDisplay ?
-            { field: 'id', headerName: 'ID', width: 50, headerClassName: classes.paper } :
+            { field: 'id', headerName: 'ID', flex: 0.3, headerClassName: classes.paper } :
             { field: 'id', headerName: 'ID', hide: { idDisplay }, headerClassName: classes.paper },
 
         codeDisplay ?

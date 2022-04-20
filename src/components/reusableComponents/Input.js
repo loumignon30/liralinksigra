@@ -11,11 +11,20 @@ export default function Input(props) {
         marginLeft: props.marginLeft,
         height: props.height
     }
+    
     const classes = useStylesSearchTable(propsInput);
 
     const { name, placeHolder, value, onChange, type, className, height,
         error = null, disabled, width, marginLeft, ...other } = props;
 
+        const styles = {
+            underline: {
+                "&:after": {
+                  borderBottomColor: "rgb(70, 197, 29)",
+                  borderWidth: "1px"
+                }
+              }
+        }
     return (
         <TextField 
             //helperText="Validation needed"

@@ -150,7 +150,7 @@ const onclickAgenciaPopup = () => {
 
             
 
-            <div style={{ marginLeft: "5px", marginBottom: "20px", marginTop: "-5px" }}>
+            <div style={{ marginLeft: "5px", marginTop: "-5px" }}>
                 <label className="inputLabel">{t('agencia')}</label>
                 <Controls.Input
                     name="agencia"
@@ -171,7 +171,7 @@ const onclickAgenciaPopup = () => {
             </div>
 
 
-            <div style={{ height: 400, width: '100%'}}>
+            <div style={{ height: 400, width: '100%', marginTop:"25px"}}>
                 <DenunciaSearchTable ref={childRef}
                     idDisplay={false}
                     nomeDisplay={true}

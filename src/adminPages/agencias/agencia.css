@@ -14,7 +14,7 @@
 .newFaculty {
   flex: 2;
   padding: 20px;
-  margin-top: -20px;
+  margin-top: -10px;
   margin-bottom: 20px;
   -webkit-box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13); 
   box-shadow: -11px 11px 6px 1px rgba(0,0,0,0.13);

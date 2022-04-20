@@ -2,8 +2,10 @@ import http from '../../http-common';
 
 class DenunciasService {
 
-    getAll(abreviationLangue, tipoImpressao, sedeID, agenciaID, tipoMovimento){
-        return http.get(`/denuncias?abreviationLangue=${abreviationLangue}&tipoImpressao=${tipoImpressao}&sedeID=${sedeID}&agenciaID=${agenciaID}&tipoMovimento=${tipoMovimento}`);
+    getAll(abreviationLangue, tipoImpressao, sedeID, agenciaID, tipoMovimento, funcionarioID1){
+        
+
+        return http.get(`/denuncias?abreviationLangue=${abreviationLangue}&tipoImpressao=${tipoImpressao}&sedeID=${sedeID}&agenciaID=${agenciaID}&tipoMovimento=${tipoMovimento}&funcionarioID=${funcionarioID1}`);
     }
 
     create(data){

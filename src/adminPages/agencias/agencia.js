@@ -14,7 +14,7 @@ import ImageUpLoad from "../../components/reusableComponents/ImageUpLoad";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { InputAdornment } from "@mui/material";
+import { Grid, InputAdornment } from "@mui/material";
 import PaisService from "../../services/admin/Pais.service";
 import CidadeService from "../../services/admin/Cidade.service";
 import Pais from "../paises/Pais";
@@ -333,7 +333,16 @@ const Agencia = () => {
   };
 
   return (
+    <>
+    <Grid constainer spacing={2}
+    container
+    direction="column"
+    justifyContent="space-between"
+    // style={{ height: "100%" }}
+    >
     <div className="facultyContainer">
+    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    <div style={{margnLeft: "10px", marginTop:"10px"}}>
       <PageHeader
         title={headerTitle}
         subTitle={headerSubTitle}
@@ -341,9 +350,13 @@ const Agencia = () => {
         color={color}
         icon={<House />}
       ></PageHeader>
+      </div>
+      </Grid>
 
       <Form onSubmit={handleSubmit} autoComplete="off">
         <div className="facultyItemContainer">
+        <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+
           <div className="newFaculty">
             <div>
               <label className="inputLabel">{t("sede")}</label>
@@ -421,19 +434,21 @@ const Agencia = () => {
                 value={values.email}
                 onChange={handleInputChange}
                 type="text"
-                width="42%"
+                width="65%"
                 // width="40%"
                 error={errors.email}
               />
+              </div>
+              <div>
 
-              {/* <label className="inputLabel">{t('contacto')}</label> */}
+              <label className="inputLabel">{t('contacto')}</label>
               <Controls.Input
                 name="telefone"
                 placeHolder={t("contacto")}
                 value={values.telefone}
                 onChange={handleInputChange}
                 type="text"
-                width="23%"
+                width="65%"
                 error={errors.telefone}
               />
             </div>
@@ -497,9 +512,13 @@ const Agencia = () => {
               </div>
             ) : null}
           </div>
-          {deviceWidth > 820 ? (
+
+          </Grid>
+          {/* {deviceWidth > 820 ? ( */}
+          <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
             <div className="newFaculty">
-              <AgenciaSearchTable
+              <div style={{marginTop: "15px" }}>
+              <AgenciaSearchTable 
                 ref={childRef2}
                 idDisplay={true}
                 codeDisplay={true}
@@ -510,8 +529,8 @@ const Agencia = () => {
                 actionsButtonDisplayEditDelete={false}
                 backGroundColor={backGroundColor}
                 color={color}
-                pageSize={5}
-                rowPerPage={5}
+                pageSize={7}
+                rowPerPage={7}
                 //idSede={sedeID}
                 editClick={(
                   id,
@@ -547,12 +566,15 @@ const Agencia = () => {
                   editCliqued(); // color
                 }}
               />
+              </div>
             </div>
-          ) : null}
+          {/* ) : null} */}
+          </Grid>
         </div>
 
         <div className="facultyItemContainer">
-          {deviceWidth > 800 ? <div className="newFaculty"></div> : null}
+          {/* {deviceWidth > 800 ? <div className="newFaculty"></div> : null} */}
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
           <div className="newFaculty">
             {location.state === null ? (
@@ -596,6 +618,7 @@ const Agencia = () => {
               />
             )}
           </div>
+          </Grid>
         </div>
       </Form>
 
@@ -723,6 +746,9 @@ const Agencia = () => {
           />
       </Popup> : null}
     </div>
+
+    </Grid>
+    </>
   );
 };
 

@@ -145,7 +145,7 @@ const ListagemDepartamento = () => {
                 />
 
                 <div>
-                    <label className="inputLabel">{t('nome_Agencia')}</label>
+                    <label style={{fontSize:"12px", marginTop: "-5px"}} className="inputLabel">{t('nome_Agencia')}</label>
                     <Controls.Input
                         name="agencia"
                         placeHolder={t('nome_Agencia')}
@@ -167,7 +167,7 @@ const ListagemDepartamento = () => {
 
             </div>
             {(count === 5) ?
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 400, width: '100%', marginTop: "2px" }}>
                     <DepartamentoResumoSearchTable ref={childRef_resumo}
                         sedeID={sedeID}
                         agenciaID={0}
@@ -176,7 +176,7 @@ const ListagemDepartamento = () => {
                         pageSize={9}
                         rowPerPage={9} />
                 </div> :
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 400, width: '100%', marginTop: "2px"}}>
                     <DepartamentoSearchTable ref={childRefDepartement}
                         idDisplay={true}
                         codeDisplay={true}
@@ -199,8 +199,8 @@ const ListagemDepartamento = () => {
                         setOpenPopup={setOpenPopup}
                         //pageHeader={PopupHeaderUniversity()}
                         buttonColor="secondary"
-                        width="550px"
-                        height="520px"
+                        width="800px"
+                        height="580px"
                         marginTop="10px"
                         title={popupTitle}>
                         <SedeUtilizadorSearchTable
@@ -208,8 +208,8 @@ const ListagemDepartamento = () => {
                             codeDisplay={false}
                             actionsButtonSelectDisplay={true} // monstrar o campo = true
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={10}
+                            rowPerPage={10}
                             backGroundColor="darkBlue"
                             color="white"
                             sedeData={(id, code, sede) => {
@@ -235,7 +235,7 @@ const ListagemDepartamento = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="770px"
+                        width="800px"
                         height="580px"
                         marginTop="10px"
                     >
@@ -250,8 +250,8 @@ const ListagemDepartamento = () => {
                             color="white"
                             sedeID={sedeID}
                             userID={userID}
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={10}
+                            rowPerPage={10}
                             agenciaData={(id, code, agencia) => {
                                 setagencia(agencia);
                                 setAgenciaID(id)
@@ -269,8 +269,8 @@ const ListagemDepartamento = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="600px"
-                        height="480px"
+                        width="800px"
+                        height="580px"
                         marginTop="10px"
                     >
                         <SedeSearchTable
@@ -279,8 +279,8 @@ const ListagemDepartamento = () => {
                             statusDisplay={true}
                             actionsButtonSelectDisplay={true}
                             actionsButtonDisplayEditDelete={false}
-                            pageSize={7}
-                            rowPerPage={7}
+                            pageSize={10}
+                            rowPerPage={10}
                             backGroundColor="darkBlue"
                             color="white"
                             // userID={userID2}
@@ -305,8 +305,8 @@ const ListagemDepartamento = () => {
                         setOpenPopup={setOpenPopup}
                         buttonColor="secondary"
                         title={popupTitle}
-                        width="770px"
-                        height="550px"
+                        width="800px"
+                        height="580px"
                         marginTop="10px"
                     >
                         <AgenciaSearchTable ref={childRefAgence}
@@ -320,8 +320,8 @@ const ListagemDepartamento = () => {
                             idSede={sedeID}
                             userID={userID}
                             color="white"
-                            pageSize={5}
-                            rowPerPage={5}
+                            pageSize={10}
+                            rowPerPage={10}
                             agenciaData={(id, code, agencia) => {
                                 setagencia(agencia);
                                 setAgenciaID(id)

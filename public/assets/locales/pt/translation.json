@@ -49,7 +49,10 @@
     "status_inactive": "Inactivo",
     "status_pendente": "Pendente",
     "status_apagado": "Apagado",
-    
+
+    "status_encurso": "Em Curso",
+    "status_concluido": "Concluído",
+    "status_sem_objeto": "Sem Objecto",
 
     "denunciante": "Nome Reclamador",
     "tipo_denuncia": "Tipo Reclamação",
@@ -96,7 +99,7 @@
      "sedeEdit_informacaoSede_text": "Informação da Sede",
      "sedeEdit_contactSede_text": "Contacto da Sede",
      
-    "agencia": "Centros de Trabalho",
+    "agencia": "Centro-Trabalho",
     "funcao": "Função",
     "action": "Ação",
     "header_title_sede": "Nova Sede da Empresa",

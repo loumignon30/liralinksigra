@@ -386,8 +386,8 @@ return (
                         idSede={sedeID}
                         userID={userID}
                         color="white"
-                        pageSize={5}
-                        rowPerPage={5}
+                        pageSize={10}
+                        rowPerPage={10}
                         agenciaData={(id, code, agencia) => {
                             setAgencia(agencia);
                             setAgenciaID(id)

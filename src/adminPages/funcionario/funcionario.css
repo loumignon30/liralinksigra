@@ -14,3 +14,11 @@
     content: "\a";
     white-space: pre;
 }
+
+.cardPositioning {
+    width: 240px;
+  display:flex;
+  align-items:space-between;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
