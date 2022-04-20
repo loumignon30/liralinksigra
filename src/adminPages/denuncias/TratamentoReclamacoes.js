@@ -9,7 +9,7 @@ import {
   Grid,
   Input,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import PageHeader from "../../components/reusableComponents/PageHeader";
 import cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
@@ -22,40 +22,36 @@ import { pink } from "@mui/material/colors";
 import { useLocation } from "react-router-dom";
 import DenunciaSearchTable from "./DenunciaSearchTable";
 import ImageUpLoad from "../../components/reusableComponents/ImageUpLoad";
+import DenunciasServices from "../../services/admin/Denuncias.services";
+import { useNavigate } from "react-router-dom";
+import { UserLoggedContext } from "../utilisador/UserLoggedContext";
+
+import { NotificationsNone, Settings, Language } from "@mui/icons-material";
+
+import NotificaoService from "../../services/admin/Notificao.service";
+import swal from "sweetalert";
+
+import NotificacaoSearchTable from "../notificacoes/NotificacaoSearchTable";
+
+
+
 
 const initialFValues = {
   id: 0,
-  codigoTrabalhador: "",
-  primeironomeTrabalhador: "",
-  ultimonomeTrabalhador: "",
-  telepfoneTrabalhador: "",
-  emailTrabalhador: "",
-
-  telepfoneDenunciante: "",
-  emailDenunciante: "",
-  queixa: "",
-  status: "1",
-  hora: "",
   data: null,
-  funcionarioID: null,
-  sedeID: 0,
-  agenciaID: 0,
-  agencia: "",
-  tipodenunciaID: "",
-  tipodenuncia: "",
-  abreviationLangue: "",
-  rating: 0,
-  ratingID: "",
-  ratingMotivoID: "",
-  tipoReclamacao: "",
-  tipoMovimento: 1, // 1 = reclamacao, 2 = Sugestão, 3 = Avaliação
-  agenciaIDReclamacao: null,
-  nomeDenunciante: "",
-  emailDenunciante: "",
-  telefoneDenunciante: "",
-  queixa: "",
-  mensagemNotificacaoTrabalhador: "",
+  hora: "",
+  mensagem: "",
+  status: '2',
+  tipoMovimento: "1",
+  sedeID: "",
+  tiponotificao: "App-Sigra",
+  funcionarioID: 0,
+  userID: 0,
+  sms: false,
+  emai: false,
+  notificacao:false
 };
+
 
 const TratamentoReclamacoes = (props) => {
   const currentLanguageCode = cookies.get("i18next") || "en";
@@ -67,10 +63,21 @@ const TratamentoReclamacoes = (props) => {
   const [agenciaID, setAgenciaID] = useState(0);
   const [agencia, setAgencia] = useState("");
 
+  const [idTrabalhador, setIDTrabalhador] = useState(0);
+  const [codigoTrabalhador, setCodigoTrabalhador] = useState("");
+
   const [primeiroNome, setPrimeiroNome] = useState("");
   const [apelido, setApelido] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [email, setEmail] = useState("");
+  const [telefoneTrabalhador, setTelefoneTrabalhador] = useState("");
+  const [emailTrabalhador, setEmailTrabalhador] = useState("");
+
+  const [nomeDenunciante, setNomeDenunciante] = useState("");
+  const [emailDenunciante, setEmailDenunciante] = useState("");
+  const [telefoneDenunciante, setTelefoneDenunciante] = useState("");
+  const [queixa, setQueixa] = useState("");
+  const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState("");
+
+
   const [endereco, setEndereco] = useState("");
   const [cidade, setCidade] = useState("");
   const [pais, setPais] = useState("");
@@ -96,6 +103,16 @@ const TratamentoReclamacoes = (props) => {
 
   const childRef = useRef(null); // it's using a reference of a method from ImageUpLoad.js
 
+  const navigate = useNavigate();
+
+  const [checkedSMS, setCheckedSMS] = useState(false);
+  const [checkedEmail, setCheckedEmail] = useState(false);
+  const [checkedNotificacao, setCheckedNotificacao] = useState(false);
+
+
+
+  const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
+
   const [state, setState] = useState({
     enviarSMS: false,
     envisrNotificacao: false,
@@ -103,6 +120,11 @@ const TratamentoReclamacoes = (props) => {
   });
 
   const { enviarSMS, envisrNotificacao, envisrEmail } = state;
+
+  const [
+    total_ReclamacaoFuncionario,
+    settotal_ReclamacaoFuncionario,
+  ] = useState(0);
 
   const validate = (fieldValues = values) => {
     let validationErrorM = {};
@@ -140,15 +162,59 @@ const TratamentoReclamacoes = (props) => {
 
   useEffect(() => {
     window.scrollTo(0, 0); // open the page on top
-    setValues(location.state);
+    // // setValues(location.state);
+
+    getTime(); // get time and Date
+
+    setIDTrabalhador(location.state.id);
+    setCodigoTrabalhador(location.state.codigoTrabalhador);
+    setPrimeiroNome(location.state.primeironomeTrabalhador);
+    setApelido(location.state.ultimonomeTrabalhador);
+    setTelefoneTrabalhador(location.state.telepfoneTrabalhador);
+    setEmailTrabalhador(location.state.emailTrabalhador);
+
+    setNomeDenunciante(location.state.nomeDenunciante);
+    setEmailDenunciante(location.state.emailDenunciante);
+    setTelefoneDenunciante(location.state.telefoneDenunciante);
+    setQueixa(location.state.queixa);
+    setImageChangeFromOutSideURL(location.state.imageChangeFromOutSideURL);
+    setSedeID(location.state.sedeID);
+    setSede(location.state.sede);
+    setAgenciaID(location.state.agenciaID);
+    setAgencia(location.state.agencia);
+
     setImageFuncionario(location.state.imageChangeFromOutSideURL);
 
-    getGetAllDataFuncionario(
+    values.funcionarioID = (location.state.funcionarioID);
+    values.sedeID = (location.state.sedeID);
+
+
+    getNotificacoesDoFuncionario(
+      "normal",
       location.state.sedeID,
-      location.state.agenciaID,
-      location.state.funcionarioID
+      location.state.funcionarioID,
+      1
     );
+
+    totalDenunciaFuncionario(location.state.funcionarioID);
+
+    updateValuesOnOpen(); // get user ID que vai envisr a mensagem
   }, []);
+
+  const updateValuesOnOpen = () => {
+    userSavedValue.map(item => {
+        values.userID = item.id
+    });
+  }
+
+  const getTime = () => {
+    var today = new Date(),
+      time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    values.hora = time;
+    let today2 = new Date().toLocaleDateString();
+    values.data = today2;
+  };
 
   const ItemTitulo = styled(Paper)(({ theme }) => ({
     // ...theme.typography.body2,
@@ -182,12 +248,12 @@ const TratamentoReclamacoes = (props) => {
     });
   };
 
-  const getGetAllDataFuncionario = (sedeID1, agenciaID1, funcionarioID1) => {
-    childRef.current.getGetAllDataFuncionario(
+  const getNotificacoesDoFuncionario = (tipoPesquisa1, sedeID1, funcionarioID1, tipoMovimento1) => {
+    childRef.current.getGetAllData(
+      tipoPesquisa1,
       sedeID1,
-      agenciaID1,
-      1,
-      funcionarioID1
+      funcionarioID1,
+      tipoMovimento1
     ); // saveImage() = method called
   };
 
@@ -200,8 +266,92 @@ const TratamentoReclamacoes = (props) => {
     },
   };
 
+  const totalDenunciaFuncionario = (funcionarioID) => {
+    DenunciasServices.getAll(
+      "countDenunciasTrabalhador",
+      location.state.sedeID,
+      agenciaID,
+      "countDenunciasTrabalhador",
+      funcionarioID
+    )
+      .then((response) => {
+        response.data.map((total) => {
+          settotal_ReclamacaoFuncionario(total.total_ReclamacaoFuncionario);
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const sair = () => {
+    navigate("/Home");
+  };
+
+  const notificaoGravar = (e) => {
+    e.preventDefault();
+
+    NotificaoService.create(values).then((response) => {
+      
+        swal(t("Notificação enviada com Sucesso!"), {
+          icon: "success",
+        });
+
+        getNotificacoesDoFuncionario(
+          "normal",
+          location.state.sedeID,
+          location.state.funcionarioID,
+          1
+        );
+    
+      
+    });
+  };
+
+  const getNotificaoSMS = (event) => {
+    event.preventDefault();
+
+    if (event.target.checked) {
+      values.tiponotificao = "SMS";
+      values.sms = true;
+      setCheckedSMS(event.target.checked);
+    }else {
+      values.sms = false;
+      setCheckedSMS(false);
+
+    }
+  };
+
+  const getNotificaoEmail = (event) => {
+    event.preventDefault();
+
+    if (event.target.checked) {
+      values.tiponotificao = "EMail";
+      values.emai = true
+      setCheckedEmail(event.target.checked);
+    }else {
+      values.emai = false
+      setCheckedEmail(false);
+    }
+  };
+
+  const getNotificaoNotificapApp = (event) => {
+    event.preventDefault();
+
+    if (event.target.checked) {
+      values.tiponotificao = "App-Sigra";
+      values.notificacao = true
+      setCheckedNotificacao(event.target.checked);
+    }else {
+      values.notificacao = false
+      setCheckedNotificacao(false);
+    }
+  };
+
+
   return (
     <>
+    
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={0}>
           <Grid item xs={10}>
@@ -209,7 +359,7 @@ const TratamentoReclamacoes = (props) => {
               <PageHeader
                 title={t("TRATAMENTO DE RECLAMAÇÕES ")}
                 subTitle={t("Formulário de Tratamento de Reclamações")}
-                backGroundColor="lightblue"
+                backGroundColor="#f0efeb"
                 color="black"
                 icon={<House />}
               ></PageHeader>
@@ -220,7 +370,7 @@ const TratamentoReclamacoes = (props) => {
             <ItemMainTitlo
               style={{
                 boxShadow: "none",
-                backgroundColor: "lightblue",
+                backgroundColor: "#f0efeb",
                 marginTop: "25px",
                 boxShadow: "none",
               }}
@@ -250,9 +400,10 @@ const TratamentoReclamacoes = (props) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
+                borderWidth: "thin",
               }}
             >
-              Total Denuncias
+              Total Reclamações
             </Item>
           </Grid>
           <Grid item xs={1}>
@@ -260,15 +411,29 @@ const TratamentoReclamacoes = (props) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                backgroundColor: "lightgray",
+                backgroundColor: "white",
+                borderWidth: "thin",
               }}
             >
-              2
+              <div style={{ textAlign: "center", borderWidth: "thin" }}>
+                {/* {total_ReclamacaoFuncionario} */}
+                {/* <NotificationsNone size={25} /> */}
+                {/* <span className="topIconBag"> */}
+                {total_ReclamacaoFuncionario}
+                {/*                 </span>
+                 */}{" "}
+              </div>
             </Item>
           </Grid>
 
           <Grid item xs={3}>
-            <Item style={{ borderStyle: "solid", borderColor: "black" }}>
+            <Item
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                borderWidth: "thin",
+              }}
+            >
               Total Avaliações
             </Item>
           </Grid>
@@ -277,15 +442,22 @@ const TratamentoReclamacoes = (props) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                backgroundColor: "lightgray",
+                backgroundColor: "white",
+                borderWidth: "thin",
               }}
             >
-              4
+              0
             </Item>
           </Grid>
 
           <Grid item xs={3}>
-            <Item style={{ borderStyle: "solid", borderColor: "black" }}>
+            <Item
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                borderWidth: "thin",
+              }}
+            >
               Total Sugestões
             </Item>
           </Grid>
@@ -294,10 +466,11 @@ const TratamentoReclamacoes = (props) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                backgroundColor: "lightgray",
+                backgroundColor: "white",
+                borderWidth: "thin",
               }}
             >
-             1
+              0
             </Item>
           </Grid>
 
@@ -305,10 +478,11 @@ const TratamentoReclamacoes = (props) => {
             <Grid item xs={12}>
               <ItemTitulo
                 style={{
-                  backgroundColor: "lightblue",
+                  backgroundColor: "#f0efeb",
                   fontWeight: "600",
                   borderStyle: "solid",
                   borderColor: "black",
+                  borderWidth: "thin",
                 }}
               >
                 <span
@@ -321,19 +495,20 @@ const TratamentoReclamacoes = (props) => {
 
             <Item
               style={{
-                height: "81%",
+                height: "83%",
                 borderStyle: "solid",
                 borderColor: "black",
+                borderWidth: "thin",
               }}
             >
-              <div style={{ marginTop: "0px" }}>
+              <div style={{ marginTop: "-10px" }}>
                 <label style={{ marginTop: "5px" }} className="userLabel">
                   Código
                 </label>
                 <Controls.Input
                   name="codigoTrabalhador"
                   placeHolder={t("denunciaNumeroPlaceOrder")}
-                  value={values.codigoTrabalhador}
+                  value={codigoTrabalhador}
                   onChange={handleInputChange}
                   width="70%"
                   type="text"
@@ -349,10 +524,10 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="primeironomeTrabalhador"
                   placeHolder="Nome"
-                  value={values.primeironomeTrabalhador}
+                  value={primeiroNome}
                   type="text"
                   width="70%"
-                  error={errors.primeironomeTrabalhador}
+                  error={errors.primeiroNome}
                 />
               </div>
               <div>
@@ -365,7 +540,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="ultimonomeTrabalhador"
                   placeHolder="ultimo nome"
-                  value={values.ultimonomeTrabalhador}
+                  value={apelido}
                   type="text"
                   width="70%"
                   error={errors.ultimonomeTrabalhador}
@@ -376,7 +551,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="sede"
                   placeHolder="Sede"
-                  value={values.sede}
+                  value={sede}
                   onChange={handleInputChange}
                   type="text"
                   width="70%"
@@ -390,7 +565,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="agencia"
                   placeHolder="Centro de Trabalho"
-                  value={values.agencia}
+                  value={agencia}
                   onChange={handleInputChange}
                   type="text"
                   width="70%"
@@ -405,7 +580,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="emailTrabalhador"
                   placeHolder={t("email")}
-                  value={values.emailTrabalhador}
+                  value={emailTrabalhador}
                   width="70%"
                   type="text"
                   error={errors.emailTrabalhador}
@@ -418,10 +593,10 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="telepfoneTrabalhador"
                   placeHolder={t("contacto")}
-                  value={values.telepfoneTrabalhador}
+                  value={telefoneTrabalhador}
                   width="70%"
                   type="text"
-                  error={errors.telepfoneTrabalhador}
+                  error={errors.telefoneTrabalhador}
                 />
               </div>
             </Item>
@@ -430,7 +605,11 @@ const TratamentoReclamacoes = (props) => {
           <Grid item xs={6}>
             <Grid item xs={12}>
               <ItemTitulo
-                style={{ backgroundColor: "lightblue", fontWeight: "600" }}
+                style={{
+                  backgroundColor: "#f0efeb",
+                  fontWeight: "600",
+                  borderWidth: "thin",
+                }}
               >
                 <span
                   style={{ fontSize: "12", fontWeight: "600", color: "black" }}
@@ -442,9 +621,10 @@ const TratamentoReclamacoes = (props) => {
 
             <Item
               style={{
-                height: "81%",
+                height: "83%",
                 borderStyle: "solid",
                 borderColor: "black",
+                borderWidth: "thin",
               }}
             >
               <div>
@@ -452,7 +632,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="nome"
                   placeHolder={t("denunciante")}
-                  value={values.nomeDenunciante}
+                  value={nomeDenunciante}
                   onChange={handleInputChange}
                   width="70%"
                   type="text"
@@ -465,7 +645,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="telefoneDenunciante"
                   placeHolder={t("contacto")}
-                  value={values.telefoneDenunciante}
+                  value={telefoneDenunciante}
                   onChange={handleInputChange}
                   width="70%"
                   type="text"
@@ -478,7 +658,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="emailDenunciante"
                   placeHolder={t("email")}
-                  value={values.emailDenunciante}
+                  value={emailDenunciante}
                   onChange={handleInputChange}
                   width="70%"
                   type="text"
@@ -491,7 +671,7 @@ const TratamentoReclamacoes = (props) => {
                 <Controls.Input
                   name="queixa"
                   placeHolder={t("queixaPlaceOrder")}
-                  value={values.queixa}
+                  value={queixa}
                   onChange={handleInputChange}
                   type="text"
                   width="70%"
@@ -507,18 +687,54 @@ const TratamentoReclamacoes = (props) => {
           <Grid
             item
             xs={2}
-            style={{ borderStyle: "solid", borderColor: "black" }}
+            style={{
+              borderStyle: "solid",
+              borderColor: "black",
+              borderWidth: "thin",
+              height: "40vh",
+            }}
           >
-            <Item>
-              <FormGroup>
+            <div>
+            <div style={{ marginTop: "0px" }}>
+                <Controls.CheckBox
+                   checked={checkedSMS}
+                  name="tiponotificaoSMS"
+                  label="Enviar SMS"
+                  value={values.sms}
+                  onChange={getNotificaoSMS}
+                />
+              </div>
+
+              <div style={{ marginTop: "-15px" }}>
+                <Controls.CheckBox
+                  checked={checkedEmail}
+                  name="tiponotificaoEmail"
+                  label="Enviar Email"
+                  value={values.emai}
+                  onChange={getNotificaoEmail}
+                />
+              </div>
+
+              <div style={{ marginTop: "-15px" }}>
+                <Controls.CheckBox
+                  checked={checkedNotificacao}
+                  name="tiponotificaoNotificacao"
+                  label="Enviar Notificação"
+                  value={values.notificacao}
+                  onChange={getNotificaoNotificapApp}
+                />
+              </div>
+
+
+              {/* <FormGroup>
                 <FormControlLabel control={<Checkbox />} label="Enviar SMS" />
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Enviar Notificação"
                 />
                 <FormControlLabel control={<Checkbox />} label="Enviar Email" />
-              </FormGroup>
-            </Item>
+              </FormGroup> */}
+            </div>
           </Grid>
 
           <Grid
@@ -528,13 +744,16 @@ const TratamentoReclamacoes = (props) => {
               borderStyle: "solid",
               borderColor: "black",
               boxShadow: "none",
+              height: "28.5vh",
+              borderWidth: "thin",
             }}
           >
             <ItemTitulo
               style={{
-                backgroundColor: "lightblue",
+                backgroundColor: "#f0efeb",
                 fontWeight: "600",
                 boxShadow: "none",
+                borderWidth: "thin",
               }}
             >
               <span style={{ fontSize: "10", color: "black" }}>
@@ -542,60 +761,132 @@ const TratamentoReclamacoes = (props) => {
               </span>
             </ItemTitulo>
             {/* <Item>Mensagem de Notificação */}
-            <div>
+            <div style={{ height: "70px", paddingLeft: "5px" }}>
               <Input
                 style={{ fontFamily: "Times New Roman" }}
-                name="mensagemNotificacaoTrabalhador"
+                name="mensagem"
                 disableUnderline={true}
                 variant="standard"
                 autoFocus
                 onChange={handleInputChange}
-                value={values.mensagemNotificacaoTrabalhador}
+                value={values.mensagem}
                 placeholder={t("Mensagem de Notificação")}
                 fullWidth
                 multiline
               />
             </div>
-            {/* </Item> */}
+
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={0}>
+                <Grid item xs={12}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      borderWidth: "thin",
+                      height: "5.8vh",
+                      marginTop: "90px",
+                      borderWidth: "thin",
+                    }}
+                  >
+                    <div style={{ marginTop: "-10px" }}>
+                      <Controls.Buttons
+                        type="button"
+                        text={t("Enviar Notificação")}
+                        color="primary"
+                        size="small"
+                        width="90%"
+                        fullWidth={false}
+                        onClick={notificaoGravar}
+                      />
+                    </div>
+                  </div>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      borderWidth: "thin",
+                      height: "5.2vh",
+                    }}
+                  >
+                    <div style={{ marginTop: "-10px" }}>
+                      <Controls.Buttons
+                        type="button"
+                        text={t("button_pagina_anterior")}
+                        color="secondary"
+                        size="small"
+                        width="90%"
+                        fullWidth={false}
+                        onClick={() => {
+                          setUserSavedValue((prevState) => {
+                            prevState[0].sedeID_pesquisas = sedeID;
+                            // prevState[0].sede_pesquisa = sede
+                            // prevState[0].agenciaID_pesquisa = agenciaID
+                            // prevState[0].agencia_pesquisa = agencia
+                            prevState[0].provenienciaFormulario = "funcionario";
+                            return [...prevState];
+                          });
+
+                          navigate(-1);
+                        }}
+                        // variant="outlined"
+
+                        // onClick={sair}
+                      />
+                    </div>
+                  </div>
+                </Grid>
+              </Grid>
+            </Box>
           </Grid>
 
           <Grid
             item
             xs={6}
-            style={{ borderStyle: "solid", borderColor: "black" }}
+            style={{
+              borderStyle: "solid",
+              borderColor: "black",
+              borderWidth: "thin",
+            }}
           >
             <ItemTitulo
-              style={{ backgroundColor: "lightblue", fontWeight: "600" }}
+              style={{
+                backgroundColor: "#f0efeb",
+                fontWeight: "600",
+                borderWidth: "thin",
+              }}
             >
               <span
                 style={{ fontSize: "12", fontWeight: "600", color: "black" }}
               >
-                LISTAGEM DE RECLAMAÇÕES
+                LISTAGEM DE NOTIFICAÇÕES
               </span>
             </ItemTitulo>
 
             {/* <Item> */}
             <div style={{ marginTop: "5px" }}>
-              <DenunciaSearchTable
+              <NotificacaoSearchTable
                 ref={childRef}
-                idDisplay={true}
-                nomeDisplay={true}
+                idDisplay={false}
+                nomeDisplay={false}
                 tipoDenunciaDisplay={false}
-                linguaQueixa={false}
                 dataDisplay={true}
                 horaDisplay={true}
+                tipoNotificaoDisplay={true}
+                userQueRnviouMensagem={true}
                 emailDisplay={false}
                 telefoneDislay={false}
-                statusDisplay={false}
-                queixaDisplay={false}
+                statusDisplay={true}
+                mensagemDisplay={false}
                 actionsButtonDisplaySelect={false}
                 actionsButtonDisplayEditDelete={false}
-                backGroundColor="darkblue"
-                color="white"
-                abreviationLangue={currentLanguageCode}
+                backGroundColor="#f0efeb"
+                color="black"
                 sedeID={sedeID}
                 tipoMovimento={1}
-                tipoImpressao="normal"
                 agenciaID={agenciaID}
                 pageSize={10}
                 rowPerPage={10}

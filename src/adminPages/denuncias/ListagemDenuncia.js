@@ -28,15 +28,17 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import DenunciasServices from "../../services/admin/Denuncias.services";
 
 const initialFValues = {
   lingua: "",
+  tipoMovimentodenuncia: "",
   reclamacaoFuncionario: false,
   reclamacaoCentroTrabalho: false,
   reclamacaoEmpresa: false,
   reclamacaoProduto: false,
   reclamacaoServico: false,
-  reclamacaoOutras: false
+  reclamacaoOutras: false,
 };
 const ListagemDenuncia = () => {
   const { t } = useTranslation();
@@ -73,11 +75,22 @@ const ListagemDenuncia = () => {
   const [agenciaID, setAgenciaID] = useState(0);
   const [userID, setUserID] = useState(0);
   const [nivelAcesso, setNivelAcesso] = useState(0);
+  const [checkedFuncionario, setCheckedFuncionario] = useState(false);
+  const [checkedCentroTrabalho, setCheckedCentroTrabalho] = useState(false);
+  const [checkedEmpresa, setCheckedEmpresa] = useState(false);
+  const [checkedProduto, setCheckedProduto] = useState(false);
+
+  const [checkedServico, setCheckedServico] = useState(false);
+  const [checkedOutras, setCheckedOutras] = useState(false);
 
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
+  const [totalPendente, setTotalPendente] = useState(0);
+  const [totalEmCurso, setTotalEmCurso] = useState(0);
+  const [totalConcluido, setTotalConcluido] = useState(0);
+
   const validate = (fieldValues = values) => {
-     let validationErrorM = {};
+    let validationErrorM = {};
     // if ("primeiroNome") validationErrorM.primeiroNome = primeiroNome ? "" : " "; // This field is Required
     // if ("apelido") validationErrorM.apelido = apelido ? "" : " "; // This field is Required
 
@@ -104,7 +117,6 @@ const ListagemDenuncia = () => {
     return Object.values(validationErrorM).every((x) => x === ""); // it will return true if x==""
   };
 
-
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     initialFValues,
     true,
@@ -112,10 +124,53 @@ const ListagemDenuncia = () => {
   ); // use
   useEffect(() => {
     window.scrollTo(0, 0); // open the page on top
-    //tableDenunciaLinguaUpdateData();
 
     getUserContext();
-  }, [currentLanguageCode]);
+
+    getGetAllZero();
+    updateValuesOnOpen(); // dados da pagina anterior
+  }, []);
+
+  const updateValuesOnOpen = () => {
+    let testEdit = 0;
+    let sedeIDP = 0;
+    let sedeIDP_text = "";
+    let agenciaIDP = 0;
+    let agenciaIDP_text = "";
+
+    userSavedValue.map(
+      (item) => (
+        setSedeID(item.sedeID),
+        // setUserID(item.id),
+        setSede(item.sede),
+        // setNivelAcesso(item.nivelAcesso),
+
+        (testEdit = item.provenienciaFormulario),
+        (sedeIDP = item.sedeID_pesquisas),
+        (agenciaIDP = item.agenciaID_pesquisa),
+        (sedeIDP_text = item.sede_pesquisa),
+        (agenciaIDP_text = item.agencia_pesquisa)
+      )
+    );
+
+    if (testEdit === "funcionario") {
+      setSedeID(sedeIDP);
+      //setAgenciaID(agenciaIDP);
+      setSede(sedeIDP_text);
+      // setagencia(agenciaIDP_text);
+
+      childRef.current.getGetAllData(
+        "Funcionario", //tipoMovimentodenuncia,
+        sedeIDP,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedFuncionario(true);
+      values.reclamacaoFuncionario = true;
+
+      //childRefDepartement.current.getGetAllData(sedeIDP, agenciaIDP) // saveImage() = method called
+    }
+  };
 
   const getUserContext = () => {
     userSavedValue.map((item) => {
@@ -180,12 +235,332 @@ const ListagemDenuncia = () => {
     color: theme.palette.text.secondary,
   }));
 
+  const getGetAllDataFuncionario = (event) => {
+    event.preventDefault();
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedCentroTrabalho(false);
+    values.reclamacaoCentroTrabalho = false;
+
+    setCheckedEmpresa(false);
+    values.reclamacaoEmpresa = false;
+
+    setCheckedProduto(false);
+    values.reclamacaoProduto = false;
+
+    setCheckedServico(false);
+    values.reclamacaoServico = false;
+
+    setCheckedOutras(false);
+    values.reclamacaoOutras = false;
+
+    if (event.target.checked) {
+      values.reclamacaoFuncionario = true;
+
+      childRef.current.getGetAllData(
+        "Funcionario", //tipoMovimentodenuncia,
+        sedeID,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedFuncionario(event.target.checked);
+      totalDenunciaStatus("Funcionario"); // total pendente, em curso e concluido
+    } else {
+      values.reclamacaoFuncionario = false;
+
+      childRef.current.getGetAllData(
+        "nada", //tipoMovimentodenuncia,
+        0,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedFuncionario(event.target.checked);
+    }
+  };
+
+  const getGetAllDataCentroTrabalho = (event) => {
+    event.preventDefault();
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedFuncionario(false);
+    values.reclamacaoFuncionario = false;
+
+    setCheckedEmpresa(false);
+    values.reclamacaoEmpresa = false;
+
+    setCheckedProduto(false);
+    values.reclamacaoProduto = false;
+
+    setCheckedServico(false);
+    values.reclamacaoServico = false;
+
+    setCheckedOutras(false);
+    values.reclamacaoOutras = false;
+
+    if (event.target.checked) {
+      values.reclamacaoCentroTrabalho = true;
+
+      childRef.current.getGetAllData(
+        "Centro Trabalho", //tipoMovimentodenuncia,
+        sedeID,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+
+      setCheckedCentroTrabalho(event.target.checked);
+      totalDenunciaStatus("Centro Trabalho"); // total pendente, em curso e concluido
+    } else {
+      values.reclamacaoCentroTrabalho = false;
+
+      childRef.current.getGetAllData(
+        "nada", //tipoMovimentodenuncia,
+        0,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedCentroTrabalho(event.target.checked);
+    }
+  };
+
+  const getGetAllDataEmpresa = (event) => {
+    event.preventDefault();
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedFuncionario(false);
+    setCheckedCentroTrabalho(false);
+    values.reclamacaoFuncionario = false;
+    values.reclamacaoCentroTrabalho = false;
+
+    setCheckedProduto(false);
+    values.reclamacaoProduto = false;
+
+    setCheckedServico(false);
+    values.reclamacaoServico = false;
+
+    setCheckedOutras(false);
+    values.reclamacaoOutras = false;
+
+    if (event.target.checked) {
+      values.reclamacaoEmpresa = true;
+
+      childRef.current.getGetAllData(
+        "Empresa", //tipoMovimentodenuncia,
+        sedeID,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+
+      setCheckedEmpresa(event.target.checked);
+      totalDenunciaStatus("Empresa"); // total pendente, em curso e concluido
+    } else {
+      values.reclamacaoEmpresa = false;
+
+      childRef.current.getGetAllData(
+        "nada", //tipoMovimentodenuncia,
+        0,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedEmpresa(event.target.checked);
+    }
+  };
+
+  const getGetAllProduto = (event) => {
+    event.preventDefault();
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedFuncionario(false);
+    setCheckedCentroTrabalho(false);
+    setCheckedEmpresa(false);
+    setCheckedServico(false);
+    setCheckedOutras(false);
+
+    values.reclamacaoServico = false;
+
+    values.reclamacaoFuncionario = false;
+    values.reclamacaoCentroTrabalho = false;
+    values.reclamacaoEmpresa = false;
+
+    values.reclamacaoOutras = false;
+
+    if (event.target.checked) {
+      values.reclamacaoProduto = true;
+
+      childRef.current.getGetAllData(
+        "Produto", //tipoMovimentodenuncia,
+        sedeID,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+
+      setCheckedProduto(event.target.checked);
+      totalDenunciaStatus("Produto"); // total pendente, em curso e concluido
+    } else {
+      values.reclamacaoProduto = false;
+
+      childRef.current.getGetAllData(
+        "nada", //tipoMovimentodenuncia,
+        0,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedProduto(event.target.checked);
+    }
+  };
+
+  const getGetAllServico = (event) => {
+    event.preventDefault();
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedFuncionario(false);
+    setCheckedCentroTrabalho(false);
+    setCheckedEmpresa(false);
+    setCheckedProduto(false);
+    setCheckedOutras(false);
+
+    values.reclamacaoFuncionario = false;
+    values.reclamacaoCentroTrabalho = false;
+    values.reclamacaoEmpresa = false;
+    values.reclamacaoProduto = false;
+    values.reclamacaoOutras = false;
+
+    if (event.target.checked) {
+      values.reclamacaoServico = true;
+
+      childRef.current.getGetAllData(
+        "Servico", //tipoMovimentodenuncia,
+        sedeID,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+
+      setCheckedServico(event.target.checked);
+      totalDenunciaStatus("Servico"); // total pendente, em curso e concluido
+    } else {
+      values.reclamacaoServico = false;
+
+      childRef.current.getGetAllData(
+        "nada", //tipoMovimentodenuncia,
+        0,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedServico(event.target.checked);
+    }
+  };
+
+  const getGetAllOutras = (event) => {
+    event.preventDefault();
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedFuncionario(false);
+    setCheckedCentroTrabalho(false);
+    setCheckedEmpresa(false);
+    setCheckedProduto(false);
+    setCheckedServico(false);
+
+    values.reclamacaoFuncionario = false;
+    values.reclamacaoCentroTrabalho = false;
+    values.reclamacaoEmpresa = false;
+    values.reclamacaoProduto = false;
+    values.reclamacaoServico = false;
+
+    if (event.target.checked) {
+      values.reclamacaoOutras = true;
+
+      childRef.current.getGetAllData(
+        "Outras", //tipoMovimentodenuncia,
+        sedeID,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+
+      setCheckedOutras(event.target.checked);
+      totalDenunciaStatus("Outras"); // total pendente, em curso e concluido
+    } else {
+      values.reclamacaoOutras = false;
+
+      childRef.current.getGetAllData(
+        "nada", //tipoMovimentodenuncia,
+        0,
+        0, //agenciaID1,
+        "funcionario" // tipoImpressao
+      ); // saveImage() = method called
+      setCheckedOutras(event.target.checked);
+    }
+  };
+
+  const getGetAllZero = () => {
+
+    setTotalPendente(0);
+    setTotalEmCurso(0);
+    setTotalConcluido(0);
+
+    setCheckedFuncionario(false);
+    setCheckedCentroTrabalho(false);
+    setCheckedEmpresa(false);
+    setCheckedProduto(false);
+    setCheckedServico(false);
+    setCheckedOutras(false);
+
+    values.reclamacaoFuncionario = false;
+    values.reclamacaoCentroTrabalho = false;
+    values.reclamacaoEmpresa = false;
+    values.reclamacaoProduto = false;
+    values.reclamacaoServico = false;
+    values.reclamacaoOutras = false;
+  };
+
+  const totalDenunciaStatus = (tipoMovimentodenuncia) => {
+    DenunciasServices.getAll(
+      tipoMovimentodenuncia,
+      sedeID,
+      0, //agenciaID,
+      "countDenunciasStatus",
+      0 // 0funcionarioID
+    )
+      .then((response) => {
+        response.data.map((total) => {
+
+          if (total.status === "1") {
+            setTotalPendente(total.total_Status);
+          }
+          if (total.status === "2") {
+            setTotalEmCurso(total.total_Status);
+          }
+          if (total.status === "3") {
+            setTotalConcluido(total.total_Status);
+          }
+          //settotal_ReclamacaoFuncionario(total.total_ReclamacaoFuncionario);
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-
         <Grid container spacing={0}>
-          
           <Grid item xs={12}>
             <ItemMainTitlo>
               <PageHeader
@@ -207,10 +582,12 @@ const ListagemDenuncia = () => {
               }}
             >
               <div
-                style={{
-                  //  marginLeft: "5px",
-                  // marginTop: "auto",
-                }}
+                style={
+                  {
+                    //  marginLeft: "5px",
+                    // marginTop: "auto",
+                  }
+                }
               >
                 <label
                   className="inputLabel"
@@ -276,32 +653,33 @@ const ListagemDenuncia = () => {
                 height: "75%",
               }}
             >
-              <div style={{marginTop:"-15px"}}>
+              <div style={{ marginTop: "-15px" }}>
                 <Controls.CheckBox
+                  checked={setCheckedFuncionario}
                   name="reclamacaoFuncionario"
                   label="Contra o Funcionários"
                   value={values.reclamacaoFuncionario}
-                  onChange={handleInputChange}
+                  onChange={getGetAllDataFuncionario}
                 />
               </div>
-              <div style={{marginTop:"-25px"}}>
+              <div style={{ marginTop: "-25px" }}>
                 <Controls.CheckBox
+                  checked={setCheckedCentroTrabalho}
                   name="reclamacaoCentroTrabalho"
                   label="Contra o Centro de Trabalho"
                   value={values.reclamacaoCentroTrabalho}
-                  onChange={handleInputChange}
+                  onChange={getGetAllDataCentroTrabalho}
                 />
               </div>
 
-              <div style={{marginTop:"-25px"}}>
+              <div style={{ marginTop: "-25px" }}>
                 <Controls.CheckBox
                   name="reclamacaoEmpresa"
                   label="Contra a Empresa"
                   value={values.reclamacaoEmpresa}
-                  onChange={handleInputChange}
+                  onChange={getGetAllDataEmpresa}
                 />
               </div>
-              
             </Item>
           </Grid>
           <Grid item xs={3}>
@@ -312,83 +690,83 @@ const ListagemDenuncia = () => {
                 height: "75%",
               }}
             >
-              <div style={{marginTop:"-15px"}}>
+              <div style={{ marginTop: "-15px" }}>
                 <Controls.CheckBox
                   name="reclamacaoProduto"
                   label="Contra o Produto"
                   value={values.reclamacaoProduto}
-                  onChange={handleInputChange}
+                  onChange={getGetAllProduto}
                 />
               </div>
-              <div style={{marginTop:"-25px"}}>
+              <div style={{ marginTop: "-25px" }}>
                 <Controls.CheckBox
                   name="reclamacaoServico"
                   label="Contra o Serviço"
                   value={values.reclamacaoServico}
-                  onChange={handleInputChange}
+                  onChange={getGetAllServico}
                 />
               </div>
 
-              <div style={{marginTop:"-25px"}}>
+              <div style={{ marginTop: "-25px" }}>
                 <Controls.CheckBox
                   name="reclamacaoOutras"
                   label="Outras.."
                   value={values.reclamacaoOutras}
-                  onChange={handleInputChange}
+                  onChange={getGetAllOutras}
                 />
               </div>
-             
             </Item>
           </Grid>
 
           <Grid item xs={4}>
             <ItemMainTitlo
-             style={{
-               marginTop: "-5px",
-              height: "20px",
-              borderStyle: "solid",
-               borderColor: "black",
-               marginBottom: "3px",
-               backgroundColor:"#f8d210"
+              style={{
+                marginTop: "-5px",
+                height: "20px",
+                borderStyle: "solid",
+                borderColor: "black",
+                marginBottom: "3px",
+                backgroundColor: "#f8d210",
 
-              // boxShadow: "none"
-            }}>
-             Total pendente:
+                // boxShadow: "none"
+              }}
+            >
+              <span>Total pendente: {totalPendente}</span>
             </ItemMainTitlo>
           </Grid>
 
           <Grid item xs={4}>
             <ItemMainTitlo
-            style={{
-              marginTop: "-5px",
-              height: "20px",
-              borderStyle: "solid",
-               borderColor: "black",
-               marginBottom: "3px",
-               backgroundColor:"#BACC81"
+              style={{
+                marginTop: "-5px",
+                height: "20px",
+                borderStyle: "solid",
+                borderColor: "black",
+                marginBottom: "3px",
+                backgroundColor: "#BACC81",
 
-              // boxShadow: "none"
-            }}>
-              
-             Total em Curso:
+                // boxShadow: "none"
+              }}
+            >
+              <span>Total em Curso: {totalEmCurso}</span>
             </ItemMainTitlo>
           </Grid>
 
           <Grid item xs={4}>
             <ItemMainTitlo
-            style={{
-              marginTop: "-5px",
-              height: "20px",
-              borderStyle: "solid",
-               borderColor: "black",
-               marginBottom: "3px",
-               backgroundColor:"#32CD30"
-              // boxShadow: "none"
-            }}>
-             Total Concluido:
+              style={{
+                marginTop: "-5px",
+                height: "20px",
+                borderStyle: "solid",
+                borderColor: "black",
+                marginBottom: "3px",
+                backgroundColor: "#32CD30",
+                // boxShadow: "none"
+              }}
+            >
+              <span>Total Concluido: {totalConcluido}</span>
             </ItemMainTitlo>
           </Grid>
-
 
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <div style={{ height: 400, width: "100%", marginTop: "5px" }}>

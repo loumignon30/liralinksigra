@@ -193,9 +193,17 @@ const useStyles = makeStyles(props => ({
          width: "200%",
         height: "85%"
     },
+
+    tipoMovimentoReclamacoesLandingPageColorLeve: {
+        color: "black",
+        background: "#f8f6f2",
+        fontSize: "10px",
+        fontFamily: "Times New Roman', Times, serif",
+        textAlign: "center",
+         width: "200%",
+        height: "85%"
+    },
 }));
-
-
 
 export default useStyles;
 

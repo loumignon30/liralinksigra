@@ -393,19 +393,24 @@ cursor: pointer;
 .ButtonStatutDataGrid._1Denuncia {
   background-color: #f8d210;
   font-weight: 600;
+  font-size: 11px;
 }
 .ButtonStatutDataGrid._2Denuncia {
   background-color: #BACC81;
   font-weight: 600;
+  font-size: 11px;
 }
 .ButtonStatutDataGrid._3Denuncia {
   background-color: #32CD30;
   font-weight: 600;
+  font-size: 11px;
 }
 .ButtonStatutDataGrid._4Denuncia {
   background-color: black;
   color: white;
   font-weight: 600;
   text-decoration: line-through;
+  font-size: 11px;
+
 }
 
