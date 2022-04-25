@@ -33,15 +33,12 @@ import swal from "sweetalert";
 
 import NotificacaoSearchTable from "../notificacoes/NotificacaoSearchTable";
 
-
-
-
 const initialFValues = {
   id: 0,
   data: null,
   hora: "",
   mensagem: "",
-  status: '2',
+  status: "2",
   tipoMovimento: "1",
   sedeID: "",
   tiponotificao: "App-Sigra",
@@ -49,17 +46,18 @@ const initialFValues = {
   userID: 0,
   sms: false,
   emai: false,
-  notificacao:false
+  notificacao: false,
 };
-
 
 const TratamentoReclamacoes = (props) => {
   const currentLanguageCode = cookies.get("i18next") || "en";
 
   const { t } = useTranslation();
 
-  const [sede, setSede] = useState("BAI - Congo");
-  const [sedeID, setSedeID] = useState(1);
+  const [idDenuncia, setIDenuncia] = useState(0);
+
+  const [sede, setSede] = useState("");
+  const [sedeID, setSedeID] = useState(0);
   const [agenciaID, setAgenciaID] = useState(0);
   const [agencia, setAgencia] = useState("");
 
@@ -75,8 +73,9 @@ const TratamentoReclamacoes = (props) => {
   const [emailDenunciante, setEmailDenunciante] = useState("");
   const [telefoneDenunciante, setTelefoneDenunciante] = useState("");
   const [queixa, setQueixa] = useState("");
-  const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState("");
-
+  const [imageChangeFromOutSideURL, setImageChangeFromOutSideURL] = useState(
+    ""
+  );
 
   const [endereco, setEndereco] = useState("");
   const [cidade, setCidade] = useState("");
@@ -108,8 +107,6 @@ const TratamentoReclamacoes = (props) => {
   const [checkedSMS, setCheckedSMS] = useState(false);
   const [checkedEmail, setCheckedEmail] = useState(false);
   const [checkedNotificacao, setCheckedNotificacao] = useState(false);
-
-
 
   const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
 
@@ -166,7 +163,8 @@ const TratamentoReclamacoes = (props) => {
 
     getTime(); // get time and Date
 
-    setIDTrabalhador(location.state.id);
+    setIDenuncia(location.state.id);
+    setIDTrabalhador(location.state.funcionarioID);
     setCodigoTrabalhador(location.state.codigoTrabalhador);
     setPrimeiroNome(location.state.primeironomeTrabalhador);
     setApelido(location.state.ultimonomeTrabalhador);
@@ -185,9 +183,8 @@ const TratamentoReclamacoes = (props) => {
 
     setImageFuncionario(location.state.imageChangeFromOutSideURL);
 
-    values.funcionarioID = (location.state.funcionarioID);
-    values.sedeID = (location.state.sedeID);
-
+    values.funcionarioID = location.state.funcionarioID;
+    values.sedeID = location.state.sedeID;
 
     getNotificacoesDoFuncionario(
       "normal",
@@ -202,10 +199,10 @@ const TratamentoReclamacoes = (props) => {
   }, []);
 
   const updateValuesOnOpen = () => {
-    userSavedValue.map(item => {
-        values.userID = item.id
+    userSavedValue.map((item) => {
+      values.userID = item.id;
     });
-  }
+  };
 
   const getTime = () => {
     var today = new Date(),
@@ -248,7 +245,12 @@ const TratamentoReclamacoes = (props) => {
     });
   };
 
-  const getNotificacoesDoFuncionario = (tipoPesquisa1, sedeID1, funcionarioID1, tipoMovimento1) => {
+  const getNotificacoesDoFuncionario = (
+    tipoPesquisa1,
+    sedeID1,
+    funcionarioID1,
+    tipoMovimento1
+  ) => {
     childRef.current.getGetAllData(
       tipoPesquisa1,
       sedeID1,
@@ -292,20 +294,27 @@ const TratamentoReclamacoes = (props) => {
     e.preventDefault();
 
     NotificaoService.create(values).then((response) => {
-      
-        swal(t("Notificação enviada com Sucesso!"), {
-          icon: "success",
-        });
+      swal(t("Notificação enviada com Sucesso!"), {
+        icon: "success",
+      });
 
-        getNotificacoesDoFuncionario(
-          "normal",
-          location.state.sedeID,
-          location.state.funcionarioID,
-          1
-        );
-    
-      
+      updateDenunciaStatuto();
+
+      getNotificacoesDoFuncionario(
+        "normal",
+        location.state.sedeID,
+        location.state.funcionarioID,
+        1
+      );
     });
+  };
+
+  const updateDenunciaStatuto = () => {
+    const dataupdate = {
+      status: 2,
+    };
+
+    DenunciasServices.update(idDenuncia, dataupdate).then((response) => {});
   };
 
   const getNotificaoSMS = (event) => {
@@ -315,10 +324,9 @@ const TratamentoReclamacoes = (props) => {
       values.tiponotificao = "SMS";
       values.sms = true;
       setCheckedSMS(event.target.checked);
-    }else {
+    } else {
       values.sms = false;
       setCheckedSMS(false);
-
     }
   };
 
@@ -327,10 +335,10 @@ const TratamentoReclamacoes = (props) => {
 
     if (event.target.checked) {
       values.tiponotificao = "EMail";
-      values.emai = true
+      values.emai = true;
       setCheckedEmail(event.target.checked);
-    }else {
-      values.emai = false
+    } else {
+      values.emai = false;
       setCheckedEmail(false);
     }
   };
@@ -340,18 +348,16 @@ const TratamentoReclamacoes = (props) => {
 
     if (event.target.checked) {
       values.tiponotificao = "App-Sigra";
-      values.notificacao = true
+      values.notificacao = true;
       setCheckedNotificacao(event.target.checked);
-    }else {
-      values.notificacao = false
+    } else {
+      values.notificacao = false;
       setCheckedNotificacao(false);
     }
   };
 
-
   return (
     <>
-    
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={0}>
           <Grid item xs={10}>
@@ -695,9 +701,9 @@ const TratamentoReclamacoes = (props) => {
             }}
           >
             <div>
-            <div style={{ marginTop: "0px" }}>
+              <div style={{ marginTop: "0px" }}>
                 <Controls.CheckBox
-                   checked={checkedSMS}
+                  checked={checkedSMS}
                   name="tiponotificaoSMS"
                   label="Enviar SMS"
                   value={values.sms}
@@ -725,7 +731,6 @@ const TratamentoReclamacoes = (props) => {
                 />
               </div>
 
-
               {/* <FormGroup>
                 <FormControlLabel control={<Checkbox />} label="Enviar SMS" />
                 <FormControlLabel
@@ -744,7 +749,7 @@ const TratamentoReclamacoes = (props) => {
               borderStyle: "solid",
               borderColor: "black",
               boxShadow: "none",
-              height: "28.5vh",
+              height: "26.5vh",
               borderWidth: "thin",
             }}
           >
@@ -776,71 +781,75 @@ const TratamentoReclamacoes = (props) => {
               />
             </div>
 
-            <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={0}>
-                <Grid item xs={12}>
-                  <div
-                    style={{
-                      borderStyle: "solid",
-                      borderColor: "black",
-                      borderWidth: "thin",
-                      height: "5.8vh",
-                      marginTop: "90px",
-                      borderWidth: "thin",
-                    }}
-                  >
-                    <div style={{ marginTop: "-10px" }}>
-                      <Controls.Buttons
-                        type="button"
-                        text={t("Enviar Notificação")}
-                        color="primary"
-                        size="small"
-                        width="90%"
-                        fullWidth={false}
-                        onClick={notificaoGravar}
-                      />
+            <div style={{ height: "15vh", margin: 0, padding: 0 }}>
+              <Box sx={{ flexGrow: 0 }}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12}>
+                    <div
+                      style={{
+                        borderStyle: "solid",
+                        borderColor: "black",
+                        borderWidth: "thin",
+                        height: "6.8vh",
+                        marginTop: "88px",
+                        borderWidth: "thin",
+                      }}
+                    >
+                      <div style={{ marginTop: "-10px" }}>
+                        <Controls.Buttons
+                          type="button"
+                          text={t("Enviar Notificação")}
+                          color="primary"
+                          size="small"
+                          width="90%"
+                          fullWidth={false}
+                          onClick={notificaoGravar}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Grid>
+                  </Grid>
 
-                <Grid item xs={12}>
-                  <div
-                    style={{
-                      borderStyle: "solid",
-                      borderColor: "black",
-                      borderWidth: "thin",
-                      height: "5.2vh",
-                    }}
-                  >
-                    <div style={{ marginTop: "-10px" }}>
-                      <Controls.Buttons
-                        type="button"
-                        text={t("button_pagina_anterior")}
-                        color="secondary"
-                        size="small"
-                        width="90%"
-                        fullWidth={false}
-                        onClick={() => {
-                          setUserSavedValue((prevState) => {
-                            prevState[0].sedeID_pesquisas = sedeID;
-                            // prevState[0].sede_pesquisa = sede
-                            // prevState[0].agenciaID_pesquisa = agenciaID
-                            // prevState[0].agencia_pesquisa = agencia
-                            prevState[0].provenienciaFormulario = "funcionario";
-                            return [...prevState];
-                          });
+                  <Grid item xs={12}>
+                    <div
+                      style={{
+                        borderStyle: "solid",
+                        borderColor: "black",
+                        borderWidth: "thin",
+                        height: "5.8vh",
+                      }}
+                    >
+                      <div style={{ marginTop: "-10px" }}>
+                        <Controls.Buttons
+                          type="button"
+                          text={t("button_pagina_anterior")}
+                          color="secondary"
+                          size="small"
+                          width="90%"
+                          fullWidth={false}
+                          onClick={() => {
+                            setUserSavedValue((prevState) => {
+                              prevState[0].sedeID_pesquisas = sedeID;
+                              // prevState[0].sede_pesquisa = sede
+                              // prevState[0].agenciaID_pesquisa = agenciaID
+                              // prevState[0].agencia_pesquisa = agencia
+                              prevState[0].provenienciaFormulario =
+                                "funcionario";
+                              return [...prevState];
+                            });
 
-                          navigate(-1);
-                        }}
-                        // variant="outlined"
+                            navigate(-1);
+                          }}
+                          // variant="outlined"
 
-                        // onClick={sair}
-                      />
+                          // onClick={sair}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
+              </Box>
+            </div>
+
           </Grid>
 
           <Grid
@@ -862,7 +871,7 @@ const TratamentoReclamacoes = (props) => {
               <span
                 style={{ fontSize: "12", fontWeight: "600", color: "black" }}
               >
-                LISTAGEM DE NOTIFICAÇÕES
+                HISTÓRICO DE NOTIFICAÇÕES
               </span>
             </ItemTitulo>
 
@@ -888,8 +897,8 @@ const TratamentoReclamacoes = (props) => {
                 sedeID={sedeID}
                 tipoMovimento={1}
                 agenciaID={agenciaID}
-                pageSize={10}
-                rowPerPage={10}
+                pageSize={4}
+                rowPerPage={4}
               />
             </div>
             {/* </Item> */}

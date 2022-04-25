@@ -102,7 +102,6 @@ const NotificacaoSearchTable = forwardRef((props, ref) => {
 
     NotificaoServices.getAll(tipoPesquisa1, sedeID1, funcionarioID1, tipoMovimento1)
       .then((response) => {
-          console.log(response.data)
         setData(response.data);
       })
       .catch((e) => {

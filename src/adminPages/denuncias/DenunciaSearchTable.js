@@ -110,6 +110,8 @@ const DenunciaSearchTable = forwardRef((props, ref) => {
     tipoMovimento1,
     funcionarioID1
   ) => {
+
+
     DenunciaService.getAll(
       abreviationLangue1,
       tipoImpressao1,

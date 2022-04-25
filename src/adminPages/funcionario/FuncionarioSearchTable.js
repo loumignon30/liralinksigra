@@ -77,7 +77,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
     sedeID,
     agenciaID,
     agenciaDisplay,
-    fotoDisplay,
+    fotoDisplay
   } = props;
 
   const [data, setData] = useState([]);
@@ -139,8 +139,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
     setOpenPopup(false);
   };
 
-  const getGetAllData = (sedeID1, agenciaID1) => {
-    FuncionarioService.getAll(sedeID1, agenciaID1, "codigoPesquisa2", "")
+  const getGetAllData = (sedeID1, agenciaID1, nome, apelido) => {
+    FuncionarioService.getAll(sedeID1, agenciaID1, "codigoPesquisa2", "", nome, apelido)
       .then((response) => {
         setData(response.data);
       })
@@ -528,13 +528,15 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
   }));
   return (
     <>
+
+    { fotoDisplay ?
       <Box sx={{ flexGrow: 1 }} style={{ marginTop: "-20px" }}>
         <Grid container spacing={0}>
           <Grid item xs={11}>
             <ItemMainTitlo
               style={{
                 borderStyle: "solid",
-                borderColor: "black",
+                backgroundColor: "#f0efeb",
                 height: "30px",
               }}
             >
@@ -551,6 +553,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
+                backgroundColor: "#f0efeb",
                 height: "30px",
               }}
             >
@@ -647,12 +650,12 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
                 borderStyle: "solid",
                 borderColor: "black",
                 // height: "40px",
-                marginTop: "22px",
+                marginTop: "2px",
               }}
             >
               {/* daodos dos funcionarios */}
               <ImageList
-                sx={{ width: 760, height: 500 }}
+                sx={{ width: 760, height: 440 }}
                 cols={3}
                 rowHeight={175}
               >
@@ -803,7 +806,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
             </Item>
           </Grid>
         </Grid>
-      </Box>
+      </Box>: null
+}
 
       {
         // fotoDisplay ? (

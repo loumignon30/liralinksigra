@@ -87,8 +87,8 @@ const AgenciaSearchTable = forwardRef((props, ref) => {
     setOpenPopup(false);
   };
 
-  const getGetAllData = (sedeID) => {
-    AgenciaService.getAll(sedeID)
+  const getGetAllData = (sedeID, tipoPesquisa, agencia, pais, cidade ) => {
+    AgenciaService.getAll(sedeID, tipoPesquisa, agencia, pais, cidade)
       .then((response) => {
         setData(response.data);
       })

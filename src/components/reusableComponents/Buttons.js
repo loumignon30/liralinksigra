@@ -14,7 +14,9 @@ export default function Buttons(props) {
     return (
         <MButton style={{margin:'12px', textTransform:'none', 
         backgroundColor: "black !important",
-        width: props.width
+        width: props.width,
+        fontSize:"8px",
+        maxWidth: '100%', maxHeight: '30px', minWidth: '10%', minHeight: '30px'
         }}
             variant={variant || "contained"}
             size={size  || "large"}

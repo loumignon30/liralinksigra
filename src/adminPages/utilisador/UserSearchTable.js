@@ -118,8 +118,8 @@ const UserSearchTable = forwardRef((props, ref) => {
       type: "success",
     });
   };
-  const userGetAll = (sedeID) => {
-    UserService.getAll(sedeID)
+  const userGetAll = (sedeID, emailPesquisa, email, tipoPesquisa, pais, cidade) => {
+    UserService.getAll(sedeID, emailPesquisa, email, tipoPesquisa, pais, cidade)
       .then((response) => {
         setUserDataParam(response.data);
       })

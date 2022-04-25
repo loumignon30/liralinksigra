@@ -14,13 +14,13 @@ import ImageUpLoad from "../../components/reusableComponents/ImageUpLoad";
 import { UserLoggedContext } from "../utilisador/UserLoggedContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Grid, InputAdornment } from "@mui/material";
+import { Box, Grid, InputAdornment, Paper } from "@mui/material";
 import PaisService from "../../services/admin/Pais.service";
 import CidadeService from "../../services/admin/Cidade.service";
 import Pais from "../paises/Pais";
 import Cidade from "../cidade/cidade";
 import StatusDataInfo from "../../services/admin/StatusData";
-
+import { styled } from "@mui/material/styles";
 
 const initialFValues = {
   id: 0,
@@ -83,7 +83,6 @@ const Agencia = () => {
     getPaises(); //Dados dos paises
     getStateValuesFromSearchTable();
     updateValuesOnOpen(); // useContext
-   
 
     // alert(window.screen.width);
     // console.log(1);
@@ -117,14 +116,12 @@ const Agencia = () => {
     if ("email" in fieldValues)
       validationErrorM.email = /$^|.+@.+..+/.test(fieldValues.email) ? "" : " ";
 
-      if ("sede")
-      validationErrorM.sede = sede ? "" : " ";
-      if ("paisID" in fieldValues)
-      validationErrorM.paisID = fieldValues.paisID ? '' : " ";
+    if ("sede") validationErrorM.sede = sede ? "" : " ";
+    if ("paisID" in fieldValues)
+      validationErrorM.paisID = fieldValues.paisID ? "" : " ";
 
     if ("cidadeID" in fieldValues)
-      validationErrorM.cidadeID = fieldValues.cidadeID ? '' : " ";
-
+      validationErrorM.cidadeID = fieldValues.cidadeID ? "" : " ";
 
     setErrors({
       ...validationErrorM,
@@ -152,8 +149,7 @@ const Agencia = () => {
       setValues(location.state);
       tableAgenciaUpdateData(location.state.sedeID);
 
-      getCidade(location.state.paisID)
-
+      getCidade(location.state.paisID);
     } else {
       ResetForm();
       // setBackGroundColor("darkGreen");
@@ -232,7 +228,7 @@ const Agencia = () => {
   };
 
   const onclickUniversityPopup = () => {
-      setCount(6);
+    setCount(6);
     setPpupTitle(t("lista_sede"));
     setOpenPopup(true);
   };
@@ -326,15 +322,454 @@ const Agencia = () => {
 
   const novaCidadeclickPopup = () => {
     values.cidadeID = "";
-  
+
     setCount(2);
     setPpupTitle(t("Listar Cidades"));
     setOpenPopup(true);
   };
 
+  const ItemMainTitlo = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    // padding: theme.spacing(1),
+    marginBottom: "-20px",
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
+  const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
   return (
     <>
-    <Grid constainer spacing={2}
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <ItemMainTitlo>
+              <PageHeader
+                title={headerTitle}
+                subTitle={headerSubTitle}
+                backGroundColor="#f0efeb"
+                color="black"
+                icon={<House />}
+              ></PageHeader>
+            </ItemMainTitlo>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Grid item xs={12}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "5vh",
+                  maxHeight: "5vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  // overflowX: "hidden",
+                  margin: "5px",
+                  backgroundColor: "#f0efeb",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ marginTop: "0px", fontWeight: 600 }}>
+                  <span>DADOS DA SEDE</span>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "7vh",
+                  maxHeight: "7vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  // overflowX: "hidden",
+                  margin: "5px",
+                }}
+              >
+                <div style={{ marginLeft: "5px" }}>
+                  <div>
+                    <label className="inputLabel">{t("sede")}</label>
+                    <Controls.Input
+                      name="sede"
+                      placeHolder={t("sede")}
+                      value={sede}
+                      onChange={handleInputChange}
+                      width="78%"
+                      type="text"
+                      error={errors.sede}
+                    />
+                    <Search
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={onclickUniversityPopup}
+                    />
+                  </div>
+                </div>
+              </div>
+            </Grid>
+            <Form onSubmit={handleSubmit} autoComplete="off">
+              <Grid item xs={12}>
+                <div
+                  style={{
+                    borderStyle: "solid",
+                    borderColor: "black",
+                    height: "4vh",
+                    maxHeight: "4vh",
+                    overflowY: "auto",
+                    overflow: "auto",
+                    // overflowX: "hidden",
+                    margin: "5px",
+                    backgroundColor: "#f0efeb",
+                    textAlign: "center",
+                  }}
+                >
+                  <div style={{ marginTop: "0px", fontWeight: 600 }}>
+                    <span>DADOS DO CENTRO DE TRABALHO</span>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    borderStyle: "solid",
+                    borderColor: "black",
+                    height: "51vh",
+                    maxHeight: "51vh",
+                    overflowY: "auto",
+                    overflow: "auto",
+                    overflowX: "hidden",
+                    margin: "5px",
+                  }}
+                >
+                  <div style={{ marginLeft: "5px" }}>
+                    <div>
+                      <label className="inputLabel">{t("code")}</label>
+                      <Controls.Input
+                        name="code"
+                        placeHolder={t("code")}
+                        value={values.code}
+                        onChange={handleInputChange}
+                        type="text"
+                        width="50%"
+                        error={errors.code}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{ marginTop: "-5px" }}
+                        className="inputLabel"
+                      >
+                        {t("nome_Agencia")}
+                      </label>
+                      <Controls.Input
+                        name="nome"
+                        placeHolder={t("nome_Agencia")}
+                        value={values.nome}
+                        onChange={handleInputChange}
+                        type="text"
+                        width="80%"
+                        error={errors.nome}
+                      />
+                    </div>
+                    <div>
+                      <label className="inputLabel">
+                        {t("nome_representante")}
+                      </label>
+                      <Controls.Input
+                        name="nomeRepresentante"
+                        placeHolder={t("nome_representante")}
+                        value={values.nomeRepresentante}
+                        onChange={handleInputChange}
+                        type="text"
+                        width="80%"
+                        error={errors.nomeRepresentante}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="inputLabel">{t("endereco")}</label>
+                      <Controls.Input
+                        name="endereco"
+                        placeHolder={t("endereco")}
+                        value={values.endereco}
+                        onChange={handleInputChange}
+                        type="text"
+                        width="80%"
+                        error={errors.endereco}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="inputLabel">{t("email")}</label>
+                      <Controls.Input
+                        name="email"
+                        placeHolder={t("email")}
+                        value={values.email}
+                        onChange={handleInputChange}
+                        type="text"
+                        width="80%"
+                        // width="40%"
+                        error={errors.email}
+                      />
+                    </div>
+                    <div>
+                      <label className="inputLabel">{t("contacto")}</label>
+                      <Controls.Input
+                        name="telefone"
+                        placeHolder={t("contacto")}
+                        value={values.telefone}
+                        onChange={handleInputChange}
+                        type="text"
+                        width="80%"
+                        error={errors.telefone}
+                      />
+                    </div>
+
+                    <div style={{ marginTop: "5px" }}>
+                      <label className="inputLabel">{t("pais")}</label>
+                      <Controls.Select
+                        name="paisID"
+                        label="paisID"
+                        value={values.paisID}
+                        onChange={paisHandleChange}
+                        options={paisesTable}
+                        typeOfSelect={6}
+                        error={errors.paisID}
+                        width="78%"
+                        height="40px"
+                      />
+                      <AddBox
+                        style={{ marginTop: "10px", cursor: "pointer" }}
+                        onClick={novoPaisclickPopup}
+                      />
+                    </div>
+
+                    <div style={{ marginTop: "3px", marginBottom: "20px" }}>
+                      <label className="inputLabel">{t("cidade")}</label>
+
+                      <Controls.Select
+                        name="cidadeID"
+                        label="cidadeID"
+                        value={values.cidadeID}
+                        onChange={handleInputChange}
+                        options={cidadeTable}
+                        typeOfSelect={7}
+                        error={errors.cidadeID}
+                        width="78%"
+                        height="40px"
+                      />
+                      <AddBox
+                        style={{ marginTop: "10px", cursor: "pointer" }}
+                        onClick={novaCidadeclickPopup}
+                      />
+                    </div>
+
+                    {location.state !== null ? (
+                      <div style={{ marginTop: "-15px" }}>
+                        <label className="userLabel" htmlFor="status">
+                          {t("status")}
+                        </label>
+                        <Controls.Select
+                          name="status"
+                          label="status"
+                          value={values.status}
+                          onChange={handleInputChange}
+                          options={StatusDataInfo()}
+                          typeOfSelect={1}
+                          width="80%"
+                          height="40px"
+                          // error={errors.status}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </Grid>
+
+              <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={0.2}>
+                  <Grid item xs={6}>
+                    <div
+                      style={{
+                        borderStyle: "solid",
+                        borderColor: "black",
+                        height: "8vh",
+                        maxHeight: "8vh",
+                        overflowY: "auto",
+                        overflow: "auto",
+                        overflowX: "hidden",
+                        margin: "5px",
+                        justifyContent: "center",
+                        justifyItems: "center",
+                      }}
+                    >
+                      {location.state === null ? (
+                        <Controls.Buttons
+                          type="submit"
+                          text={t("button_gravar")}
+                          width="40%"
+                          //className="button"
+                          size="small"
+                        />
+                      ) : (
+                        <Controls.Buttons
+                          type="submit"
+                          text={t("button_modificar")}
+                          // className="button"
+                          size="small"
+                          width="40%"
+                        />
+                      )}
+
+                      {location.state === null ? (
+                        <Controls.Buttons
+                          type="button"
+                          text={t("button_limpar")}
+                          color="secondary"
+                          size="small"
+                          width="40%"
+                          // className="button"
+                          onClick={ResetForm}
+                        />
+                      ) : (
+                        <Controls.Buttons
+                          type="button"
+                          text={t("button_pagina_anterior")}
+                          color="secondary"
+                          size="small"
+                          width="40%"
+                          // className="button"
+                          onClick={() => {
+                            setUserSavedValue((prevState) => {
+                              prevState[0].sedeID_pesquisas = sedeID;
+                              prevState[0].sede_pesquisa = sede;
+                              prevState[0].provenienciaFormulario =
+                                "EditAgencia";
+                              return [...prevState];
+                            });
+
+                            navigate(-1);
+                          }}
+                        />
+                      )}
+                    </div>
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <div
+                      style={{
+                        borderStyle: "solid",
+                        borderColor: "black",
+                        height: "8vh",
+                        maxHeight: "8vh",
+                        overflowY: "auto",
+                        overflow: "auto",
+                        overflowX: "hidden",
+                        margin: "5px",
+                        justifyContent: "center",
+                        justifyItems: "center",
+                        backgroundColor: "#f0efeb",
+                      }}
+                    ></div>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Form>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Grid item xs={12}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "5vh",
+                  maxHeight: "5vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  // overflowX: "hidden",
+                  margin: "5px",
+                  backgroundColor: "#f0efeb",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ marginTop: "0px", fontWeight: 600 }}>
+                  <span>CENTRO DE TRABALHO GRAVADOS</span>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "74vh",
+                  maxHeight: "74vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  overflowX: "hidden",
+                  margin: "5px",
+                }}
+              >
+                <AgenciaSearchTable
+                  ref={childRef2}
+                  idDisplay={true}
+                  codeDisplay={true}
+                  paisDisplay={true}
+                  emailDisplay={false}
+                  statusDiplay={false}
+                  actionsButtonDisplaySelect={false}
+                  actionsButtonDisplayEditDelete={false}
+                  backGroundColor="#f0efeb"
+                  color="black"
+                  pageSize={13}
+                  rowPerPage={13}
+                  //idSede={sedeID}
+                  editClick={(
+                    id,
+                    code,
+                    nome,
+                    endereco,
+                    email,
+                    telefone,
+                    cidade,
+                    pais,
+                    nomeRepresentante,
+                    status,
+                    imageChangeFromOutSideURL,
+                    imageName
+                  ) => {
+                    values.id = id;
+                    values.code = code;
+                    values.nome = nome;
+                    values.endereco = endereco;
+                    values.email = email;
+                    values.telefone = telefone;
+                    values.cidade = cidade;
+                    values.pais = pais;
+                    values.nomeRepresentante = nomeRepresentante;
+                    values.status = status;
+                    values.imageName = imageName;
+
+                    setImageFileName(imageName);
+                    imageAgenciaDisplay(imageChangeFromOutSideURL);
+                    setOpenPopup(false);
+                    tableAgenciaUpdateData(id);
+
+                    editCliqued(); // color
+                  }}
+                />
+              </div>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* <Grid constainer spacing={2}
     container
     direction="column"
     justifyContent="space-between"
@@ -352,6 +787,8 @@ const Agencia = () => {
       ></PageHeader>
       </div>
       </Grid>
+
+      
 
       <Form onSubmit={handleSubmit} autoComplete="off">
         <div className="facultyItemContainer">
@@ -514,7 +951,6 @@ const Agencia = () => {
           </div>
 
           </Grid>
-          {/* {deviceWidth > 820 ? ( */}
           <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
             <div className="newFaculty">
               <div style={{marginTop: "15px" }}>
@@ -568,12 +1004,10 @@ const Agencia = () => {
               />
               </div>
             </div>
-          {/* ) : null} */}
           </Grid>
         </div>
 
         <div className="facultyItemContainer">
-          {/* {deviceWidth > 800 ? <div className="newFaculty"></div> : null} */}
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
           <div className="newFaculty">
@@ -620,7 +1054,7 @@ const Agencia = () => {
           </div>
           </Grid>
         </div>
-      </Form>
+      </Form> */}
 
       {notificatinoShow ? (
         <Notifications notify={notify} setNotify={setNotify} />
@@ -631,8 +1065,8 @@ const Agencia = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          width="650px"
-          height="520px"
+          width="800px"
+          height="580px"
           title={popupTitle}
         >
           <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
@@ -678,18 +1112,17 @@ const Agencia = () => {
         </Popup>
       ) : null}
 
-{Number(count) === 1 ? 
-      <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-        buttonColor="secondary"
-        width="850px"
-        height="700px"
-        closeButtonDisplay={false}
-        marginTop="-10px"
-        // title={popupTitle}
-      >
-       
+      {Number(count) === 1 ? (
+        <Popup
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+          buttonColor="secondary"
+          width="850px"
+          height="700px"
+          closeButtonDisplay={false}
+          marginTop="-10px"
+          // title={popupTitle}
+        >
           <Pais
             //ref={childRePais}
             // idDisplay={true}
@@ -710,19 +1143,19 @@ const Agencia = () => {
               // tableAgenciaUpdateData(id);
               // setSedePesquisa("")
             }}
-          /> 
-          </Popup>:
-           Number(count) === 2 ? 
-           <Popup
-           openPopup={openPopup}
-           setOpenPopup={setOpenPopup}
-           buttonColor="secondary"
-           width="850px"
-           height="700px"
-           closeButtonDisplay={false}
-           marginTop="-10px"
-           // title={popupTitle}
-         >
+          />
+        </Popup>
+      ) : Number(count) === 2 ? (
+        <Popup
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+          buttonColor="secondary"
+          width="850px"
+          height="700px"
+          closeButtonDisplay={false}
+          marginTop="-10px"
+          // title={popupTitle}
+        >
           <Cidade
             //ref={childRePais}
             // idDisplay={true}
@@ -744,10 +1177,12 @@ const Agencia = () => {
               // setSedePesquisa("")
             }}
           />
-      </Popup> : null}
-    </div>
+        </Popup>
+      ) : null}
+      {/* </div> 
 
-    </Grid>
+    // </Grid>
+    */}
     </>
   );
 };

@@ -70,14 +70,15 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
     const { idDisplay, codeDisplay, actionsButtonDisplay,
         actionsButtonDisplayEditDelete, statusDisplay,
         pageSize, rowPerPage,
-        sedeID, agenciaID } = props;
+        sedeID, agenciaID,
+        departamentoPesquisa } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
 
     useEffect(() => {
 
-       getGetAllData(sedeID, agenciaID);
+       getGetAllData(sedeID, agenciaID, departamentoPesquisa);
         setUrl(urlImage());
 
     }, []);
@@ -92,9 +93,9 @@ const DepartamentoSearchTable = forwardRef((props, ref) => { // forwardRef is us
         setOpenPopup(false);
     }
 
-    const getGetAllData = (sedeID1, agenciaID1) => {
+    const getGetAllData = (sedeID1, agenciaID1, departamentoPesquisa) => {
 
-        DepartamentoServices.getAll(sedeID1, agenciaID1, "geral")
+        DepartamentoServices.getAll(sedeID1, agenciaID1, "geral", departamentoPesquisa)
             .then(response => {
                 setData(response.data)
             })

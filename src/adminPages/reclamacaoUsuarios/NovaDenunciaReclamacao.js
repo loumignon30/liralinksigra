@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { Button, Checkbox, Grid } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-import { Box, color } from "@mui/system";
+import { Box, color, textAlign } from "@mui/system";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import PageHeader from "../../components/reusableComponents/PageHeader";
 import { useTranslation } from "react-i18next";
@@ -205,7 +205,7 @@ function NovaDenunciaReclamacao() {
 
     let cancel = false;
 
-    getSedeDados2(1);
+    getSedeDados2(5);
 
     values.computador = getNomeComputador();
 
@@ -507,7 +507,7 @@ function NovaDenunciaReclamacao() {
               swal(t("Reclamação enviada com Sucesso!"), {
                 icon: "success",
               });
-            }else {
+            } else {
               swal(t("Nehuma Reclamação foi encontrada"), {
                 icon: "error",
               });
@@ -670,7 +670,7 @@ function NovaDenunciaReclamacao() {
                             <Controls.Buttons
                               type="button"
                               text={t("Funcionários")}
-                              color="warning"
+                              color="success"
                               size="small"
                               width="90%"
                               fullWidth={false}
@@ -682,7 +682,7 @@ function NovaDenunciaReclamacao() {
                             <Controls.Buttons
                               type="button"
                               text={t("Centro-Trabalho")}
-                              color="primary"
+                              color="secondary"
                               size="small"
                               width="90%"
                               fullWidth={false}
@@ -711,7 +711,7 @@ function NovaDenunciaReclamacao() {
                             <Controls.Buttons
                               type="button"
                               text={t("Empresa")}
-                              color="primary"
+                              color="info"
                               size="small"
                               width="90%"
                               fullWidth={false}
@@ -719,20 +719,22 @@ function NovaDenunciaReclamacao() {
                             />
                           </div>
 
-                          <div style={{ marginTop: "-15px" }}>
+                          <div
+                            style={{ marginTop: "-15px", marginLeft: "-2px" }}
+                          >
                             <Controls.Buttons
                               type="button"
                               text={t("Produto")}
-                              color="secondary"
+                              color="warning"
                               size="small"
                               width="90%"
-                              fullWidth={false}
                               onClick={denunciaContraProduto}
                             />
                           </div>
                         </div>
                       </Item>
                     </Grid>
+
                     <Grid item xs={4}>
                       <Item
                         style={{
@@ -740,16 +742,18 @@ function NovaDenunciaReclamacao() {
                           borderColor: "gray",
                           borderWidth: "thin",
                           height: "75%",
+                          // marginLeft: "-10px",
                         }}
                       >
-                        <div style={{ marginTop: "-20px" }}>
+                        <div
+                          style={{ marginTop: "-20px", marginLeft: "-10px" }}
+                        >
                           <Controls.Buttons
                             type="button"
                             text={t("Serviço")}
-                            color="warning"
+                            color="primary"
                             size="small"
                             width="90%"
-                            fullWidth={false}
                             onClick={denunciaContraServico}
                           />
                           {/* <Controls.CheckBox
@@ -760,14 +764,15 @@ function NovaDenunciaReclamacao() {
                 /> */}
                         </div>
 
-                        <div style={{ marginTop: "-20px" }}>
+                        <div
+                          style={{ marginTop: "-20px", marginLeft: "-10px" }}
+                        >
                           <Controls.Buttons
                             type="button"
                             text={t("Outras...")}
-                            color="primary"
+                            color="success"
                             size="small"
                             width="90%"
-                            fullWidth={false}
                             onClick={denunciaContraOutras}
                           />
                         </div>
@@ -831,8 +836,6 @@ function NovaDenunciaReclamacao() {
                   />
                 </div>
               </div>
-
-              
             </Grid>
 
             <Grid item xs={6}>
@@ -856,7 +859,12 @@ function NovaDenunciaReclamacao() {
                 </Grid>
               </Box>
 
-              <Box sx={{ flexGrow: 0 }}>
+              <Box
+                sx={{ flexGrow: 3 }}
+                display="flex"
+                flex="1"
+                justifyContent="space-around"
+              >
                 <Grid container spacing={0}>
                   <Grid item xs={9}>
                     <div
@@ -866,6 +874,11 @@ function NovaDenunciaReclamacao() {
                         borderColor: "gray",
                         height: "52.5vh",
                         width: "100%",
+                        // maxHeight: "100vh",
+                        maxHeight: "52.5vh",
+                        overflowY: "auto",
+                        overflow: "auto",
+                        overflowX: "hidden",
                       }}
                     >
                       <div style={{ marginLeft: "5px" }}>
@@ -876,7 +889,7 @@ function NovaDenunciaReclamacao() {
                             placeHolder={t("denunciante")}
                             value={values.nomeDenunciante}
                             onChange={handleInputChange}
-                            width="70%"
+                            width="79%"
                             type="text"
                             error={errors.nome}
                           />
@@ -889,7 +902,7 @@ function NovaDenunciaReclamacao() {
                             placeHolder={t("contacto")}
                             value={values.telepfoneDenunciante}
                             onChange={handleInputChange}
-                            width="70%"
+                            width="79%"
                             type="text"
                           />
                         </div>
@@ -905,7 +918,7 @@ function NovaDenunciaReclamacao() {
                             placeHolder={t("email")}
                             value={values.emailDenunciante}
                             onChange={handleInputChange}
-                            width="70%"
+                            width="79%"
                             type="text"
                             error={errors.emailDenunciante}
                           />
@@ -919,7 +932,7 @@ function NovaDenunciaReclamacao() {
                             value={values.queixa}
                             onChange={handleInputChange}
                             type="text"
-                            width="70%"
+                            width="79%"
                             multiline
                             rows={3}
                             height="100px"
@@ -936,11 +949,14 @@ function NovaDenunciaReclamacao() {
                                 borderStyle: "solid",
                                 borderColor: "gray",
                                 borderWidth: "thin",
-                                height: "3.5vh",
+                                height: "5vh",
                                 backgroundColor: "#f0efeb",
                                 color: "black",
                                 fontWeight: 600,
                                 textAlign: "center",
+                                maxHeight: "5.5vh",
+                                // overflowY: "auto",
+                                // overflow: "auto",
                               }}
                             >
                               <div>
@@ -978,7 +994,7 @@ function NovaDenunciaReclamacao() {
                                     typeOfSelect={3}
                                     id="fixInputSize" //Works
                                     //error={errors.role}
-                                    width="74%"
+                                    width="79%"
                                     height="40px"
                                   />
                                 </div>
@@ -1015,7 +1031,7 @@ function NovaDenunciaReclamacao() {
                                     options={RatingMotivodata}
                                     typeOfSelect={4}
                                     //error={errors.role}
-                                    width="74%"
+                                    width="79%"
                                     height="40px"
                                   />
                                   {/* </div> */}
@@ -1033,116 +1049,161 @@ function NovaDenunciaReclamacao() {
                     </div>
                   </Grid>
 
-                  <Grid item xs={3}>
-                    <Item
-                      style={{
-                        borderStyle: "solid",
-                        // backgroundColor: "#edf2fb",
-                        borderWidth: "thin",
-                        height: "3vh",
-                      }}
-                    >
-                      <div style={{ marginTop: "-15px" }}>
-                        <Controls.CheckBox
-                          //  checked={checked}
-                          name="reclamacaoAnonima"
-                          onChange={handleChange}
-                          label="Anônima"
-                          value={values.reclamacaoAnonima}
-                          // onChange={handleInputChange}
-                        />
-                      </div>
-                    </Item>
-
+                  <Grid
+                    item
+                    xs={3}
+                    direction="column"
+                    style={{
+                      border: "solid 1px",
+                      height: "53vh",
+                      overflowY: "auto",
+                      overflow: "auto",
+                      overflowX: "hidden",
+                      // backgroundColor: "#5e6472",
+                    }}
+                  >
                     <Box sx={{ flexGrow: 1 }}>
                       <Grid container spacing={0}>
-                        <Grid item xs={12}>
-                          <div
+                        <Grid item xs={12}
+                         style={{
+                          border: "solid 1px",
+                          maxHeight: "100%",
+                          height: "100%",
+                          overflowY: "auto",
+                          overflow: "auto",
+                          overflowX: "hidden",
+                          backgroundColor: "#5e6472",
+                        }}
+                        >
+                          <Item
                             style={{
                               borderStyle: "solid",
+                              // backgroundColor: "#edf2fb",
                               borderWidth: "thin",
-                              backgroundColor: "#5e6472",
-                              height: "31.9vh",
+                              height: "2%",
+                              boxShadow: "none",
                             }}
                           >
-                            <div>
-                              <img
-                                style={{ height: "100%", width: "100%" }}
-                                src={sigraLetrasImagem}
+                            <div style={{ marginTop: "-15px" }}>
+                              <Controls.CheckBox
+                                //  checked={checked}
+                                name="reclamacaoAnonima"
+                                onChange={handleChange}
+                                label="Anônima"
+                                value={values.reclamacaoAnonima}
+                                // onChange={handleInputChange}
                               />
                             </div>
-                          </div>
+                          </Item>
+
+                          <Grid item xs={12}>
+                            {/* <Box sx={{ flexGrow: 1 }}>
+                        <Grid container spacing={0}>
+                          <Grid item xs={12} sm={12}> */}
+                            <Item
+                              style={{
+                                // borderStyle: "solid",
+                                // borderWidth: "thin",
+                                // backgroundColor: "#5e6472",
+                                maxHeight: "75%",
+                                boxShadow: "none",
+                              }}
+                            >
+                              <div>
+                                <img
+                                  style={{ height: "100%", width: "100%" }}
+                                  src={sigraLetrasImagem}
+                                />
+                              </div>
+                            </Item>
+                          </Grid>
+
+                          <Grid item xs={12}>
+                            <Item
+                              style={{
+                                boxShadow: "none",
+                                // height: "45%",
+                                // borderStyle: "solid",
+                                // borderColor: "gray",
+                                // borderWidth: "thin",
+                                // backGroundColor: "#f0efeb",
+                                maxHeight: "25%",
+                                height: "25%",
+
+                                alignContent: "center",
+                                textAlign: "center",
+                                // backgroundColor: "#5e6472",
+                                marginTop: "3px",
+
+                                // msTransform: "translateY(-50%)",
+                                // transform: "translateY(-50%)",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  // marginTop: "12x",
+                                  // // marginLeft: "-5px",
+                                  // backGroundColor: "#f0efeb",
+                                  // // position: "absolute",
+                                  // // top: "50%",
+
+                                   marginLeft: "-12px",
+                                  // borderStyle: "solid",
+                                }}
+                              >
+                                <div
+                                 style={{ marginTop: "0px", marginLeft: "-18px"}}
+                                >
+                                  <Controls.Buttons
+                                    type="submit"
+                                    text={t("Gravar")}
+                                    color="info"
+                                    size="small"
+                                    width="100%"
+                                    onClick={gravarDenuncias}
+                                  />
+                                </div>
+
+                                <div
+                                  style={{
+                                   marginTop: "-18px",
+                                    marginLeft: "-18px",
+                                  }}
+                                >
+                                  <Controls.Buttons
+                                    type="button"
+                                    text={t("Fechar")}
+                                    color="warning"
+                                    size="small"
+                                    width="100%"
+                                    onClick={sair}
+                                  />
+                                </div>
+                              </div>
+                            </Item>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Box>
-
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12}>
-                          <div
-                            style={{
-                              borderStyle: "solid",
-                              borderColor: "gray",
-                              borderWidth: "thin",
-                              height: "7.3vh",
-                              backgroundColor: "white",
-                              color: "black",
-                              textAlign: "center",                              
-                            }}
-                          >
-                            <div style={{marginTop: "-8px"}}>
-                        <Controls.Buttons
-                          type="submit"
-                          text={t("Gravar")}
-                          color="primary"
-                          size="small"
-                          width="90%"
-                          fullWidth={false}
-                          onClick={gravarDenuncias}
-                        />
-                      </div>
-                          </div>
-                        </Grid>
-                      </Grid>
-                    </Box>
-
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12}>
-                          <div
-                            style={{
-                              borderStyle: "solid",
-                              borderColor: "gray",
-                              borderWidth: "thin",
-                              height: "7.4vh",
-                              backgroundColor: "white",
-                              color: "black",
-                              textAlign: "center",
-                            }}
-                          >
-                            <div  style={{marginTop: "-8px"}}>
-                        <Controls.Buttons
-                          type="button"
-                          text={t("Fechar")}
-                          color="secondary"
-                          size="small"
-                          width="90%"
-                          fullWidth={false}
-                          onClick={sair}
-                        />
-                        </div>
-                          </div>
-                        </Grid>
-                      </Grid>
-                    </Box>
-
-
+                    {/* </Grid> */}
                   </Grid>
                 </Grid>
               </Box>
             </Grid>
           </Grid>
         </Box>
+        {/* </Grid>
+          </Grid> */}
+        {/* </Box> */}
+        {/* </Grid> */}
+        {/* </Grid> */}
+        {/* </Box> */}
+        {/* </Grid> */}
+        {/* </Grid>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box> */}
 
         {Number(count) === 1 ? (
           <Popup

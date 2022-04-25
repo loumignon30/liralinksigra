@@ -11,16 +11,18 @@ import PageHeader from "../../components/reusableComponents/PageHeader";
 import ImageUpLoad from "../../components/reusableComponents/ImageUpLoad";
 import UserService from "../../services/admin/User.service";
 import { useTranslation } from "react-i18next";
-import { AddBox, Search } from "@mui/icons-material";
+import { AddBox, House, Search } from "@mui/icons-material";
 import Popup from "../../components/reusableComponents/Popup";
 import SedeSearchTable from "../sede/SedeSearchTable";
-import { Button, Grid, InputAdornment } from "@mui/material";
+import { Button, Grid, InputAdornment, Box, Paper } from "@mui/material";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import PaisService from "../../services/admin/Pais.service";
 import CidadeService from "../../services/admin/Cidade.service";
 import Pais from "../paises/Pais";
 import Cidade from "../cidade/cidade";
+import { styled } from "@mui/material/styles";
+import UserSearchTable from "./UserSearchTable";
 
 const initialFValues = {
   id: 0,
@@ -64,6 +66,7 @@ export default function NewUSerForm(props) {
   const [sedePesquisa, setSedePesquisa] = useState("");
   const childRefSede = useRef(null); // it's using a reference of a method from ImageUpLoad.js
   const navigate = useNavigate();
+  const childRefUtilizador = useRef(null); // it's using a reference of a method from ImageUpLoad.js
 
   const [paisesTable, setPaisesTable] = useState([]);
   const [cidadeTable, setCidadeTable] = useState([]);
@@ -197,6 +200,8 @@ export default function NewUSerForm(props) {
           type: "success",
         });
         setNotificationShow(true);
+        childRefUtilizador.current.userGetAll(values.sedeID); // saveImage() = method called
+
       })
       .catch((e) => {
         console.log(e);
@@ -275,9 +280,471 @@ export default function NewUSerForm(props) {
       });
   };
 
+  const ItemMainTitlo = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    // padding: theme.spacing(1),
+    marginBottom: "-20px",
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
+  const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
   return (
     <>
-      <Grid
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <ItemMainTitlo>
+              <PageHeader
+                title={t("header_title_utilisador_novo")}
+                subTitle={t("header_subTitle_utilisador_novo")}
+                backGroundColor="#f0efeb"
+                color="black"
+                icon={<House />}
+              ></PageHeader>
+            </ItemMainTitlo>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Grid item xs={12}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "5vh",
+                  maxHeight: "5vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  // overflowX: "hidden",
+                  margin: "5px",
+                  backgroundColor: "#f0efeb",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ marginTop: "0px", fontWeight: 600 }}>
+                  <span>DADOS DA SEDE</span>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "7vh",
+                  maxHeight: "7vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  // overflowX: "hidden",
+                  margin: "5px",
+                }}
+              >
+                <div style={{ marginLeft: "5px" }}>
+                  <div>
+                    <label className="inputLabel">{t("sede")}</label>
+                    <Controls.Input
+                      name="sede"
+                      placeHolder={t("sede")}
+                      value={sede}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="78%"
+                      error={errors.sede}
+                    />
+                    <Search
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={onclicSedePopup}
+                    />
+                  </div>
+                </div>
+              </div>
+            </Grid>
+           
+
+            <Grid item xs={12}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "4vh",
+                  maxHeight: "4vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  // overflowX: "hidden",
+                  margin: "5px",
+                  backgroundColor: "#f0efeb",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ marginTop: "0px", fontWeight: 600 }}>
+                  <span>DADOS DO UTILIZADOR</span>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  height: "53vh",
+                  maxHeight: "53vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  overflowX: "hidden",
+                  margin: "5px",
+                }}
+              >
+                <div style={{ marginLeft: "5px" }}>
+                  <div>
+                    <label className="userLabel">{t("nome")}</label>
+                    <Controls.Input
+                      name="firstname"
+                      placeHolder={t("nome")}
+                      value={values.firstname}
+                      onChange={handleInputChange}
+                      width="78%"
+                      type="text"
+                      error={errors.firstname}
+                    />
+                  </div>
+                  <div>
+                    <label className="userLabel">{t("apelido")}</label>
+                    <Controls.Input
+                      name="lastname"
+                      placeHolder={t("apelido")}
+                      value={values.lastname}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="78%"
+                      error={errors.lastname}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="userLabel">{t("email")}</label>
+                    <Controls.Input
+                      name="email"
+                      placeHolder={t("email")}
+                      value={values.email}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="78%"
+                      error={errors.email}
+                      autoComplete="new-password"
+                      autofill="off"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="userLabel">{t("contacto")}</label>
+                    <Controls.Input
+                      name="telephone"
+                      placeHolder={t("contacto")}
+                      value={values.telephone}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="78%"
+                      error={errors.telephone}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="userLabel">{t("endereco")}</label>
+                    <Controls.Input
+                      name="address"
+                      placeHolder={t("endereco")}
+                      value={values.address}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="78%"
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "5px" }}>
+                    <label className="inputLabel">{t("pais")}</label>
+                    <Controls.Select
+                      name="paisID"
+                      label="paisID"
+                      value={values.paisID}
+                      onChange={paisHandleChange}
+                      options={paisesTable}
+                      typeOfSelect={6}
+                      error={errors.paisID}
+                      width="78%"
+                      height="40px"
+                    />
+                    <AddBox
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={novoPaisclickPopup}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "3px", marginBottom: "20px" }}>
+                    <label className="inputLabel">{t("cidade")}</label>
+
+                    <Controls.Select
+                      name="cidadeID"
+                      label="cidadeID"
+                      value={values.cidadeID}
+                      onChange={handleInputChange}
+                      options={cidadeTable}
+                      typeOfSelect={7}
+                      error={errors.cidadeID}
+                      width="78%"
+                      height="40px"
+                    />
+                    <AddBox
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={novaCidadeclickPopup}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "-20px" }}>
+                    <ImageUpLoad
+                      ref={childRef}
+                      fotoTitulo={t("foto")}
+                      margnLeft="0px"
+                      uploadDisplay={true}
+                    />
+                  </div>
+                </div>
+              </div>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={6}>
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "5vh",
+                maxHeight: "5vh",
+                overflowY: "auto",
+                overflow: "auto",
+                // overflowX: "hidden",
+                margin: "5px",
+                backgroundColor: "#f0efeb",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ marginTop: "0px", fontWeight: 600 }}>
+                <span>OUTROS DADOS</span>
+              </div>
+            </div>
+
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "30vh",
+                maxHeight: "30vh",
+                overflowY: "auto",
+                overflow: "auto",
+                // overflowX: "hidden",
+                margin: "5px",
+              }}
+            >
+              <div style={{ marginLeft: "5px" }}>
+                <div style={{ marginBottom: "10px" }}>
+                  <label className="userLabel">{t("data_nascimento")}</label>
+                  <Controls.Input
+                    name="dateofbirth"
+                    placeHolder={t("data_nascimento")}
+                    value={values.dateofbirth}
+                    onChange={handleInputChange}
+                    width="78%"
+                    type="date"
+                  />
+                </div>
+
+                <div>
+                  <label className="userLabel">{t("sexo")}</label>
+                  <Controls.Select
+                    name="gender"
+                    label="gender"
+                    value={values.gender}
+                    onChange={handleInputChange}
+                    options={genderItems}
+                    width="78%"
+                    height="40px"
+                    typeOfSelect={1}
+                    error={errors.gender}
+                  />
+                </div>
+
+                <div style={{ paddingTop: "5px" }}>
+                  <label className="userLabel" htmlFor="role">
+                    {t("nivel_accesso")}
+                  </label>
+                  <Controls.Select
+                    name="role"
+                    label="Role"
+                    value={values.role}
+                    onChange={handleInputChange}
+                    options={getRole}
+                    typeOfSelect={1}
+                    error={errors.role}
+                    width="78%"
+                    height="40px"
+                  />
+                </div>
+
+                <div>
+                  <label className="userLabel">{t("senha")}</label>
+                  <Controls.Input
+                    name="password"
+                    placeHolder={t("senha")}
+                    value={values.password}
+                    onChange={handleInputChange}
+                    width="78%"
+                    type="password"
+                    autoComplete="new-password"
+                    error={errors.password}
+                  />
+                </div>
+
+                <div>
+                  <label className="userLabel">{t("confirmar_senha")}</label>
+                  <Controls.Input
+                    name="password"
+                    placeHolder={t("confirmar_senha")}
+                    value={values.password}
+                    onChange={handleInputChange}
+                    type="password"
+                    autoComplete="new-password"
+                    width="78%"
+                    error={errors.password}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={0}>
+                <Grid item xs={6}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      height: "5vh",
+                      maxHeight: "5vh",
+                      overflowY: "auto",
+                      overflow: "auto",
+                      // overflowX: "hidden",
+                      margin: "5px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{marginTop: "-10px"}}>
+                    <Controls.Buttons 
+                    type="button" 
+                    text={t("button_gravar")} 
+                    // className="button"
+                    width="40%"
+                    size="small"
+                    onClick={handleSubmit}
+
+                    />
+
+                    <Controls.Buttons
+                      type="button"
+                      text={t("button_limpar")}
+                      color="secondary"
+                      onClick={ResetForm}
+                      width="40%"
+                      size="small"
+                      // className="button"
+
+                    />
+                    {/* <Controls.Buttons
+                                    type="button"
+                                    text={t('sair')}
+                                    color="secondary"
+                                    onClick={close} 
+                   */}
+                    </div>
+
+
+                  </div>
+                </Grid>
+
+              
+
+                
+
+                <Grid item xs={6}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      height: "5vh",
+                      maxHeight: "5vh",
+                      overflowY: "auto",
+                      overflow: "auto",
+                      // overflowX: "hidden",
+                      margin: "5px",
+                      backgroundColor: "#f0efeb",
+                      textAlign: "center",
+                    }}
+                  ></div>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      height: "27.5vh",
+                      maxHeight: "27.5vh",
+                      overflowY: "auto",
+                      overflow: "auto",
+                      // overflowX: "hidden",
+                      margin: "5px",
+                      backgroundColor: "#f0efeb",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>
+                      <UserSearchTable
+                        ref={childRefUtilizador}
+                        idDisplay={false}
+                        codeDisplay={false}
+                        userNameDisplay={true}
+                        firstnameDisplay={true}
+                        lastnameDisplay={true}
+                        emailDisplay={false}
+                        sexoDisplay={false}
+                        cidadeDisplay={false}
+                        paisDisplay={false}
+                        roleDisplay={false}
+                        statusDisplay={true}
+                        affectacaoDisplay={false}
+
+                        actionsButtonDisplaySelect={false}
+                        actionsButtonDisplayEditDelete={true}
+                        backGroundColor="blue"
+                        sedeID={sedeID}
+                        color="white"
+                        pageSize={4}
+                        rowPerPage={4}
+                      />
+                    </div>
+                  </div>
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
+
+         
+        </Grid>
+        
+      </Box>
+
+      {/* <Grid
         // spacing={2}
         container
         direction="column"
@@ -294,13 +761,6 @@ export default function NewUSerForm(props) {
               icon={<ArticleIcon />}
             ></PageHeader>
           </Grid>
-
-          {/* <div>
-                    <Button variant="contained"
-                        onClick={testEmailExist}
-                        size="small"
-                        color="primary">{t('button_gravar')}</Button>
-                </div> */}
 
           <Form onSubmit={handleSubmit}>
             <div className="newUserContainer">
@@ -428,26 +888,7 @@ export default function NewUSerForm(props) {
                     />
                   </div>
 
-                  {/*  <div>
-                                <label className="userLabel">{t('cidade')}</label>
-                                <Controls.Input
-                                    name="city"
-                                    placeHolder={t('cidade')}
-                                    value={values.city}
-                                    onChange={handleInputChange}
-                                    type="text"
-                                />
-                            </div>
-                            <div>
-                                <label className="userLabel">{t('pais')}</label>
-                                <Controls.Input
-                                    name="country"
-                                    placeHolder={t('pais')}
-                                    value={values.country}
-                                    onChange={handleInputChange}
-                                    type="text"
-                                />
-                            </div> */}
+                 
                
               </div>
               </Grid>
@@ -565,136 +1006,132 @@ export default function NewUSerForm(props) {
                                     text={t('sair')}
                                     color="secondary"
                                     onClick={close} 
-                                 /> */}
-                  </div>
-                </Grid>
-              </div>
-            </div>
-          </Form>
-        </div>
+                   */}
 
-        {notificatinoShow ? (
-          <Notifications notify={notify} setNotify={setNotify} />
-        ) : null}
+      {notificatinoShow ? (
+        <Notifications notify={notify} setNotify={setNotify} />
+      ) : null}
 
-        {count === 1 ? (
-          <Popup
-            openPopup={openPopup}
-            setOpenPopup={setOpenPopup}
-            buttonColor="secondary"
-            title={popupTitle}
-            width="650px"
-            height="520px"
-          >
-            <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
-              <label className="userLabel">{t("Recherche")}</label>
-              <Controls.Input
-                name="sedePesquisa"
-                type="text"
-                value={sedePesquisa}
-                placeHolder={t("sede")}
-                width="55%"
-                marginLeft="-20px"
-                onChange={sedeSearchToToDataGrid}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <SedeSearchTable
-              ref={childRefSede}
-              idDisplay={true}
-              codeDisplay={false}
-              actionsButtonSelectDisplay={true}
-              actionsButtonDisplayEditDelete={false}
-              statusDisplay={true}
-              pageSize={7}
-              rowPerPage={7}
-              backGroundColor="#50394c"
-              color="white"
-              sedeData={(id, code, sede) => {
-                setSede(sede);
-                setSedeID(id);
-                values.sedeID = id;
-                setOpenPopup(false);
-                setSedePesquisa("");
+      {count === 1 ? (
+        <Popup
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+          buttonColor="secondary"
+          title={popupTitle}
+          width="800px"
+          height="580px"
+        >
+          <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+            <label className="userLabel">{t("Recherche")}</label>
+            <Controls.Input
+              name="sedePesquisa"
+              type="text"
+              value={sedePesquisa}
+              placeHolder={t("sede")}
+              width="55%"
+              marginLeft="-20px"
+              onChange={sedeSearchToToDataGrid}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
               }}
             />
-          </Popup>
-        ) : null}
+          </div>
+          <SedeSearchTable
+            ref={childRefSede}
+            idDisplay={true}
+            codeDisplay={false}
+            actionsButtonSelectDisplay={true}
+            actionsButtonDisplayEditDelete={false}
+            statusDisplay={true}
+            pageSize={7}
+            rowPerPage={7}
+            backGroundColor="#50394c"
+            color="white"
+            sedeData={(id, code, sede) => {
+              setSede(sede);
+              setSedeID(id);
+              values.sedeID = id;
+              setOpenPopup(false);
+              setSedePesquisa("");
 
-        {Number(count) === 2 ? (
-          <Popup
-            openPopup={openPopup}
-            setOpenPopup={setOpenPopup}
-            buttonColor="secondary"
-            width="850px"
-            height="700px"
-            closeButtonDisplay={false}
-            marginTop="-10px"
-            // title={popupTitle}
-          >
-            <Pais
-              //ref={childRePais}
-              // idDisplay={true}
-              // codeDisplay={false}
-              // statusDisplay={true}
-              // actionsButtonSelectDisplay={true} // monstrar o campo = true
-              // actionsButtonDisplayEditDelete={false}
-              // pageSize={7}
-              // rowPerPage={7}
-              backGroundColor="darkBlue"
-              color="white"
-              paisData={(id, code, sede) => {
-                // setSede(sede);
-                // setSedeID(id);
-                // values.sedeID = id
-                setOpenPopup(false);
-                getPaises();
-                // tableAgenciaUpdateData(id);
-                // setSedePesquisa("")
-              }}
-            />
-          </Popup>
-        ) : Number(count) === 3 ? (
-          <Popup
-            openPopup={openPopup}
-            setOpenPopup={setOpenPopup}
-            buttonColor="secondary"
-            width="850px"
-            height="700px"
-            closeButtonDisplay={false}
-            marginTop="-10px"
-            // title={popupTitle}
-          >
-            <Cidade
-              //ref={childRePais}
-              // idDisplay={true}
-              // codeDisplay={false}
-              // statusDisplay={true}
-              // actionsButtonSelectDisplay={true} // monstrar o campo = true
-              // actionsButtonDisplayEditDelete={false}
-              // pageSize={7}
-              // rowPerPage={7}
-              backGroundColor="darkBlue"
-              color="white"
-              cidadeData={(id, code, sede) => {
-                // setSede(sede);
-                // setSedeID(id);
-                // values.sedeID = id
-                setOpenPopup(false);
-                getPaises();
-                // tableAgenciaUpdateData(id);
-                // setSedePesquisa("")
-              }}
-            />
-          </Popup>
-        ) : null}
-      </Grid>
+              childRefUtilizador.current.userGetAll(id); // saveImage() = method called
+
+            }}
+          />
+        </Popup>
+      ) : null}
+
+      {Number(count) === 2 ? (
+        <Popup
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+          buttonColor="secondary"
+          width="850px"
+          height="700px"
+          closeButtonDisplay={false}
+          marginTop="-10px"
+          // title={popupTitle}
+        >
+          <Pais
+            //ref={childRePais}
+            // idDisplay={true}
+            // codeDisplay={false}
+            // statusDisplay={true}
+            // actionsButtonSelectDisplay={true} // monstrar o campo = true
+            // actionsButtonDisplayEditDelete={false}
+            // pageSize={7}
+            // rowPerPage={7}
+            backGroundColor="darkBlue"
+            color="white"
+            paisData={(id, code, sede) => {
+              // setSede(sede);
+              // setSedeID(id);
+              // values.sedeID = id
+              setOpenPopup(false);
+              getPaises();
+              // tableAgenciaUpdateData(id);
+              // setSedePesquisa("")
+            }}
+          />
+        </Popup>
+      ) : Number(count) === 3 ? (
+        <Popup
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+          buttonColor="secondary"
+          width="850px"
+          height="700px"
+          closeButtonDisplay={false}
+          marginTop="-10px"
+          // title={popupTitle}
+        >
+          <Cidade
+            //ref={childRePais}
+            // idDisplay={true}
+            // codeDisplay={false}
+            // statusDisplay={true}
+            // actionsButtonSelectDisplay={true} // monstrar o campo = true
+            // actionsButtonDisplayEditDelete={false}
+            // pageSize={7}
+            // rowPerPage={7}
+            backGroundColor="darkBlue"
+            color="white"
+            cidadeData={(id, code, sede) => {
+              // setSede(sede);
+              // setSedeID(id);
+              // values.sedeID = id
+              setOpenPopup(false);
+              getPaises();
+              // tableAgenciaUpdateData(id);
+              // setSedePesquisa("")
+            }}
+          />
+        </Popup>
+      ) : null}
     </>
   );
 }

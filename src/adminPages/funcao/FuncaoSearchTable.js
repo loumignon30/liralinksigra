@@ -68,7 +68,9 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
     const [openPopup, setOpenPopup] = useState(false);
     const { idDisplay, codeDisplay, actionsButtonDisplay,
         actionsButtonDisplayEditDelete,
-        pageSize, rowPerPage, sedeID, agenciaID, statusDisplay } = props;
+        pageSize, rowPerPage, sedeID, 
+        agenciaID, statusDisplay,
+        funcaoPesquisa } = props;
 
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("");  // backend image  URL
@@ -77,7 +79,7 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
 
 
     useEffect(() => {
-        getGetAllData(sedeID, agenciaID);
+        getGetAllData(sedeID, agenciaID, funcaoPesquisa);
         setUrl(urlImage());
 
     }, []);
@@ -94,9 +96,9 @@ const FuncaoSearchTable = forwardRef((props, ref) => { // forwardRef is used to 
         setOpenPopup(false);
     }
 
-    const getGetAllData = (sedeID1, agenciaID1) => {
+    const getGetAllData = (sedeID1, agenciaID1, funcaoPesquisa) => {
 
-        FuncaoService.getAll(sedeID1, agenciaID1)
+        FuncaoService.getAll(sedeID1, agenciaID1, funcaoPesquisa)
             .then(response => {
                 setData(response.data)
             })

@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class FuncionarioService {
 
-    getAll(sedeID, agenciaID, codigoPesquisa, codigo) {
-        return http.get(`/funcionarios?sedeID=${sedeID}&agenciaID=${agenciaID}&codigoPesquisa=${codigoPesquisa}&codigo=${codigo}`);
+    getAll(sedeID, agenciaID, codigoPesquisa, codigo, nome, apelido) {
+        return http.get(`/funcionarios?sedeID=${sedeID}&agenciaID=${agenciaID}&codigoPesquisa=${codigoPesquisa}&codigo=${codigo}&nome=${nome}&apelido=${apelido}`);
     }
     
     create(data) {

@@ -25,7 +25,7 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
             backgroundColor: "green",
             color: "white",
             cursor: "pointer",
-            marginRight: "20px"
+            marginRight: "2px"
         },
         deleleButton: {
             color: "red",
@@ -213,7 +213,7 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
 
         actionsButtonSelectDisplay ?
             {
-                field: 'action1', headerName: t('selecione'), flex: 0.8, headerClassName: classes.paper,
+                field: 'action1', headerName: t('selecione'), flex: 1, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
@@ -232,10 +232,11 @@ const SedeSearchTable = forwardRef((props, ref) => { // forwardRef is used to up
         ,
         actionsButtonDisplayEditDelete ?
             {
-                field: 'action', headerName: t('action'), flex: 1, headerClassName: classes.paper,
+                field: 'action', headerName: t('action'), flex: 0.7, headerClassName: classes.paper,
                 renderCell: (params) => {
                     return (
                         <>
+
                             <Link to={"/sedeEdit/" + params.row.id}
                                 state={{
                                     id: params.row.id,

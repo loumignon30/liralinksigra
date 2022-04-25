@@ -25,7 +25,8 @@ import Cidade from "../cidade/cidade";
 import swal from "sweetalert";
 
 import CodigoMensagemErro from "../../services/erroMessages/CodigoMensagemErro";
-import { Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const Sede = (props) => {
   const initialFValues = {
@@ -110,7 +111,6 @@ const Sede = (props) => {
 
     if (values.id > 0) {
       imaSedeDisplay(imageDisplay);
-      
     }
   }, [id, deviceWidth]);
 
@@ -339,39 +339,390 @@ const Sede = (props) => {
     getCidade(e.target.value);
   };
 
+  const ItemMainTitlo = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    // padding: theme.spacing(1),
+    marginBottom: "-20px",
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
+  const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
   return (
     <>
-      <Grid constainer spacing={1}
-      container
-      direction="column"
-      justifyContent="space-between"
-      // style={{ height: "100%" }}
-      >
-        <div className="universityContainer">
-        {/* <Grid item xs={12} sm={12} md={12} lg={6} xl={4}> */}
-
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {/* <Paper> */}
-          <div style={{margnLeft: "10px", marginTop:"10px"}}>
-            <PageHeader 
-              title={t("header_title_sede")}
-              subTitle={t("header_subTitle_sede")}
-              backGroundColor="darkBlue"
-              color="white"
-              icon={<House />}
-            ></PageHeader>
-            </div>
-            {/* </Paper> */}
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={0.2}>
+          <Grid item xs={12}>
+            <ItemMainTitlo>
+              <PageHeader
+                title={t("header_title_sede")}
+                subTitle={t("header_subTitle_sede")}
+                backGroundColor="lightblue"
+                color="black"
+                icon={<House />}
+              ></PageHeader>
+            </ItemMainTitlo>
           </Grid>
 
-          {/* <button onClick={MenuDataDisplay}>Test Menu Data</button> */}
+          <Grid item xs={6}>
 
-          {/* <button onClick={buttonclick}> Button</button> */}
+          <Grid item xs={12}>
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "6vh",
+                maxHeight: "6vh",
+                overflowY: "auto",
+                overflow: "auto",
+                // overflowX: "hidden",
+                margin: "5px",
+                backgroundColor: "#f0efeb",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ marginTop: "0px", fontWeight: 600 }}>
+               <span>
+                 DADOS DA SEDE
+               </span>
+              </div>
+            </div>
+          </Grid>
+
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "54vh",
+                maxHeight: "54vh",
+                overflowY: "auto",
+                overflow: "auto",
+                overflowX: "hidden",
+                margin: "5px"
+              }}
+            >
+              <Form onSubmit={handleSubmit} autoComplete="off">
+                <div style={{ margin: "5px" }}>
+                  <div>
+                    <label className="inputLabel">{t("code")}</label>
+                    <Controls.Input
+                      name="code"
+                      placeHolder={t("code")}
+                      value={values.code}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="50%"
+                      error={errors.code}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="inputLabel">{t("sede")}</label>
+                    <Controls.Input
+                      name="sede"
+                      placeHolder={t("sede")}
+                      value={values.sede}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="80%"
+                      error={errors.sede}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="inputLabel">{t("email")}</label>
+                    <Controls.Input
+                      name="email"
+                      placeHolder={t("email")}
+                      value={values.email}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="80%"
+                      error={errors.email}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="inputLabel">{t("contacto")}</label>
+                    <Controls.Input
+                      name="contacto"
+                      placeHolder={t("contacto")}
+                      value={values.contacto}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="80%"
+                      error={errors.contacto}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="inputLabel">{t("endereco")}</label>
+                    <Controls.Input
+                      name="endereco"
+                      placeHolder={t("endereco")}
+                      value={values.endereco}
+                      onChange={handleInputChange}
+                      type="text"
+                      width="80%"
+                      error={errors.endereco}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "0px", marginTop: "5px" }}>
+                    <label className="inputLabel">{t("pais")}</label>
+                    <Controls.Select
+                      name="paisID"
+                      label="paisID"
+                      value={values.paisID}
+                      onChange={paisHandleChange}
+                      options={paisesTable}
+                      typeOfSelect={6}
+                      error={errors.paisID}
+                      width="74%"
+                      height="40px"
+                    />
+                    <AddBox
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={novoPaisclickPopup}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "3px", marginBottom: "10px" }}>
+                    <label className="inputLabel">{t("cidade")}</label>
+
+                    <Controls.Select
+                      name="cidadeID"
+                      label="cidadeID"
+                      value={values.cidadeID}
+                      onChange={handleInputChange}
+                      options={cidadeTable}
+                      typeOfSelect={7}
+                      error={errors.cidadeID}
+                      width="74%"
+                      height="40px"
+                    />
+                    <AddBox
+                      style={{ marginTop: "10px", cursor: "pointer" }}
+                      onClick={novaCidadeclickPopup}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "0px" }}>
+                <ImageUpLoad
+                  ref={childRef}
+                  margnLeft="5px"
+                  fotoTitulo="Logo"
+                  marginTop= "10px"
+                  marginTopTexto= "-40px"
+                  iconMarginTop = "15px"
+                  uploadDisplay={true}
+                />
+              </div>
+                </div>
+              </Form>
+            </div>
+          </Grid>
+
+          <Grid item xs={6}>
+
+          <Grid item xs={12}>
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "6vh",
+                maxHeight: "6vh",
+                overflowY: "auto",
+                overflow: "auto",
+                // overflowX: "hidden",
+                margin: "5px",
+                backgroundColor: "#f0efeb",
+                textAlign: "center",
+
+              }}
+            >
+              <div style={{ marginTop: "0px", fontWeight: 600 }}>
+               <span>
+                 SEDES GRAVADAS
+               </span>
+              </div>
+            </div>
+          </Grid>
+
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "54vh",
+                maxHeight: "54vh",
+                overflowY: "auto",
+                overflow: "auto",
+                overflowX: "hidden",
+                margin: "5px"
+              }}
+            >
+              <div>
+                <SedeSearchTable
+                  ref={childRef2}
+                  idDisplay={true}
+                  codeDisplay={false}
+                  actionsButtonSelectDisplay={false} // monstrar o campo = true
+                  actionsButtonDisplayEditDelete={true}
+                  backGroundColor= "#f0efeb"
+                  color= "black"
+                  pageSize={8}
+                  rowPerPage={8}
+                />
+              </div>
+            </div>
+          </Grid>
+
+          <Grid item xs={3}>
+         
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "13vh",
+                maxHeight: "13vh",
+                overflowY: "auto",
+                overflow: "auto",
+                overflowX: "hidden",
+                margin: "5px",
+              justifyContent: "center", justifyItems:"center"
+                
+              }}
+            >
+              <div 
+              style={{ marginTop: "-10px", marginLeft: "0px"}}
+              >
+                <Controls.Buttons
+                  type="submit"
+                  text={t("button_gravar")}
+                  // className="button"
+                  size="small"
+                  width="90%"
+                  onClick={handleSubmit}
+                />
+                <div style={{ marginTop: "-13px" , marginLeft: "0px"}}>
+                  <Controls.Buttons
+                    type="button"
+                    text={t("button_limpar")}
+                    color="secondary"
+                    size="small"
+                    width="90%"
+                    // className="button"
+                    onClick={ResetForm}
+                  />
+                </div>
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={3}>
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "13vh",
+                maxHeight: "13vh",
+                overflowY: "auto",
+                overflow: "auto",
+                // overflowX: "hidden",
+                margin: "5px",
+                backgroundColor: "#f0efeb",
+              }}
+            >
+              <div style={{ marginTop: "-10px" }}>
+               
+              </div>
+            </div>
+          </Grid>
+
+          <Grid item xs={3}>
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "13vh",
+                maxHeight: "13vh",
+                overflowY: "auto",
+                overflow: "auto",
+                overflowX: "hidden",
+                margin: "5px",
+                backgroundColor: "#f0efeb",
+              justifyContent: "center", justifyItems:"center"
+                
+              }}
+            >
+              
+            </div>
+          </Grid>
+          <Grid item xs={3}>
+            <div
+              style={{
+                borderStyle: "solid",
+                borderColor: "black",
+                height: "13vh",
+                maxHeight: "13vh",
+                overflowY: "auto",
+                overflow: "auto",
+                overflowX: "hidden",
+                margin: "5px",
+                backgroundColor: "#f0efeb",
+              }}
+            ></div>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {notificatinoShow ? (
+            <Notifications notify={notify} setNotify={setNotify} />
+          ) : null}
+
+          <ConfirmDialog
+            confirmDialog={confirmDialog}
+            setConfirmDialog={setConfirmDialog}
+          />
+      {/*
+      <Grid
+        constainer
+        spacing={1}
+        container
+        direction="column"
+        justifyContent="space-between"
+        // style={{ height: "100%" }}
+      >
+       // <div className="universityContainer">
+         // {/* <Grid item xs={12} sm={12} md={12} lg={6} xl={4}> 
+
+         // <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            //{/* <Paper> 
+            <div style={{ margnLeft: "10px", marginTop: "10px" }}>
+              <PageHeader
+                title={t("header_title_sede")}
+                subTitle={t("header_subTitle_sede")}
+                backGroundColor="darkBlue"
+                color="white"
+                icon={<House />}
+              ></PageHeader>
+            </div>
+           // {/* </Paper> 
+          </Grid>
+
+          // <button onClick={MenuDataDisplay}>Test Menu Data</button> 
+
+          // <button onClick={buttonclick}> Button</button> 
 
           <Form onSubmit={handleSubmit} autoComplete="off">
             <div className="unversityItemContainer">
-            <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
-              {/* <Paper> */}
+              <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+               // {/* <Paper> 
                 <div className="newUniversity">
                   <div style={{ marginTop: "-20px" }}>
                     <label className="inputLabel">{t("code")}</label>
@@ -478,64 +829,64 @@ const Sede = (props) => {
                 onChange={handleInputChange}
                 type="text"
                 error={errors.cidade}
-              /> */}
+              ///> 
                   </div>
                 </div>
-                {/* </Paper> */}
+                // {/* </Paper> 
               </Grid>
 
-               {deviceWidth > 800 ? ( 
-          <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
-          {/* <Paper> */}
-                <div className="newUniversity">
-                  <div style={{marginTop: "-20px"}}>
-                    <SedeSearchTable
-                      ref={childRef2}
-                      idDisplay={true}
-                      codeDisplay={false}
-                      actionsButtonSelectDisplay={false} // monstrar o campo = true
-                      actionsButtonDisplayEditDelete={true}
-                      pageSize={5}
-                      rowPerPage={5}
-                    />
+              {deviceWidth > 800 ? (
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+               //   {/* <Paper> 
+                  <div className="newUniversity">
+                    <div style={{ marginTop: "-20px" }}>
+                      <SedeSearchTable
+                        ref={childRef2}
+                        idDisplay={true}
+                        codeDisplay={false}
+                        actionsButtonSelectDisplay={false} // monstrar o campo = true
+                        actionsButtonDisplayEditDelete={true}
+                        pageSize={5}
+                        rowPerPage={5}
+                      />
+                    </div>
                   </div>
-                </div>
-                {/* </Paper> */}
-              </Grid>
-               ) : null} 
+                  // {/* </Paper> 
+                </Grid>
+              ) : null}
             </div>
 
             <div className="unversityItemContainer">
               <div className="newUniversity">
-              <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
-                {/* <Paper> */}
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+                 // {/* <Paper> 
                   <ImageUpLoad
                     ref={childRef}
                     margnLeft="5px"
                     fotoTitulo="Logo"
                     uploadDisplay={true}
                   />
-                  {/* </Paper> */}
+                 // {/* </Paper> 
                 </Grid>
               </div>
 
               <div className="newUniversity">
-              <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
-                {/* <Paper> */}
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={4}>
+                 // {/* <Paper> 
                   <Controls.Buttons
                     type="submit"
                     text={t("button_gravar")}
-                     className="button"
+                    className="button"
                   />
                   <Controls.Buttons
                     type="button"
                     text={t("button_limpar")}
                     color="secondary"
-                     className="button"
+                    className="button"
                     onClick={ResetForm}
                     // onClick={close}
                   />
-                  {/* </Paper> */}
+                //  {/* </Paper> 
                 </Grid>
               </div>
             </div>
@@ -610,6 +961,7 @@ const Sede = (props) => {
           </Popup>
         </div>
       </Grid>
+      */}
     </>
   );
 };

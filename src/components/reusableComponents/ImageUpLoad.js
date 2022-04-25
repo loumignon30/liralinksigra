@@ -18,7 +18,7 @@ const ImageUpLoad = forwardRef((props, ref) => {
     const useStyles = makeStyles({
         imageIcon: {
             marginLeft: props.iconMarginLeft || "220px",
-            marginTop: props.iconMarginTop || "-10px",
+            marginTop: props.iconMarginTop || "10px",
             background: "yellow",
             width: "30px",
             height: "30px"
@@ -26,6 +26,8 @@ const ImageUpLoad = forwardRef((props, ref) => {
         labelStyle: {
             marginLeft: props.margnLeft || "0px",
             fontWeight: "bold",
+            marginTop: props.marginTopTexto || "0px",
+
 
         },
         file: {

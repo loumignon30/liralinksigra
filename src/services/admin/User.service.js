@@ -2,8 +2,8 @@ import http from '../../http-common';
 
 class UserService {
 
-    getAll(sedeID, emailPesquisa, email){
-        return http.get(`/users?sedeID=${sedeID}&emailPesquisa=${emailPesquisa}&email=${email}`);
+    getAll(sedeID, emailPesquisa, email, tipoPesquisa, pais, cidade){
+        return http.get(`/users?sedeID=${sedeID}&emailPesquisa=${emailPesquisa}&email=${email}&tipoPesquisa=${tipoPesquisa}&pais=${pais}&cidade=${cidade}`);
     }
     
     create(data){
