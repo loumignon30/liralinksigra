@@ -77,28 +77,25 @@ const UserList = () => {
     let agenciaIDP = 0;
     let agenciaIDP_text = "";
 
-    userSavedValue.map(
-      (item) => {
-        setRole(item.nivelAcesso)
-        setSedeID(item.sedeID);
-        setSede(item.sede)
-        testEdit = item.provenienciaFormulario
-        sedeIDP = item.sedeID
-        agenciaIDP = item.agenciaID_pesquisa
-        sedeIDP_text = item.sede
-        agenciaIDP_text = item.agencia_pesquisa;
+    userSavedValue.map((item) => {
+      setRole(item.nivelAcesso);
+      setSedeID(item.sedeID);
+      setSede(item.sede);
+      testEdit = item.provenienciaFormulario;
+      sedeIDP = item.sedeID;
+      agenciaIDP = item.agenciaID_pesquisa;
+      sedeIDP_text = item.sede;
+      agenciaIDP_text = item.agencia_pesquisa;
 
-        tableAgenciaUpdateData(
-          sedeID,
-          "SedeID",
-          "undefined",
-          "filtrePais",
-          "",
-          ""
-        );
-
-      }
-    );
+      tableAgenciaUpdateData(
+        sedeID,
+        "SedeID",
+        "undefined",
+        "filtrePais",
+        "",
+        ""
+      );
+    });
 
     if (testEdit === "EditUser") {
       setSedeID(sedeIDP);
@@ -113,9 +110,22 @@ const UserList = () => {
     setOpenPopup(true);
   };
 
-
-  const tableAgenciaUpdateData = (sedeID, emailPesquisa,email, tipoPesquisa, pais, cidade ) => {
-    childRef.current.userGetAll(sedeID, emailPesquisa,email, tipoPesquisa, pais, cidade); // saveImage() = method called
+  const tableAgenciaUpdateData = (
+    sedeID,
+    emailPesquisa,
+    email,
+    tipoPesquisa,
+    pais,
+    cidade
+  ) => {
+    childRef.current.userGetAll(
+      sedeID,
+      emailPesquisa,
+      email,
+      tipoPesquisa,
+      pais,
+      cidade
+    ); // saveImage() = method called
   };
 
   const sedeSearchToToDataGrid = (e) => {
@@ -258,7 +268,7 @@ const UserList = () => {
                     name="sede"
                     placeHolder={t("sede")}
                     value={sede}
-                    width="78%"
+                    width="74%"
                     type="text"
                     disabled="true"
                   />
@@ -274,7 +284,7 @@ const UserList = () => {
                     type="text"
                     value={nomeUsuarioPesquisa}
                     placeHolder={t("nome")}
-                    width="78%"
+                    width="74%"
                     // marginLeft="-20px"
                     onChange={usuarioSearchToToDataGrid}
                     InputProps={{
@@ -355,29 +365,29 @@ const UserList = () => {
                 // textAlign: "center",
               }}
             >
-                <div>
-                  <UserSearchTable
-                    ref={childRef}
-                    idDisplay={true}
-                    userNameDisplay={true}
-                    firstnameDisplay={true}
-                    lastnameDisplay={true}
-                    emailDisplay={false}
-                    roleDisplay={true}
-                    statusDisplay={true}
-                    affectacaoDisplay={true}
-                    sexoDisplay={false}
-                    paisDisplay={true}
-                    cidadeDisplay={true}
-                    actionsButtonDisplaySelect={false}
-                    actionsButtonDisplayEditDelete={true}
-                    backGroundColor="blue"
-                    sedeID={sedeID}
-                    color="white"
-                    pageSize={10}
-                    rowPerPage={10}
-                  />
-                </div>
+              <div>
+                <UserSearchTable
+                  ref={childRef}
+                  idDisplay={true}
+                  userNameDisplay={true}
+                  firstnameDisplay={true}
+                  lastnameDisplay={true}
+                  emailDisplay={false}
+                  roleDisplay={true}
+                  statusDisplay={true}
+                  affectacaoDisplay={true}
+                  sexoDisplay={false}
+                  paisDisplay={true}
+                  cidadeDisplay={true}
+                  actionsButtonDisplaySelect={false}
+                  actionsButtonDisplayEditDelete={true}
+                  backGroundColor="blue"
+                  sedeID={sedeID}
+                  color="white"
+                  pageSize={10}
+                  rowPerPage={10}
+                />
+              </div>
             </div>
           </Grid>
         </Grid>
@@ -499,10 +509,11 @@ const UserList = () => {
         buttonColor="secondary"
         width="800px"
         height="580px"
-        marginTop="10px"
-        title={popupTitle}
+        closeButtonDisplay={false}
+        marginTop="-20px"
+        // title={popupTitle}
       >
-        <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+        {/* <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
           <label className="userLabel">{t("Recherche")}</label>
           <Controls.Input
             name="sedePesquisa"
@@ -520,7 +531,7 @@ const UserList = () => {
               ),
             }}
           />
-        </div>
+        </div> */}
 
         <SedeSearchTable
           ref={childRefSede}
@@ -529,10 +540,11 @@ const UserList = () => {
           statusDisplay={true}
           actionsButtonSelectDisplay={true} // monstrar o campo = true
           actionsButtonDisplayEditDelete={false}
-          pageSize={7}
-          rowPerPage={7}
+          pageSize={9}
+          rowPerPage={9}
           backGroundColor="darkBlue"
           color="white"
+          listarGrid={true}
           sedeData={(id, code, sede) => {
             setSede(sede);
             setSedeID(id);

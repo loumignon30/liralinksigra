@@ -100,7 +100,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-     getGetAllData(sedeID, agenciaID);
+     getGetAllData(sedeID, agenciaID, "", "");
     setUrl(urlImage());
     agenciaGetData(sedeID);
   }, []);
@@ -157,6 +157,7 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
         console.log(e);
       });
   };
+  
 
   const getFirstnameSearch = (firstNameToSearch) => {
     setCampoPesquisa("primeironome");
@@ -175,6 +176,8 @@ const FuncionarioSearchTable = forwardRef((props, ref) => {
       sedeID,
       agenciaIDLocal,
       "funcionariosComAgencia",
+      "",
+      "",
       ""
     )
       .then((response) => {

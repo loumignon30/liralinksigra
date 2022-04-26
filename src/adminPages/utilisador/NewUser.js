@@ -353,7 +353,7 @@ export default function NewUSerForm(props) {
                       value={sede}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
                       error={errors.sede}
                     />
                     <Search
@@ -390,8 +390,8 @@ export default function NewUSerForm(props) {
                 style={{
                   borderStyle: "solid",
                   borderColor: "black",
-                  height: "53vh",
-                  maxHeight: "53vh",
+                  height: "63vh",
+                  maxHeight: "63vh",
                   overflowY: "auto",
                   overflow: "auto",
                   overflowX: "hidden",
@@ -474,7 +474,7 @@ export default function NewUSerForm(props) {
                       options={paisesTable}
                       typeOfSelect={6}
                       error={errors.paisID}
-                      width="78%"
+                      width="74%"
                       height="40px"
                     />
                     <AddBox
@@ -494,7 +494,7 @@ export default function NewUSerForm(props) {
                       options={cidadeTable}
                       typeOfSelect={7}
                       error={errors.cidadeID}
-                      width="78%"
+                      width="74%"
                       height="40px"
                     />
                     <AddBox
@@ -503,12 +503,15 @@ export default function NewUSerForm(props) {
                     />
                   </div>
 
-                  <div style={{ marginTop: "-20px" }}>
+                  <div style={{ marginTop: "-10px" }}>
                     <ImageUpLoad
                       ref={childRef}
                       fotoTitulo={t("foto")}
                       margnLeft="0px"
                       uploadDisplay={true}
+                      marginTop= "10px"
+                      iconMarginTop = "15px"
+
                     />
                   </div>
                 </div>
@@ -540,8 +543,8 @@ export default function NewUSerForm(props) {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                height: "30vh",
-                maxHeight: "30vh",
+                height: "32vh",
+                maxHeight: "32vh",
                 overflowY: "auto",
                 overflow: "auto",
                 // overflowX: "hidden",
@@ -698,8 +701,8 @@ export default function NewUSerForm(props) {
                     style={{
                       borderStyle: "solid",
                       borderColor: "black",
-                      height: "27.5vh",
-                      maxHeight: "27.5vh",
+                      height: "36vh",
+                      maxHeight: "36vh",
                       overflowY: "auto",
                       overflow: "auto",
                       // overflowX: "hidden",
@@ -1017,11 +1020,13 @@ export default function NewUSerForm(props) {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+          // title={popupTitle}
           width="800px"
           height="580px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
-          <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+          {/* <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
             <label className="userLabel">{t("Recherche")}</label>
             <Controls.Input
               name="sedePesquisa"
@@ -1039,7 +1044,7 @@ export default function NewUSerForm(props) {
                 ),
               }}
             />
-          </div>
+          </div> */}
           <SedeSearchTable
             ref={childRefSede}
             idDisplay={true}
@@ -1047,10 +1052,11 @@ export default function NewUSerForm(props) {
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
             statusDisplay={true}
-            pageSize={7}
-            rowPerPage={7}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor="#50394c"
             color="white"
+            listarGrid = {true}
             sedeData={(id, code, sede) => {
               setSede(sede);
               setSedeID(id);
@@ -1058,7 +1064,7 @@ export default function NewUSerForm(props) {
               setOpenPopup(false);
               setSedePesquisa("");
 
-              childRefUtilizador.current.userGetAll(id); // saveImage() = method called
+              childRefUtilizador.current.userGetAll(id, "SedeID"); // saveImage() = method called
 
             }}
           />

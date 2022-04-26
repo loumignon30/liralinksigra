@@ -222,13 +222,13 @@ const ListagemDepartamento = () => {
                     name="sede"
                     placeHolder={t("sede")}
                     value={sede}
-                    width="78%"
+                    width="74%"
                     type="text"
                     disabled="true"
                   />
                   <Search
                     style={{ marginTop: "10px", cursor: "pointer" }}
-                    onClick={onclickAgenciaPopup}
+                    onClick={onclicSedePopup}
                   />
                 </div>
                 <div>
@@ -238,7 +238,7 @@ const ListagemDepartamento = () => {
                         placeHolder={t('nome_Agencia')}
                         value={agencia}
                         type="text"
-                        width="78%"
+                        width="74%"
                     />
                     <Search style={{ marginTop: "10px", cursor: "pointer" }}
                         onClick={onclickAgenciaPopup}
@@ -250,7 +250,7 @@ const ListagemDepartamento = () => {
                     type="text"
                     value={values.departamentoPesquisa}
                     placeHolder={t("Pesquisar Departamento")}
-                    width="78%"
+                    width="74%"
                     onChange={departamentoPesquisaCons}
                     // marginLeft="-20px"
                     // onChange={sedeSearchToToDataGrid}
@@ -342,8 +342,8 @@ const ListagemDepartamento = () => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                height: "45vh",
-                maxHeight: "45vh",
+                height: "65vh",
+                maxHeight: "65vh",
                 overflowY: "auto",
                 overflow: "auto",
                 // overflowX: "hidden",
@@ -470,8 +470,8 @@ const ListagemDepartamento = () => {
             codeDisplay={false}
             actionsButtonSelectDisplay={true} // monstrar o campo = true
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor="#f0efeb"
             color="black"
             sedeData={(id, code, sede) => {
@@ -510,8 +510,8 @@ const ListagemDepartamento = () => {
             color="black"
             sedeID={sedeID}
             userID={userID}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             agenciaData={(id, code, agencia) => {
               setagencia(agencia);
               setAgenciaID(id);
@@ -530,7 +530,8 @@ const ListagemDepartamento = () => {
           title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <SedeSearchTable
             idDisplay={false}
@@ -538,10 +539,11 @@ const ListagemDepartamento = () => {
             statusDisplay={true}
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor="#f0efeb"
             color="black"
+            listarGrid={true}
             // userID={userID2}
             // sedeID={sedeID}
             sedeData={(id, code, sede) => {
@@ -563,10 +565,11 @@ const ListagemDepartamento = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <AgenciaSearchTable
             ref={childRefAgence}
@@ -581,8 +584,9 @@ const ListagemDepartamento = () => {
             idSede={sedeID}
             userID={userID}
             color="black"
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
+            listarGrid={true}
             agenciaData={(id, code, agencia) => {
               setagencia(agencia);
               setAgenciaID(id);

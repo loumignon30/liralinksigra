@@ -208,13 +208,13 @@ const ListagemFuncao = () => {
                       name="sede"
                       placeHolder={t("sede")}
                       value={sede}
-                      width="78%"
+                      width="74%"
                       type="text"
                       disabled="true"
                     />
                     <Search
                       style={{ marginTop: "10px", cursor: "pointer" }}
-                      onClick={onclickAgenciaPopup}
+                      onClick={onclicSedePopup}
                     />
                   </div>
                   <div>
@@ -229,7 +229,7 @@ const ListagemFuncao = () => {
                       placeHolder={t("nome_Agencia")}
                       value={agencia}
                       type="text"
-                      width="78%"
+                      width="74%"
                     />
                     <Search
                       style={{ marginTop: "10px", cursor: "pointer" }}
@@ -243,7 +243,7 @@ const ListagemFuncao = () => {
                       type="text"
                       value={values.funcaoPesquisa}
                       placeHolder={t("Pesquisar Função")}
-                      width="78%"
+                      width="74%"
                       onChange={funcaoPesquisaCons}
                       // marginLeft="-20px"
                       // onChange={sedeSearchToToDataGrid}
@@ -292,8 +292,8 @@ const ListagemFuncao = () => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                height: "45vh",
-                maxHeight: "45vh",
+                height: "65vh",
+                maxHeight: "65vh",
                 overflowY: "auto",
                 overflow: "auto",
                 // overflowX: "hidden",
@@ -309,8 +309,8 @@ const ListagemFuncao = () => {
                     statusDisplay={true}
                     actionsButtonDisplaySelect={true}
                     actionsButtonDisplayEditDelete={true}
-                    pageSize={7}
-                    rowPerPage={7}
+                    pageSize={10}
+                    rowPerPage={10}
                     sedeID={sedeID}
                     agenciaID={agenciaID}
                 />
@@ -450,10 +450,11 @@ const ListagemFuncao = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <SedeSearchTable
             idDisplay={false}
@@ -465,6 +466,7 @@ const ListagemFuncao = () => {
             rowPerPage={9}
             backGroundColor="darkBlue"
             color="white"
+            listarGrid={true}
             // userID={userID2}
             // sedeID={sedeID}
             sedeData={(id, code, sede) => {
@@ -487,7 +489,8 @@ const ListagemFuncao = () => {
           title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <AgenciaSearchTable
             ref={childRefAgence}
@@ -504,6 +507,7 @@ const ListagemFuncao = () => {
             color="white"
             pageSize={9}
             rowPerPage={9}
+            listarGrid={true}
             agenciaData={(id, code, agencia) => {
               setAgencia(agencia);
               setAgenciaID(id);

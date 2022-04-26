@@ -26,6 +26,8 @@ import PaisService from "../../services/admin/Pais.service";
 import CidadeService from "../../services/admin/Cidade.service";
 import FuncaoSearchTable from "../funcao/FuncaoSearchTable";
 import DepartamentoSearchTable from "../departamento/DepartamentoSearchTable";
+import DepartamentoResumoSearchTable from "../departamento/DepartamentoResumoSearchTable";
+import FuncaoResumoSearchTable from "../funcao/FuncaoResumoSearchTable";
 
 const initialFValues = {
   primeironome: "",
@@ -61,8 +63,10 @@ const ListagemFuncionarios = () => {
 
   const childRefAgence = useRef(null); // it's using a reference of a method from ImageUpLoad.js
   const childRefFuncao = useRef(null); // it's using a reference of a method from ImageUpLoad.js
+  const childRefDepartamento = useRef(null); // it's using a reference of a method from ImageUpLoad.js
 
   const childRef_resumo = useRef(null);
+
 
   const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
   const [searchNome, setSearchNome] = useState("");
@@ -74,7 +78,7 @@ const ListagemFuncionarios = () => {
 
   const [departamento, setDepartamento] = useState("");
   const [funcao, setFuncao] = useState("");
-  
+
   const { values, setValues, handleInputChange } = useForm(
     initialFValues,
     false
@@ -157,11 +161,30 @@ const ListagemFuncionarios = () => {
 
   const onclickAllDataPopup = () => {
     setAgencia("");
-    setCount(5);
+    setCount(15);
     try {
       childRef_resumo.current.getGetAllDataFuncionarioAgencia(); // search the firstname
     } catch (err) {
       // console.log(err)
+    }
+  };
+  const onclickResumoDepartamento = () => {
+    setCount(16);
+    // alert(sedeID)
+    try {
+        childRefDepartamento.current.getGetAllDataFuncionarioDepartamento(sedeID, 0); // search the firstname
+    } catch (err) {
+      //console.log(err)
+    }
+  };
+
+  const onclickResumoFuncao = () => {
+    setCount(17);
+    // alert(sedeID)
+    try {
+      childRefFuncao.current.getGetAllDataFuncionarioFuncao(sedeID, 0); // search the firstname
+    } catch (err) {
+      //console.log(err)
     }
   };
 
@@ -246,14 +269,14 @@ const ListagemFuncionarios = () => {
     setOpenPopup(true);
   };
   const onclickFuncaoPopup = () => {
-    setCount(5);
+    setCount(18);
     setPpupTitle(t("listagem_funcao_menu"));
     setOpenPopup(true);
   };
 
   const tableDepartamentoUpdateData1 = (sedeID1, agenciaID1, nome, apelido) => {
     if (sedeID1 > 0 && agenciaID1 > 0) {
-        childRef.current.getGetAllData(sedeID1, agenciaID1, nome, apelido); // saveImage() = method called
+      childRef.current.getGetAllData(sedeID1, agenciaID1, nome, apelido); // saveImage() = method called
     }
   };
 
@@ -316,13 +339,13 @@ const ListagemFuncionarios = () => {
                       name="sede"
                       placeHolder={t("sede")}
                       value={sede}
-                      width="78%"
+                      width="74%"
                       type="text"
                       disabled="true"
                     />
                     <Search
                       style={{ marginTop: "10px", cursor: "pointer" }}
-                      onClick={onclickAgenciaPopup}
+                      onClick={onclicSedePopup}
                     />
                   </div>
                   <div>
@@ -337,7 +360,7 @@ const ListagemFuncionarios = () => {
                       placeHolder={t("nome_Agencia")}
                       value={agencia}
                       type="text"
-                      width="78%"
+                      width="74%"
                     />
                     <Search
                       style={{ marginTop: "10px", cursor: "pointer" }}
@@ -351,7 +374,7 @@ const ListagemFuncionarios = () => {
                       type="text"
                       value={values.primeironome}
                       placeHolder={t("Pesquisar o Nome")}
-                      width="65%"
+                      width="74%"
                       onChange={funcionarioPesquisaCons}
                       // marginLeft="-20px"
                       // onChange={sedeSearchToToDataGrid}
@@ -363,15 +386,15 @@ const ListagemFuncionarios = () => {
                         ),
                       }}
                     />
-                    </div>
-                    <div>
+                  </div>
+                  <div>
                     <label className="userLabel">{t("Recherche")}</label>
                     <Controls.Input
                       name="ultimonome"
                       type="text"
                       value={values.ultimonome}
                       placeHolder={t("Pesquisar o Apelido")}
-                      width="65%"
+                      width="74%"
                       onChange={funcionarioPesquisaUltimoNomeCons}
                       // marginLeft="-20px"
                       // onChange={sedeSearchToToDataGrid}
@@ -424,13 +447,11 @@ const ListagemFuncionarios = () => {
                   // overflowX: "hidden",
                   margin: "5px",
                   // backgroundColor: "#f0efeb",
-                //   textAlign: "center",
+                  //   textAlign: "center",
                 }}
               >
-                  <div style={{marginLeft:"5px"}}>
-
-                  
-               <div >
+                <div style={{ marginLeft: "5px" }}>
+                  <div>
                     <label className="inputLabel">{t("departamento")}</label>
                     <Controls.Input
                       name="departamento"
@@ -438,7 +459,7 @@ const ListagemFuncionarios = () => {
                       value={departamento}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
                     />
                     <Search
                       style={{ marginTop: "10px", cursor: "pointer" }}
@@ -453,45 +474,93 @@ const ListagemFuncionarios = () => {
                       value={funcao}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
                     />
                     <Search
                       style={{ marginTop: "10px", cursor: "pointer" }}
                       onClick={onclickFuncaoPopup}
                     />
                   </div>
-                  </div>
-
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div
-                style={{
-                  borderStyle: "solid",
-                  borderColor: "black",
-                  height: "8.8vh",
-                  maxHeight: "8.8vh",
-                  overflowY: "auto",
-                  overflow: "auto",
-                  // overflowX: "hidden",
-                  margin: "5px",
-                  backgroundColor: "#f0efeb",
-                  textAlign: "center",
-                }}
-              >
-                <div>
-                  <div>
-                    <Controls.Buttons
-                      type="button"
-                      text={t("resumo")}
-                      size="small"
-                      width="60%"
-                      onClick={onclickAllDataPopup}
-                    />
-                  </div>
                 </div>
               </div>
             </Grid>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={0.2}>
+                <Grid item xs={6}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      height: "8vh",
+                      maxHeight: "8vh",
+                    //   overflowY: "auto",
+                    //   overflow: "auto",
+                      // overflowX: "hidden",
+                      margin: "5px",
+                      backgroundColor: "#f0efeb",
+                      //   textAlign: "center",
+                    }}
+                  >
+                      <div>
+                        <Controls.Buttons
+                          type="button"
+                          text={t("Resumo Centro de Tr.")}
+                          color="primary"
+                          size="small"
+                          width="40%"
+                          onClick={onclickAllDataPopup}
+                        />
+                      
+                        <Controls.Buttons
+                          type="button"
+                          text={t("Resumo por Dep.")}
+                          size="small"
+                          color="success"
+                          width="40%"
+                          onClick={onclickResumoDepartamento}
+                        />
+                      </div>
+                    </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div
+                    style={{
+                      borderStyle: "solid",
+                      borderColor: "black",
+                      height: "8vh",
+                      maxHeight: "8vh",
+                      overflowY: "auto",
+                      overflow: "auto",
+                      // overflowX: "hidden",
+                      margin: "5px",
+                      backgroundColor: "#f0efeb",
+                      //   textAlign: "center",
+                    }}
+                  >
+                    <div>
+                      <div>
+                        <Controls.Buttons
+                          type="button"
+                          text={t("Resumo por Função")}
+                          size="small"
+                          color="secondary"
+                          width="40%"
+                          onClick={onclickResumoFuncao}
+                        />
+                      
+                    <Controls.Buttons
+                      type="button"
+                      text={t("Resumo por Estado")}
+                      size="small"
+                      width="40%"
+                      onClick={onclickAllDataPopup}
+                    />
+                  </div> 
+                    </div>
+                  </div>
+                </Grid>
+              </Grid>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <div
@@ -509,28 +578,43 @@ const ListagemFuncionarios = () => {
               }}
             >
               <div>
-                {count === 5 && Number(nivelAcesso) === 101 ? (
+                {count === 15 && Number(nivelAcesso) === 101 ? (
                   <div style={{ height: 400, width: "100%" }}>
                     <FuncionarioResumoSearchTable
                       ref={childRef_resumo}
-                      // idDisplay={false}
-                      // agenciaDisplay={false}
-                      // codeDisplay={true}
-                      // primeiroNomeDisplay={false}
-                      // ultimonomeDisplay={false}
-                      // emailDisplay={true}
-                      // actionsButtonDisplaySelect={false}
-                      // emailDisplay={true}
-                      // telefoneDislay={true}
-                      // statusDisplay={true}
-                      // actionsButtonDisplayEditDelete={true}
                       backGroundColor="darkBlue"
                       color="white"
                       pageSize={9}
                       rowPerPage={9}
                     />
                   </div>
-                ) : (
+                ) : 
+                count === 16 ? 
+                    <div style={{ height: 400, width: "100%", marginTop: "2px" }}>
+                      <DepartamentoResumoSearchTable
+                        ref={childRefDepartamento}
+                        sedeID={sedeID}
+                        agenciaID={0}
+                        backGroundColor="darkBlue"
+                        color="white"
+                        pageSize={9}
+                        rowPerPage={9}
+                      />
+                    </div>
+                   : 
+                   count === 17 ? 
+                    <div style={{ height: 400, width: "100%", marginTop: "2px" }}>
+                      <FuncaoResumoSearchTable
+                        ref={childRefFuncao}
+                        sedeID={sedeID}
+                        agenciaID={0}
+                        backGroundColor="darkBlue"
+                        color="white"
+                        pageSize={9}
+                        rowPerPage={9}
+                      />
+                    </div>
+                   : 
                   <div style={{ height: 400, width: "100%" }}>
                     <FuncionarioSearchTable
                       ref={childRef}
@@ -552,7 +636,19 @@ const ListagemFuncionarios = () => {
                       rowPerPage={9}
                     />
                   </div>
-                )}
+                }
+                {/* {count === 6 && Number(nivelAcesso) === 101 ? (
+                  <div style={{ height: 400, width: "100%" }}>
+                    <FuncionarioResumoSearchTable
+                      ref={childRef_resumo}
+                      backGroundColor="darkBlue"
+                      color="white"
+                      pageSize={9}
+                      rowPerPage={9}
+                    />
+                  </div>
+                ) : null
+                } */}
               </div>
             </div>
           </Grid>
@@ -761,10 +857,11 @@ const ListagemFuncionarios = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+          //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <SedeSearchTable
             idDisplay={false}
@@ -776,6 +873,7 @@ const ListagemFuncionarios = () => {
             rowPerPage={10}
             backGroundColor="darkBlue"
             color="white"
+            listarGrid={true}
             // userID={userID2}
             // sedeID={sedeID}
             sedeData={(id, code, sede) => {
@@ -795,12 +893,13 @@ const ListagemFuncionarios = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+          //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
-         <DepartamentoSearchTable
+          <DepartamentoSearchTable
             idDisplay={true}
             codeDisplay={false}
             statusDisplay={true}
@@ -813,6 +912,7 @@ const ListagemFuncionarios = () => {
             departamentoPesquisa=""
             backGroundColor="#f0efeb"
             color="black"
+            listarGrid={true}
             departamentoData={(id, code, departamento) => {
               setDepartamento(departamento);
               values.departamentoID = id;
@@ -823,16 +923,17 @@ const ListagemFuncionarios = () => {
       ) : (
         ""
       )}
-      {count === 5 ? (
+      {count === 18 ? (
         <Popup
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           //pageHeader={PopupHeaderUniversity()}
           buttonColor="secondary"
-          title={popupTitle}
+          //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <FuncaoSearchTable
             idDisplay={false}
@@ -847,6 +948,7 @@ const ListagemFuncionarios = () => {
             sedeID={sedeID}
             agenciaID={agenciaID}
             funcaoPesquisa=""
+            listarGrid={true}
             funcaoData={(id, code, funcao) => {
               setFuncao(funcao);
               values.funcaoID = id;
@@ -857,7 +959,7 @@ const ListagemFuncionarios = () => {
       ) : (
         ""
       )}
-       {count === 6 ? (
+      {count === 6 ? (
         <Popup
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
@@ -865,7 +967,8 @@ const ListagemFuncionarios = () => {
           title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <AgenciaSearchTable
             idDisplay={false}
@@ -880,6 +983,7 @@ const ListagemFuncionarios = () => {
             color="black"
             pageSize={10}
             rowPerPage={10}
+            listarGrid={true}
             agenciaData={(id, code, agencia) => {
               values.agenciaID = id;
               setAgencia(agencia);

@@ -399,8 +399,8 @@ const Sede = (props) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                height: "54vh",
-                maxHeight: "54vh",
+                height: "56vh",
+                maxHeight: "56vh",
                 overflowY: "auto",
                 overflow: "auto",
                 overflowX: "hidden",
@@ -559,8 +559,8 @@ const Sede = (props) => {
               style={{
                 borderStyle: "solid",
                 borderColor: "black",
-                height: "54vh",
-                maxHeight: "54vh",
+                height: "56vh",
+                maxHeight: "56vh",
                 overflowY: "auto",
                 overflow: "auto",
                 overflowX: "hidden",

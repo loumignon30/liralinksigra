@@ -509,7 +509,6 @@ const ListagemDenuncia = () => {
   };
 
   const getGetAllZero = () => {
-
     setTotalPendente(0);
     setTotalEmCurso(0);
     setTotalConcluido(0);
@@ -539,7 +538,6 @@ const ListagemDenuncia = () => {
     )
       .then((response) => {
         response.data.map((total) => {
-
           if (total.status === "1") {
             setTotalPendente(total.total_Status);
           }
@@ -873,10 +871,11 @@ const ListagemDenuncia = () => {
               openPopup={openPopup}
               setOpenPopup={setOpenPopup}
               buttonColor="secondary"
-              title={popupTitle}
+              // title={popupTitle}
               width="800px"
               height="580px"
-              marginTop="10px"
+              closeButtonDisplay={false}
+              marginTop="-20px"
             >
               <SedeSearchTable
                 idDisplay={true}
@@ -884,10 +883,11 @@ const ListagemDenuncia = () => {
                 statusDisplay={true}
                 actionsButtonSelectDisplay={true}
                 actionsButtonDisplayEditDelete={false}
-                pageSize={10}
-                rowPerPage={10}
+                pageSize={9}
+                rowPerPage={9}
                 backGroundColor="lightblue"
                 color="black"
+                listarGrid={true}
                 sedeData={(id, code, sede) => {
                   setSede(sede);
                   setSedeID(id);
@@ -904,10 +904,11 @@ const ListagemDenuncia = () => {
               openPopup={openPopup}
               setOpenPopup={setOpenPopup}
               buttonColor="secondary"
-              title={popupTitle}
+              // title={popupTitle}
               width="800px"
               height="580px"
-              marginTop="10px"
+              closeButtonDisplay={false}
+              marginTop="-20px"
             >
               <AgenciaSearchTable
                 idDisplay={true}
@@ -920,8 +921,9 @@ const ListagemDenuncia = () => {
                 userID={userID}
                 backGroundColor="lightblue"
                 color="black"
-                pageSize={10}
-                rowPerPage={10}
+                pageSize={9}
+                rowPerPage={9}
+                listarGrid={true}
                 agenciaData={(id, code, agencia) => {
                   setAgencia(agencia);
                   setAgenciaID(id);

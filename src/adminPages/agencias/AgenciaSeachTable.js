@@ -1,4 +1,4 @@
-import { Delete, Done } from "@mui/icons-material";
+import { Delete, Done, Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, {
   forwardRef,
@@ -13,6 +13,11 @@ import urlImage from "../../http-common-images";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useTranslation } from "react-i18next";
+
+import { Box } from "@mui/system";
+import { styled } from "@mui/material/styles";
+import { Grid, InputAdornment, Paper } from "@mui/material";
+import Controls from "../../components/reusableComponents/Controls";
 
 const AgenciaSearchTable = forwardRef((props, ref) => {
   // forwardRef is used to update method from this file from ather files
@@ -60,6 +65,7 @@ const AgenciaSearchTable = forwardRef((props, ref) => {
     pageSize,
     rowPerPage,
     idSede,
+    listarGrid
   } = props;
 
   const [data, setData] = useState([]);
@@ -68,6 +74,9 @@ const AgenciaSearchTable = forwardRef((props, ref) => {
 
   const [agenciaSearch, setAgenciaSearch] = useState("");
   const [campoPesquisa, setCampoPesquisa] = useState("");
+
+  const [agenciaPesquisa, setAgenciaPesquisa] = useState("");
+
 
   const { t } = useTranslation();
 
@@ -359,16 +368,178 @@ const AgenciaSearchTable = forwardRef((props, ref) => {
           headerClassName: classes.paper,
         },
   ];
+  const ItemMainTitlo = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    // padding: theme.spacing(1),
+    marginBottom: "-20px",
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
+  const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  }));
+
+  const close = () => {
+    setOpenPopup(false);
+    props.agenciaData();
+  };
+
+  const agenciaSearchCons = (agenciaToSearch) => {
+    setCampoPesquisa("nome");
+    setAgenciaSearch(agenciaToSearch);
+    // setSedePesquisa(e.target.value);
+  };
+
+  const agenciaSearchToToDataGrid = (e) => {
+    setAgenciaPesquisa(e.target.value);
+    agenciaSearchCons(e.target.value);
+    // childRefSede.current.sedSearch(e.target.value); // search the firstname
+  };
   return (
     <>
-      <UsableTable
+    {listarGrid ? (
+        <Box sx={{ flexGrow: 1 }} style={{ marginTop: "-20px" }}>
+          <Grid container spacing={0}>
+            <Grid item xs={11}>
+              <ItemMainTitlo
+                style={{
+                  borderStyle: "solid",
+                  backgroundColor: "#f0efeb",
+                  height: "5vh",
+                  maxHeight: "5vh",
+                  margin: "5px",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ fontWeight: 600 }}>
+                  <span>PESQUISA DE CENTRO DE TRABALHO</span>
+                </div>
+              </ItemMainTitlo>
+            </Grid>
+
+            <Grid item xs={1}>
+              <ItemMainTitlo
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  backgroundColor: "#f0efeb",
+                  height: "5vh",
+                  maxHeight: "5vh",
+                  margin: "5px",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <button
+                    className="buttonPopupGridFuncionarioSearhTable"
+                    onClick={() => {
+                      close();
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              </ItemMainTitlo>
+            </Grid>
+
+            <Grid item xs={6}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  // backgroundColor: "#f0efeb",
+                  height: "7vh",
+                  maxHeight: "7vh",
+                  margin: "5px",
+                  // textAlign: "center",
+                }}
+              >
+                <div>
+                  <label className="userLabel">{t("Recherche")}</label>
+                  <Controls.Input
+                    name="agenciaPesquisa"
+                    type="text"
+                    value={agenciaPesquisa}
+                    placeHolder={t("agencia")}
+                    width="75%"
+                    marginLeft="-20px"
+                    onChange={agenciaSearchToToDataGrid}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Search />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </div>
+              </div>
+            </Grid>
+            <Grid item xs={6}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  backgroundColor: "#f0efeb",
+                  height: "7vh",
+                  maxHeight: "7vh",
+                  margin: "5px",
+                  // textAlign: "center",
+                }}
+              >
+                <div></div>
+              </div>
+            </Grid>
+
+            <Grid item xs={12}>
+              <div
+                style={{
+                  borderStyle: "solid",
+                  height: "59vh",
+                  maxHeight: "59vh",
+                  overflowY: "auto",
+                  overflow: "auto",
+                  margin: "5px",
+                }}
+              >
+                <div>
+                  <UsableTable
+                    records={data}
+                    columns={columns}
+                    pageSize={pageSize}
+                    rowPerPage={rowPerPage}
+                    firstNameSearch={agenciaSearch}
+                    campoPesquisa={campoPesquisa}
+                  />
+                </div>
+              </div>
+            </Grid>
+          </Grid>
+        </Box>
+      ) : (
+        <div>
+          <UsableTable
+            records={data}
+            columns={columns}
+            pageSize={pageSize}
+            rowPerPage={rowPerPage}
+            firstNameSearch={agenciaSearch}
+            campoPesquisa={campoPesquisa}
+          />
+        </div>
+      )}
+      {/* <UsableTable
         records={data}
         columns={columns}
         pageSize={pageSize}
         rowPerPage={rowPerPage}
         firstNameSearch={agenciaSearch}
         campoPesquisa={campoPesquisa}
-      />
+      /> */}
     </>
   );
 });

@@ -63,7 +63,7 @@ const Agencia = () => {
   const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
   const location = useLocation();
 
-  const [backGroundColor, setBackGroundColor] = useState("");
+  const [backGroundColor, setBackGroundColor] = useState("#f0efeb");
   const [color, setColor] = useState("");
   const [headerTitle, setHeaderTitle] = useState("");
   const [headerSubTitle, setHeaderSubTitle] = useState("");
@@ -138,8 +138,8 @@ const Agencia = () => {
 
   const getStateValuesFromSearchTable = () => {
     if (location.state !== null) {
-      setBackGroundColor("darkBlue");
-      setColor("white");
+      setBackGroundColor("#f0efeb");
+      setColor("black");
       setHeaderTitle(t("header_title_agence_modificar"));
       setHeaderSubTitle(t("header_subTitle_agence_modificar"));
       setButtonTitle(t("button_modificar"));
@@ -199,8 +199,8 @@ const Agencia = () => {
 
     updateValuesOnOpen(); // useContext
 
-    setBackGroundColor("darkGreen");
-    setColor("white");
+    setBackGroundColor("#f0efeb");
+    setColor("black");
     setHeaderTitle(t("header_title_agence_novo"));
     setHeaderSubTitle(t("header_subTitle_agence_novo"));
     setButtonTitle(t("button_gravar"));
@@ -384,8 +384,8 @@ const Agencia = () => {
                 style={{
                   borderStyle: "solid",
                   borderColor: "black",
-                  height: "7vh",
-                  maxHeight: "7vh",
+                  height: "7.5vh",
+                  maxHeight: "7.5vh",
                   overflowY: "auto",
                   overflow: "auto",
                   // overflowX: "hidden",
@@ -400,7 +400,7 @@ const Agencia = () => {
                       placeHolder={t("sede")}
                       value={sede}
                       onChange={handleInputChange}
-                      width="78%"
+                      width="76%"
                       type="text"
                       error={errors.sede}
                     />
@@ -540,7 +540,7 @@ const Agencia = () => {
                         options={paisesTable}
                         typeOfSelect={6}
                         error={errors.paisID}
-                        width="78%"
+                        width="76%"
                         height="40px"
                       />
                       <AddBox
@@ -560,7 +560,7 @@ const Agencia = () => {
                         options={cidadeTable}
                         typeOfSelect={7}
                         error={errors.cidadeID}
-                        width="78%"
+                        width="76%"
                         height="40px"
                       />
                       <AddBox
@@ -1067,9 +1067,12 @@ const Agencia = () => {
           buttonColor="secondary"
           width="800px"
           height="580px"
-          title={popupTitle}
+          closeButtonDisplay={false}
+          marginTop="-20px"
+
+          // title={popupTitle}
         >
-          <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+          {/* <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
             <label className="userLabel">{t("Recherche")}</label>
             <Controls.Input
               name="sedePesquisa"
@@ -1087,19 +1090,20 @@ const Agencia = () => {
                 ),
               }}
             />
-          </div>
+          </div> */}
 
           <SedeSearchTable
             ref={childRefSede}
             idDisplay={true}
-            codeDisplay={false}
+            codeDisplay={true}
             statusDisplay={true}
             actionsButtonSelectDisplay={true} // monstrar o campo = true
             actionsButtonDisplayEditDelete={false}
-            pageSize={7}
-            rowPerPage={7}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor={backGroundColor}
             color={color}
+            listarGrid = {true}
             sedeData={(id, code, sede) => {
               setSede(sede);
               setSedeID(id);

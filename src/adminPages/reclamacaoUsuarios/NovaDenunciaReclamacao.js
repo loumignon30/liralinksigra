@@ -205,7 +205,7 @@ function NovaDenunciaReclamacao() {
 
     let cancel = false;
 
-    getSedeDados2(5);
+    getSedeDados2(1);
 
     values.computador = getNomeComputador();
 
@@ -1281,10 +1281,11 @@ function NovaDenunciaReclamacao() {
             setOpenPopup={setOpenPopup}
             //pageHeader={PopupHeaderUniversity()}
             buttonColor="secondary"
-            title="Listagem Agencias"
+            // title="Listagem Agencias"
             width="800px"
             height="650px"
-            marginTop="-35px"
+            closeButtonDisplay={false}
+            marginTop="-20px"
           >
             <AgenciaSearchTable
               idDisplay={false}
@@ -1299,6 +1300,7 @@ function NovaDenunciaReclamacao() {
               // userID={userID}
               pageSize={10}
               rowPerPage={10}
+              listarGrid={true}
               agenciaData={(id, code, agencia, cidade, email, telefone) => {
                 values.sedeID = sedeID;
                 values.agenciaID = id;

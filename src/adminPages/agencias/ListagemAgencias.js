@@ -21,7 +21,7 @@ import CidadeService from "../../services/admin/Cidade.service";
 const initialFValues = {
   paisID: "",
   cidadeID: "",
-  centroTrabalhoPesquisa: '',
+  centroTrabalhoPesquisa: "",
 };
 
 const ListagemAgencias = () => {
@@ -45,7 +45,6 @@ const ListagemAgencias = () => {
   const [sedePesquisa, setSedePesquisa] = useState("");
   const [agenciaPesquisa, setAgenciaPesquisa] = useState("");
 
-  
   const { userSavedValue, setUserSavedValue } = useContext(UserLoggedContext);
 
   const { t } = useTranslation();
@@ -91,16 +90,27 @@ const ListagemAgencias = () => {
     setOpenPopup(true);
   };
 
-  const tableAgenciaUpdateData = (sedeID, tipoPesquisa, agencia, pais, cidade  ) => {
-    childRef.current.getGetAllData(sedeID, tipoPesquisa, agencia, pais,  cidade); // saveImage() = method called
+  const tableAgenciaUpdateData = (
+    sedeID,
+    tipoPesquisa,
+    agencia,
+    pais,
+    cidade
+  ) => {
+    childRef.current.getGetAllData(sedeID, tipoPesquisa, agencia, pais, cidade); // saveImage() = method called
   };
 
   const sedeSearchToToDataGrid = (e) => {
     handleInputChange(e);
     setSedePesquisa(e.target.value);
     //childRefSede.current.sedSearch(e.target.value); // search the firstname
-    childRef.current.getGetAllData(sedeID, "filtre", e.target.value, values.pais,  values.cidade); // saveImage() = method called
-
+    childRef.current.getGetAllData(
+      sedeID,
+      "filtre",
+      e.target.value,
+      values.pais,
+      values.cidade
+    ); // saveImage() = method called
   };
   const getPaises = () => {
     PaisService.getAll()
@@ -127,14 +137,26 @@ const ListagemAgencias = () => {
     values.centroTrabalhoPesquisa = "";
     handleInputChange(e);
     getCidade(e.target.value);
-    tableAgenciaUpdateData(sedeID, "filtre", agenciaPesquisa, e.target.value, values.cidadeID)
+    tableAgenciaUpdateData(
+      sedeID,
+      "filtre",
+      agenciaPesquisa,
+      e.target.value,
+      values.cidadeID
+    );
   };
 
   const cidadeHandleChange = (e) => {
     values.cidadeID = "";
     values.centroTrabalhoPesquisa = "";
     handleInputChange(e);
-    tableAgenciaUpdateData(sedeID, "filtre", agenciaPesquisa, values.paisID, e.target.value)
+    tableAgenciaUpdateData(
+      sedeID,
+      "filtre",
+      agenciaPesquisa,
+      values.paisID,
+      e.target.value
+    );
   };
 
   const ItemMainTitlo = styled(Paper)(({ theme }) => ({
@@ -201,7 +223,7 @@ const ListagemAgencias = () => {
                   // overflowX: "hidden",
                   margin: "5px",
                   // backgroundColor: "#f0efeb",
-                //   textAlign: "center",
+                  //   textAlign: "center",
                 }}
               >
                 <div>
@@ -219,7 +241,7 @@ const ListagemAgencias = () => {
                     onClick={onclickAgenciaPopup}
                   />
                 </div>
-                <div >
+                <div>
                   <label className="userLabel">{t("Recherche")}</label>
                   <Controls.Input
                     name="centroTrabalhoPesquisa"
@@ -339,10 +361,11 @@ const ListagemAgencias = () => {
         buttonColor="secondary"
         width="800px"
         height="580px"
-        marginTop="10px"
-        title={popupTitle}
+        closeButtonDisplay={false}
+        marginTop="-20px"
+        // title={popupTitle}
       >
-        <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
+        {/* <div style={{ marginBottom: "10px", marginTop: "-20px" }}>
           <label className="userLabel">{t("Recherche")}</label>
           <Controls.Input
             name="sedePesquisa"
@@ -360,7 +383,7 @@ const ListagemAgencias = () => {
               ),
             }}
           />
-        </div>
+        </div> */}
         <SedeSearchTable
           ref={childRefSede}
           idDisplay={true}
@@ -368,10 +391,11 @@ const ListagemAgencias = () => {
           statusDisplay={true}
           actionsButtonSelectDisplay={true} // monstrar o campo = true
           actionsButtonDisplayEditDelete={false}
-          pageSize={7}
-          rowPerPage={7}
+          pageSize={9}
+          rowPerPage={9}
           backGroundColor="darkBlue"
           color="white"
+          listarGrid={true}
           sedeData={(id, code, sede) => {
             setSede(sede);
             setSedeID(id);

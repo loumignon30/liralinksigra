@@ -342,7 +342,7 @@ const NovoDepartamento = () => {
                       value={sede}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
                       error={errors.sede}
                     />
                     <Search
@@ -360,7 +360,7 @@ const NovoDepartamento = () => {
                       value={agencia}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
 
                       error={errors.agencia}
                     />
@@ -844,8 +844,8 @@ const NovoDepartamento = () => {
             statusDisplay={true}
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor={backGroundColor}
             color={color}
             userID={userID2}
@@ -886,8 +886,8 @@ const NovoDepartamento = () => {
             sedeID={sedeID}
             userID={userID2}
             color={color}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             agenciaData={(id, code, agencia) => {
               values.agenciaID = id;
               setAgencia(agencia);
@@ -904,10 +904,11 @@ const NovoDepartamento = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <SedeSearchTable
             idDisplay={false}
@@ -915,10 +916,11 @@ const NovoDepartamento = () => {
             statusDisplay={true}
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor={backGroundColor}
             color={color}
+            listarGrid={true}
             // userID={userID2}
             // sedeID={sedeID}
             sedeData={(id, code, sede) => {
@@ -939,10 +941,11 @@ const NovoDepartamento = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <AgenciaSearchTable
             ref={childRefAgence}
@@ -956,8 +959,9 @@ const NovoDepartamento = () => {
             idSede={sedeID}
             userID={userID2}
             color={color}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
+            listarGrid={true}
             agenciaData={(id, code, agencia) => {
               values.agenciaID = id;
               setAgencia(agencia);

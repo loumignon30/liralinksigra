@@ -564,7 +564,7 @@ const NovoFuncionario = () => {
                       value={departamento}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
                       error={errors.departamento}
                     />
                     <Search
@@ -580,7 +580,7 @@ const NovoFuncionario = () => {
                       value={funcao}
                       onChange={handleInputChange}
                       type="text"
-                      width="78%"
+                      width="74%"
                       error={errors.funcao}
                     />
                     <Search
@@ -1027,8 +1027,8 @@ const NovoFuncionario = () => {
             statusDisplay={true}
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor="#f0efeb"
             color="black"
             sedeID={sedeID}
@@ -1068,8 +1068,8 @@ const NovoFuncionario = () => {
             actionsButtonDisplayEditDelete={false}
             backGroundColor="#f0efeb"
             color="black"
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             sedeID={sedeID}
             userID={userID}
             agenciaData={(id, code, agencia) => {
@@ -1093,10 +1093,11 @@ const NovoFuncionario = () => {
           setOpenPopup={setOpenPopup}
           //pageHeader={PopupHeaderUniversity()}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <DepartamentoSearchTable
             idDisplay={true}
@@ -1104,13 +1105,14 @@ const NovoFuncionario = () => {
             statusDisplay={true}
             actionsButtonDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             sedeID={sedeID}
             agenciaID={agenciaID}
             departamentoPesquisa=""
             backGroundColor="#f0efeb"
             color="black"
+            listarGrid = {true}
             departamentoData={(id, code, departamento) => {
               setDepartamento(departamento);
               values.departamentoID = id;
@@ -1128,10 +1130,11 @@ const NovoFuncionario = () => {
           setOpenPopup={setOpenPopup}
           //pageHeader={PopupHeaderUniversity()}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <FuncaoSearchTable
             idDisplay={false}
@@ -1139,13 +1142,14 @@ const NovoFuncionario = () => {
             statusDisplay={true}
             actionsButtonDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor="#f0efeb"
             color="black"
             sedeID={sedeID}
             agenciaID={agenciaID}
             funcaoPesquisa=""
+            listarGrid = {true}
             funcaoData={(id, code, funcao) => {
               setFuncao(funcao);
               values.funcaoID = id;
@@ -1162,10 +1166,11 @@ const NovoFuncionario = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <SedeSearchTable
             idDisplay={false}
@@ -1173,10 +1178,11 @@ const NovoFuncionario = () => {
             statusDisplay={true}
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
             backGroundColor="#f0efeb"
             color="black"
+            listarGrid={true}
             // userID={userID2}
             // sedeID={sedeID}
             sedeData={(id, code, sede) => {
@@ -1197,10 +1203,11 @@ const NovoFuncionario = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
+        //   title={popupTitle}
           width="800px"
           height="580px"
-          marginTop="10px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <AgenciaSearchTable
             idDisplay={false}
@@ -1213,8 +1220,9 @@ const NovoFuncionario = () => {
             idSede={sedeID}
             userID={userID}
             color="black"
-            pageSize={10}
-            rowPerPage={10}
+            pageSize={9}
+            rowPerPage={9}
+            listarGrid={true}
             agenciaData={(id, code, agencia) => {
               values.agenciaID = id;
               setAgencia(agencia);

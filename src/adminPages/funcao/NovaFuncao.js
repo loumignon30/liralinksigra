@@ -136,7 +136,7 @@ const NovaFuncao = () => {
       setSedeID(location.state.sedeID);
       setAgenciaID(location.state.agenciaID);
 
-      tableFuncaoUpdateData1(location.state.sedeID, location.state.agenciaID);
+      tableFuncaoUpdateData1(location.state.sedeID, location.state.agenciaID, "");
     } else {
       ResetForm();
       // setBackGroundColor("darkGreen");
@@ -157,7 +157,7 @@ const NovaFuncao = () => {
     values.funcao = "";
     values.observacao = "";
 
-    tableFuncaoUpdateData1(sedeID, agenciaID);
+    tableFuncaoUpdateData1(sedeID, agenciaID, "");
 
     setBackGroundColor("darkGreen");
     setColor("white");
@@ -206,7 +206,7 @@ const NovaFuncao = () => {
           values.funcao = "";
           values.observacao = "";
 
-          tableFuncaoUpdateData1(sedeID, agenciaID); // update Faculty Data on FacultySearchTable.js
+          tableFuncaoUpdateData1(sedeID, agenciaID, ""); // update Faculty Data on FacultySearchTable.js
 
           setNotify({
             isOpen: true,
@@ -229,7 +229,7 @@ const NovaFuncao = () => {
           values.funcao = "";
           values.observacao = "";
 
-          tableFuncaoUpdateData1(sedeID, agenciaID); // update Faculty Data on FacultySearchTable.js
+          tableFuncaoUpdateData1(sedeID, agenciaID, ""); // update Faculty Data on FacultySearchTable.js
 
           setNotify({
             isOpen: true,
@@ -244,9 +244,9 @@ const NovaFuncao = () => {
     }
   };
 
-  const tableFuncaoUpdateData1 = (sedeID1, agenciaID1) => {
+  const tableFuncaoUpdateData1 = (sedeID1, agenciaID1, funcaoPesquisa) => {
     if (sedeID1 > 0 && agenciaID1 > 0) {
-      childRef2.current.getGetAllData(sedeID1, agenciaID1); // saveImage() = method called
+      childRef2.current.getGetAllData(sedeID1, agenciaID1, funcaoPesquisa); // saveImage() = method called
     }
   };
 
@@ -855,7 +855,7 @@ const NovaFuncao = () => {
               setAgencia(agencia);
               setAgenciaID(id);
               setOpenPopup(false);
-              tableFuncaoUpdateData1(sedeID, id);
+              tableFuncaoUpdateData1(sedeID, id, "");
             }}
           />
         </Popup>
@@ -866,10 +866,11 @@ const NovaFuncao = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
-          width="600px"
-          height="480px"
-          marginTop="10px"
+        //   title={popupTitle}
+          width="800px"
+          height="580px"
+          closeButtonDisplay={false}
+          marginTop="-20px"
         >
           <SedeSearchTable
             idDisplay={false}
@@ -877,8 +878,9 @@ const NovaFuncao = () => {
             statusDisplay={true}
             actionsButtonSelectDisplay={true}
             actionsButtonDisplayEditDelete={false}
-            pageSize={7}
-            rowPerPage={7}
+            pageSize={9}
+            rowPerPage={9}
+            listarGrid={true}
             backGroundColor={backGroundColor}
             color={color}
             // userID={userID2}
@@ -901,11 +903,11 @@ const NovaFuncao = () => {
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}
           buttonColor="secondary"
-          title={popupTitle}
-          width="770px"
-          height="550px"
-          marginTop="10px"
-        >
+        //   title={popupTitle}
+          width="800px"
+          height="580px"
+          closeButtonDisplay={false}
+          marginTop="-20px"        >
           <AgenciaSearchTable
             ref={childRefAgence}
             idDisplay={false}
@@ -918,14 +920,15 @@ const NovaFuncao = () => {
             idSede={sedeID}
             userID={userID}
             color={color}
-            pageSize={5}
-            rowPerPage={5}
+            pageSize={9}
+            rowPerPage={9}
+            listarGrid={true}
             agenciaData={(id, code, agencia) => {
               values.agenciaID = id;
               setAgencia(agencia);
               setAgenciaID(id);
               setOpenPopup(false);
-              tableFuncaoUpdateData1(sedeID, id);
+              tableFuncaoUpdateData1(sedeID, id, "");
             }}
           />
         </Popup>
